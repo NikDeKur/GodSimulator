@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="NDKGlobal">
+    <CLASSES />
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../NDKGlobal" />
+      <root url="file://$PROJECT_DIR$/../NDKGlobal/src/main/java" />
+    </SOURCES>
+  </library>
+</component>

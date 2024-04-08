@@ -1,0 +1,175 @@
+package org.ndk.godsimulator.god
+
+import org.bukkit.Material
+import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
+import org.ndk.global.interfaces.Snowflake
+import org.ndk.global.placeholders.Placeholder
+import org.ndk.godsimulator.language.MSG
+import org.ndk.godsimulator.language.MSGNameHolder
+import org.ndk.godsimulator.skill.Skill
+import org.ndk.godsimulator.skill.SkillExecution
+import org.ndk.minecraft.item.ItemPattern
+
+
+abstract class God: Placeholder, MSGNameHolder, Snowflake<String> {
+    override val defaultPhName: String = "god"
+
+    open val isSelectable: Boolean = true
+
+    abstract val skills: List<Skill>
+
+    override fun getIcon(player: Player): ItemStack {
+        return ItemPattern.from(Material.BARRIER)
+            .setDisplayName(nameMSG)
+            .setLore(MSG.GOD_SELECT_LORE)
+            .setTag("god", id)
+            .build(player, getFinalPlaceholder(player))
+    }
+}
+
+
+class NotSelectedGod : God() {
+    override val id: String = "NotSelected"
+    override val nameMSG: MSG = MSG.GOD_NOT_SELECTED
+    override val isSelectable: Boolean = false
+    override val skills: List<Skill> = emptyList()
+}
+
+class Zeus : God() {
+    override val id: String = "Zeus"
+    override val nameMSG: MSG = MSG.GOD_NAME_ZEUS
+    override val skills: List<Skill> = Skills.entries
+
+    enum class Skills(
+        override val executionClass: Class<out SkillExecution>,
+        override val nameMSG: MSG,
+        override val requiredLevel: Int,
+        override val cooldownMs: Long
+    ) : Skill {
+        THUNDERBOLT(Zeus_ThunderBolt::class.java, MSG.SKILL_ZEUS_THUNDERBOLT_NAME, 0, 1000),
+        EARTHQUAKE(Zeus_Earthquake::class.java, MSG.SKILL_ZEUS_EARTHQUAKE_NAME, 5, 3 * 1000),
+        ;
+
+        override val id: String = "$ID-$name"
+
+        override fun execute(entity: Player) {
+            when (this) {
+                THUNDERBOLT -> Zeus_ThunderBolt(entity).execute()
+                EARTHQUAKE -> Zeus_Earthquake(entity).execute()
+            }
+        }
+    }
+
+
+    companion object {
+        const val ID = "Zeus"
+    }
+}
+
+
+
+
+class Apollo : God() {
+    override val id: String = ID
+    override val nameMSG: MSG = MSG.GOD_NAME_APOLLO
+    override val skills: List<Skill> = Skills.entries
+
+    enum class Skills(
+        override val executionClass: Class<out SkillExecution>,
+        override val nameMSG: MSG,
+        override val requiredLevel: Int,
+        override val cooldownMs: Long
+    ) : Skill {
+        SUNBEAM(Apollo_SunBeam::class.java, MSG.SKILL_APOLLO_SUNBEAM_NAME, 0, 1000),
+        SOLARBLAST(Apollo_SolarBlast::class.java, MSG.SKILL_APOLLO_SOLARBLAST_NAME, 5, 3 * 1000),
+        ;
+        override val id: String = "$ID-$name"
+
+        override fun execute(entity: Player) {
+            when (this) {
+                SUNBEAM -> Apollo_SunBeam(entity).execute()
+                SOLARBLAST -> Apollo_SolarBlast(entity).execute()
+            }
+        }
+    }
+
+
+    companion object {
+        const val ID = "Apollo"
+    }
+}
+
+
+// Боги: Посейдон (Вода), Аид (Смерть), Арес (Войны)
+
+class Poseidon : God() {
+    override val id: String = "Poseidon"
+    override val nameMSG: MSG = MSG.GOD_NAME_POSEIDON
+    override val skills: List<Skill> = Skills.entries
+
+    enum class Skills(
+        override val executionClass: Class<out SkillExecution>,
+        override val nameMSG: MSG,
+        override val requiredLevel: Int,
+        override val cooldownMs: Long
+    ) : Skill {
+        // WATERFALL(Poseidon_Waterfall::class.java, MSG.SKILL_POSEIDON_WATERFALL_NAME, 1000),
+        // TIDALWAVE(Poseidon_TidalWave::class.java, MSG.SKILL_POSEIDON_TIDALWAVE_NAME, 3 * 1000),
+        ;
+        override val id: String = "$ID-$name"
+    }
+
+
+    companion object {
+        const val ID = "Poseidon"
+    }
+}
+
+// Аид
+class Hades : God() {
+    override val id: String = "Hades"
+    override val nameMSG: MSG = MSG.GOD_NAME_HADES
+    override val skills: List<Skill> = Skills.entries
+
+    enum class Skills(
+        override val executionClass: Class<out SkillExecution>,
+        override val nameMSG: MSG,
+        override val requiredLevel: Int,
+        override val cooldownMs: Long
+    ) : Skill {
+        // DEATHRAY(Hades_DeathRay::class.java, MSG.SKILL_HADES_DEATHRAY_NAME, 1000),
+        // SOULSUCKER(Hades_SoulSucker::class.java, MSG.SKILL_HADES_SOULSUCKER_NAME, 3 * 1000),
+        ;
+        override val id: String = "$ID-$name"
+    }
+
+
+    companion object {
+        const val ID = "Hades"
+    }
+}
+
+
+class Ares : God() {
+    override val id: String = "Ares"
+    override val nameMSG: MSG = MSG.GOD_NAME_ARES
+    override val skills: List<Skill> = Skills.entries
+
+    enum class Skills(
+        override val executionClass: Class<out SkillExecution>,
+        override val nameMSG: MSG,
+        override val requiredLevel: Int,
+        override val cooldownMs: Long
+    ) : Skill {
+        // BLOODLUST(Ares_BloodLust::class.java, MSG.SKILL_ARES_BLOODLUST_NAME, 1000),
+        // WARCRY(Ares_WarCry::class.java, MSG.SKILL_ARES_WARCRY_NAME, 3 * 1000),
+        ;
+        override val id: String = "$ID-$name"
+    }
+
+
+    companion object {
+        const val ID = "Ares"
+    }
+}

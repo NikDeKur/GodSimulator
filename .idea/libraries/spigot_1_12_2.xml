@@ -1,0 +1,20 @@
+<component name="libraryTable">
+  <library name="spigot-1.12.2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../../Minecraft/BuildTools/spigot-1.12.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../../../../Minecraft/BuildTools/Spigot/Bukkit/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../../../../Minecraft/BuildTools/Spigot/Bukkit/src/main/javadoc" />
+      <root url="file://$PROJECT_DIR$/../../../../Minecraft/BuildTools/Spigot/Bukkit/src/test/java" />
+      <root url="file://$PROJECT_DIR$/../../../../Minecraft/BuildTools/Spigot/CraftBukkit/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../../../../Minecraft/BuildTools/Spigot/CraftBukkit/src/test/java" />
+      <root url="file://$PROJECT_DIR$/../../../../Minecraft/BuildTools/Spigot/Spigot-API/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../../../../Minecraft/BuildTools/Spigot/Spigot-API/src/main/javadoc" />
+      <root url="file://$PROJECT_DIR$/../../../../Minecraft/BuildTools/Spigot/Spigot-API/src/test/java" />
+      <root url="file://$PROJECT_DIR$/../../../../Minecraft/BuildTools/Spigot/Spigot-Server/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../../../../Minecraft/BuildTools/Spigot/Spigot-Server/src/test/java" />
+    </SOURCES>
+  </library>
+</component>

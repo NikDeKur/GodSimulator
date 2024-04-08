@@ -1,0 +1,28 @@
+<component name="libraryTable">
+  <library name="kotlin1">
+    <ANNOTATIONS>
+      <root url="file://$MAVEN_REPOSITORY$/org/jetbrains/kotlin" />
+      <root url="file://$MAVEN_REPOSITORY$/org/jetbrains/kotlinx" />
+    </ANNOTATIONS>
+    <CLASSES>
+      <root url="file://$MAVEN_REPOSITORY$/org/jetbrains/kotlin" />
+      <root url="file://$MAVEN_REPOSITORY$/org/jetbrains/kotlinx" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="file://$MAVEN_REPOSITORY$/org/jetbrains/kotlin" />
+      <root url="file://$MAVEN_REPOSITORY$/org/jetbrains/kotlinx" />
+    </JAVADOC>
+    <NATIVE>
+      <root url="file://$MAVEN_REPOSITORY$/org/jetbrains/kotlin" />
+      <root url="file://$MAVEN_REPOSITORY$/org/jetbrains/kotlinx" />
+    </NATIVE>
+    <SOURCES>
+      <root url="file://$MAVEN_REPOSITORY$/org/jetbrains/kotlin" />
+      <root url="file://$MAVEN_REPOSITORY$/org/jetbrains/kotlinx" />
+    </SOURCES>
+    <jarDirectory url="file://$MAVEN_REPOSITORY$/org/jetbrains/kotlin" recursive="false" />
+    <jarDirectory url="file://$MAVEN_REPOSITORY$/org/jetbrains/kotlinx" recursive="false" />
+    <jarDirectory url="file://$MAVEN_REPOSITORY$/org/jetbrains/kotlin" recursive="false" type="SOURCES" />
+    <jarDirectory url="file://$MAVEN_REPOSITORY$/org/jetbrains/kotlinx" recursive="false" type="SOURCES" />
+  </library>
+</component>

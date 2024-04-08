@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/GodSimulator.iml" filepath="$PROJECT_DIR$/.idea/modules/GodSimulator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/GodSimulator.main.iml" filepath="$PROJECT_DIR$/.idea/modules/GodSimulator.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/NDKMinecraft.main.iml" filepath="$PROJECT_DIR$/.idea/modules/NDKMinecraft.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Projects.GodSimulator.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Projects.GodSimulator.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/org.ndk.GodSimulator.main.iml" filepath="$PROJECT_DIR$/.idea/modules/org.ndk.GodSimulator.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/org.ndk.NDKMinecraft.main.iml" filepath="$PROJECT_DIR$/.idea/modules/org.ndk.NDKMinecraft.main.iml" />
+    </modules>
+  </component>
+</project>

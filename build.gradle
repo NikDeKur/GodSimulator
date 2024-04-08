@@ -1,0 +1,111 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.22'
+}
+
+group = 'org.ndk'
+version = '1.0.0'
+
+
+repositories {
+    mavenCentral()
+    maven {
+        name = "spigotmc-repo"
+        url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
+    }
+    maven {
+        name = "sonatype"
+        url = "https://oss.sonatype.org/content/groups/public/"
+    }
+
+    maven {
+        name = "enginehub"
+        url = "https://maven.enginehub.org/repo/"
+    }
+
+    maven {
+        url = "https://repo.xenondevs.xyz/releases"
+    }
+    maven {
+        url "https://repo.destroystokyo.com/repository/maven-public/"
+    }
+
+
+
+    mavenLocal()
+
+    flatDir {
+        dirs 'C:\\Users\\nikdekur\\.m2\\repository\\org\\ndk\\NDKGlobal\\1.0.0'
+        dirs 'C:\\Users\\nikdekur\\.m2\\repository\\org\\ndk\\NDKMinecraft\\1.0.0'
+        dirs 'C:\\Users\\nikdekur\\.m2\\repository\\org\\ndk\\database\\1.0.0'
+    }
+}
+
+dependencies {
+    implementation 'org.ndk:NDKGlobal:1.0.0'
+    implementation 'org.ndk:NDKMinecraft:1.0.0'
+    implementation 'org.ndk:database:1.0.0'
+
+    implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.11'
+
+    compileOnly 'com.sk89q.worldedit:worldedit-bukkit:6.1.5'
+    compileOnly 'com.sk89q.worldedit:worldedit-core:6.1.4-SNAPSHOT'
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0-RC2"
+    compileOnly "org.jetbrains.kotlin:kotlin-reflect:1.9.22"
+
+    implementation "xyz.xenondevs.invui:invui:1.27"
+
+    // Spigot
+    compileOnly 'org.spigotmc:spigot:1.12.2-R0.1-SNAPSHOT'
+
+}
+
+def targetJavaVersion = 8
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
+
+kotlin {
+    jvmToolchain(8)
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
+    }
+}
+
+jar {
+    manifest {
+        attributes["Main-Class"] = 'org.ndk.godsimulator.GodSimulator'
+    }
+
+    // To avoid the duplicate handling strategy error
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    // To add all of the dependencies
+    from(sourceSets.main.output)
+
+    from({
+        configurations.runtimeClasspath.filter {
+            def f = it as File
+            f.name.endsWith("jar")
+        }.toList().stream().map {
+            zipTree(it)
+        }.collect()
+    })
+
+    exclude("META-INF/*.RSA", "META-INF/*.DSA", "META-INF/*.SF")
+
+    destinationDirectory.set(file("C:\\codes\\Java\\Projects\\GodSimulator\\out\\GodSimulator.jar"))
+}
+
