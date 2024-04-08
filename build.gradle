@@ -59,6 +59,9 @@ dependencies {
     // Spigot
     compileOnly 'org.spigotmc:spigot:1.12.2-R0.1-SNAPSHOT'
 
+    // Paper
+    compileOnly 'com.destroystokyo.paper:paper-api:1.12.2-R0.1-SNAPSHOT'
+
 }
 
 def targetJavaVersion = 8
