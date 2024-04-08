@@ -14,6 +14,7 @@ import org.ndk.godsimulator.buying.Buyable
 import org.ndk.godsimulator.database.Database.Companion.accessor
 import org.ndk.godsimulator.database.Database.Companion.accessorAsync
 import org.ndk.godsimulator.database.PlayerAccessor
+import org.ndk.godsimulator.event.profile.ProfileStaminaChangeEvent
 import org.ndk.godsimulator.god.ForceGodSelectGUI
 import org.ndk.godsimulator.god.God
 import org.ndk.godsimulator.god.NotSelectedGod
@@ -25,6 +26,7 @@ import org.ndk.klib.*
 import org.ndk.minecraft.CooldownHolder
 import org.ndk.minecraft.extension.*
 import org.ndk.minecraft.language.MSGHolder
+import org.ndk.minecraft.plugin.ServerPlugin.Companion.callEvent
 import java.math.BigInteger
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -124,7 +126,35 @@ class PlayerProfile(
     fun fillStamina(amount: Int) {
         var new = stamina + amount
         if (new > maxStamina) new = maxStamina
-        scopes.stamina = new
+
+        val event = ProfileStaminaChangeEvent(this, stamina, new)
+        callEvent(event)
+        if (event.isCancelled) return
+        val finalNew = event.newStamina
+
+        scopes.stamina = finalNew
+    }
+
+    /**
+     * Take the stamina from the player.
+     *
+     * @param amount the amount of stamina to take
+     * @return has the stamina been taken?
+     * @see fillStamina
+     */
+    fun takeStamina(amount: Int): Boolean {
+        require(amount >= 0) { "Amount must be greater than or equal to 0"}
+        if (stamina < amount) return false
+
+        val new = stamina - amount
+
+        val event = ProfileStaminaChangeEvent(this, stamina, new)
+        callEvent(event)
+        if (event.isCancelled) return false
+        val finalNew = event.newStamina
+
+        scopes.stamina = finalNew
+        return true
     }
 
 
