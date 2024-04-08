@@ -11,6 +11,7 @@ import org.ndk.godsimulator.equipable.EquipableManager
 import org.ndk.godsimulator.god.GodsManager
 import org.ndk.godsimulator.language.SimulatorLangManager
 import org.ndk.godsimulator.language.SimulatorLangProvider
+import org.ndk.godsimulator.listener.DoubleJumpManager
 import org.ndk.godsimulator.listener.GlobalEventListener
 import org.ndk.godsimulator.listener.OtherCommandsTabCompletion
 import org.ndk.godsimulator.location.LocationComeListener
@@ -82,15 +83,13 @@ class GodSimulator : ServerPlugin() {
             SimulatorLangManager(), RPGManager(), GodsManager(),
             EquipableManager(), Database(), WorldsManager(),
             ShopManager(), BuildingsManager(), EntitiesManager(),
-            LocationsManager(), RegenerationManager,
+            LocationsManager(), RegenerationManager, DoubleJumpManager,
             org.ndk.minecraft.scoreboard.ScoreboardManager(ScoreboardAdapter())
         )
     override val languageProvider: LanguageProvider = SimulatorLangProvider()
 
     companion object {
 
-        val isReloading: Boolean
-            get() = instance.isReloading
         val classLoader: ClassLoader
             get() = instance.classLoader
 

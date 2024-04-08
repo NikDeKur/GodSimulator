@@ -9,7 +9,10 @@ interface Skill : MSGNameHolder, Snowflake<String> {
     val requiredLevel: Int
     val cooldownMs: Long
 
-    fun execute(entity: Player)
+    fun newInstance(executor: Player): SkillExecution {
+        val constructor = executionClass.getConstructor(Player::class.java)
+        return constructor.newInstance(executor)
+    }
 
     override val defaultPhName: String
         get() = "skill"

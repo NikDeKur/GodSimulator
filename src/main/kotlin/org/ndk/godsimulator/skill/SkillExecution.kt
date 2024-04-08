@@ -21,6 +21,14 @@ abstract class SkillExecution(val executor: Entity) {
 
     var distanceFlied: Double = 0.0
 
+    /**
+     * Highlights the area where the skill will be executed.
+     */
+    abstract fun highlightArea()
+
+    /**
+     * Executes the skill.
+     */
     abstract fun execute()
 
 

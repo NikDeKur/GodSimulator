@@ -52,13 +52,6 @@ class Zeus : God() {
         ;
 
         override val id: String = "$ID-$name"
-
-        override fun execute(entity: Player) {
-            when (this) {
-                THUNDERBOLT -> Zeus_ThunderBolt(entity).execute()
-                EARTHQUAKE -> Zeus_Earthquake(entity).execute()
-            }
-        }
     }
 
 
@@ -85,13 +78,6 @@ class Apollo : God() {
         SOLARBLAST(Apollo_SolarBlast::class.java, MSG.SKILL_APOLLO_SOLARBLAST_NAME, 5, 3 * 1000),
         ;
         override val id: String = "$ID-$name"
-
-        override fun execute(entity: Player) {
-            when (this) {
-                SUNBEAM -> Apollo_SunBeam(entity).execute()
-                SOLARBLAST -> Apollo_SolarBlast(entity).execute()
-            }
-        }
     }
 
 
