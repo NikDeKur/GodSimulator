@@ -205,12 +205,10 @@ object Quick {
     fun cannotAfford(sender: CommandSender, price: Wallet, balance: Wallet) {
         val entries = StringBuilder()
 
-        price.map.forEach {
-            val key = it.key
-            val priceValue = it.value
-            val balanceValue = balance.getBalance(key)
-            val placeholder = key.getFinalPlaceholder(sender)
-            placeholder["price"] = priceValue.toBeautifulString().toSingletonSet()
+        price.forEach { currency, value ->
+            val balanceValue = balance.getBalance(currency)
+            val placeholder = currency.getFinalPlaceholder(sender)
+            placeholder["price"] = value.toBeautifulString().toSingletonSet()
             placeholder["balance"] = balanceValue.toBeautifulString().toSingletonSet()
             entries.append("\n" + SimulatorLangManager.PREFIX + sender.getLangMsg(MSG.CANNOT_AFFORD_ENTRY, placeholder).text)
         }

@@ -1,5 +1,3 @@
-@file:Suppress("NOTHING_TO_INLINE")
-
 package org.ndk.godsimulator.profile
 
 import org.ndk.global.placeholders.Placeholder
@@ -31,13 +29,6 @@ class ProfileWallet(val profile: PlayerProfile) : Wallet , Placeholder {
     val scopes = profile.scopes
     val wallet by scopes::wallet
 
-    /**
-     * The wallet map, used only to implement the Wallet interface
-     *
-     * Stores the balance of each currency
-     */
-    override val map: MutableMap<Currency, BigInteger> = HashMap()
-
     override fun getBalance(currency: Currency): BigInteger {
         val value = wallet[currency.id] ?: return ZERO
         if (value is BigInteger) return value
@@ -49,10 +40,8 @@ class ProfileWallet(val profile: PlayerProfile) : Wallet , Placeholder {
 
     override fun setBalance(currency: Currency, value: BigInteger) {
         if (value <= ZERO) {
-            map.remove(currency)
             wallet.remove(currency.id)
         } else {
-            map[currency] = value
             wallet[currency.id] = value
         }
     }
@@ -68,9 +57,23 @@ class ProfileWallet(val profile: PlayerProfile) : Wallet , Placeholder {
         return true
     }
 
-    override fun resetBalance() {
+    override fun resetBalances() {
         wallet.clear()
-        map.clear()
+    }
+
+    @Suppress("LABEL_NAME_CLASH")
+    override fun forEach(action: (Currency, BigInteger) -> Unit) {
+        wallet.forEach { (key, value) ->
+            val currency = Currency.currencies[key] ?: return@forEach
+            action(currency, value as BigInteger)
+        }
+    }
+
+    override fun all(predicate: (Currency, BigInteger) -> Boolean): Boolean {
+        return wallet.map { (key, value) ->
+            val currency = Currency.currencies[key] ?: return@map false
+            predicate(currency, value as BigInteger)
+        }.all { it }
     }
 
 

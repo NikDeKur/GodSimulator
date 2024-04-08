@@ -1,11 +1,8 @@
 package org.ndk.godsimulator.buying
 
-import org.ndk.klib.all
 import java.math.BigInteger
 
 interface Wallet {
-    val map: MutableMap<Currency, BigInteger>
-
     fun getBalance(currency: Currency): BigInteger
     fun setBalance(currency: Currency, value: BigInteger)
     fun giveBalance(currency: Currency, value: BigInteger)
@@ -16,21 +13,24 @@ interface Wallet {
     fun resetBalance(currency: Currency) {
         setBalance(currency, BigInteger.ZERO)
     }
-    fun resetBalance()
+    fun resetBalances()
+
+    fun forEach(action: (Currency, BigInteger) -> Unit)
+    fun all(predicate: (Currency, BigInteger) -> Boolean): Boolean
 
 
 
     fun give(wallet: Wallet) {
-        wallet.map.forEach(::giveBalance)
+        wallet.forEach(::giveBalance)
     }
 
     fun take(wallet: Wallet): Boolean {
         if (!has(wallet)) return false
-        return wallet.map.all(::takeBalance)
+        return wallet.all(::takeBalance)
     }
 
     fun has(wallet: Wallet): Boolean {
-        return wallet.map.all(::hasBalance)
+        return wallet.all(::hasBalance)
     }
 
 
@@ -45,7 +45,7 @@ interface Wallet {
     }
 
     fun transferTo(wallet: Wallet): Boolean {
-        return map.all { (currency, value) ->
+        return all { currency: Currency, value: BigInteger ->
             wallet.transferTo(wallet, currency, value)
         }
     }
