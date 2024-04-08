@@ -30,7 +30,7 @@ class LocationComeListener : Listener {
         event.setCancelled(cancel = true, yaw = false, pitch = false)
 
         if (profile.wallet.has(location.price)) {
-            ConfirmGUI(location, player, location.getFinalPlaceholder(player)).open()
+            ConfirmGUI(location, player).open()
         } else {
             Quick.cannotAfford(player, location.price, profile.wallet)
         }
@@ -51,13 +51,12 @@ class LocationComeListener : Listener {
 
 
     companion object {
-        class ConfirmGUI(val location: SimulatorLocation, player: Player, val placeholders: Map<String, Iterable<Any>>) :
+        class ConfirmGUI(val location: SimulatorLocation, player: Player) :
             ConfirmationGUI(player) {
 
             override fun getTitle(): String {
                 return player.getLangMsg(
-                    MSG.LOCATION_UNLOCK_MENU_TITLE,
-                    placeholders
+                    MSG.LOCATION_UNLOCK_MENU_TITLE
                 ).text
             }
 
