@@ -12,3 +12,15 @@
 /.build/
 /.kotlin/
 /.gradle/
+/.vscode/
+/.idea/
+/.git/
+/.gitignore
+/.gitattributes
+/.gitmodules
+/.github/
+/.gitlab-ci.yml
+/.gitlab/
+/.build/
+/.kotlin/
+/.gradle/
