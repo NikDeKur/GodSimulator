@@ -21,6 +21,6 @@ class FlagBaseCommand : SimulatorCommand.Root() {
 
     override val name: String = "flag"
     override val children: Array<ServerCommand> = arrayOf(
-        FlagLocationsCommand(), FlagSkillCastCommand(), FlagAdventureCommand()
+        FlagLocationsCommand(), FlagSkillCastCommand(), FlagAdventureCommand(), FlagCooldownCommand()
     )
 }
