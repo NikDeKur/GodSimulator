@@ -5,7 +5,7 @@ import java.math.BigInteger
 
 object LevelManager {
     fun getXpForLevel(level: Int): BigInteger {
-        return Constants.BIGINT_100 shl level
+        return Constants.BIGINT_100 shl level - 1
     }
 
     fun giveExperience(profile: PlayerProfile, amount: BigInteger) {
