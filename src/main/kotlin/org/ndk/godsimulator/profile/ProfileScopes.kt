@@ -1,5 +1,3 @@
-@file:Suppress("NOTHING_TO_INLINE")
-
 package org.ndk.godsimulator.profile
 
 import org.ndk.godsimulator.GodSimulator.Companion.equipableManager
@@ -26,9 +24,10 @@ import org.ndk.minecraft.language.Language
  * @param profile The player profile
  */
 class ProfileScopes(
-    val profile: PlayerProfile,
-    val accessor: MutableMap<String, Any>
+    val profile: PlayerProfile
 ) {
+
+    val accessor = profile.accessor
 
 
     /**
@@ -111,6 +110,11 @@ class ProfileScopes(
     var xp by accessor.bigIntBoundVar("xp")
 
     /**
+     * The rebirth of the player.
+     */
+    var rebirth by accessor.intBoundVar("rebirth", default = 0)
+
+    /**
      * The map currency id to the amount of the player.
      */
     val wallet: MutableMap<String, Any> by accessor.mutableMapBoundVar("wallet")
@@ -119,6 +123,8 @@ class ProfileScopes(
      * The map of the skill bindings of the player.
      */
     val skillBindings: MutableMap<String, Any> by accessor.mutableMapBoundVar("skillBindings")
+
+    val unlockedSkills: MutableSet<String> by accessor.mutablePrimitiveSetBoundVar("unlockedSkills")
 
     /**
      * The bag fill of the player.
@@ -159,10 +165,6 @@ class ProfileScopes(
         BagsInventory::class.java,
         equipableManager.bags
     )
-
-    // Using get, not by because we wait scopes to be loaded before we can get the bags
-    val bag
-        get() = bags::bag
 
 
     val unlockedLocations by classDataHolder(
