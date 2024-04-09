@@ -474,6 +474,35 @@ enum class MSG(val defaultText: String) : MSGHolder {
     CURRENCY_COINS("&6Coins"),
     CURRENCY_SOULS("&6Souls"),
 
+    GLOBAL_MENU_TITLE("&6Menu"),
+
+    GLOBAL_MENU_SKILLS_ITEM_DISPLAY("&6Skills"),
+    GLOBAL_MENU_SKILLS_ITEM_LORE("", "&fClick to open the skills menu"),
+
+    GLOBAL_MENU_PROFILE_ITEM_DISPLAY("&6Profiles"),
+    GLOBAL_MENU_PROFILE_ITEM_LORE("", "&fClick to open the profiles menu"),
+
+    GLOBAL_MENU_REBIRTH_ITEM_DISPLAY("&6Rebirth"),
+    GLOBAL_MENU_REBIRTH_ITEM_LORE("", "&fClick to open the rebirth menu"),
+
+    GLOBAL_MENU_QUESTS_ITEM_DISPLAY("&6Quests"),
+    GLOBAL_MENU_QUESTS_ITEM_LORE("", "&fClick to open the quests menu"),
+
+    GLOBAL_MENU_PETS_ITEM_DISPLAY("&6Pets"),
+    GLOBAL_MENU_PETS_ITEM_LORE("", "&fClick to open the pets menu"),
+
+    GLOBAL_MENU_AURAS_ITEM_DISPLAY("&6Auras"),
+    GLOBAL_MENU_AURAS_ITEM_LORE("", "&fClick to open the auras menu"),
+
+    GLOBAL_MENU_ITEMS_ITEM_DISPLAY("&6Items"),
+    GLOBAL_MENU_ITEMS_ITEM_LORE("", "&fClick to open the items menu"),
+
+    GLOBAL_MENU_STATISTICS_ITEM_DISPLAY("&6Statistics"),
+    GLOBAL_MENU_STATISTICS_ITEM_LORE("", "&fClick to open the statistics menu"),
+
+    GLOBAL_MENU_SETTINGS_ITEM_DISPLAY("&6Settings"),
+    GLOBAL_MENU_SETTINGS_ITEM_LORE("", "&fClick to open the settings menu"),
+
     ;
 
     constructor(vararg lines: String) : this(lines.joinToString("\n"))

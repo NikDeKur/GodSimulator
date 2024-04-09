@@ -1,6 +1,6 @@
 package org.ndk.godsimulator.command
 
-import org.ndk.godsimulator.profile.ProfilesGUI
+import org.ndk.godsimulator.menu.ProfilesGUI
 import org.ndk.minecraft.plugin.ServerPlugin
 import org.ndk.minecraft.command.CommandExecution
 import org.ndk.minecraft.command.CommandTabExecution
