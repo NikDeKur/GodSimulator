@@ -1,33 +1,41 @@
-@file:Suppress("NOTHING_TO_INLINE")
-
 package org.ndk.godsimulator.profile
 
 import com.google.gson.reflect.TypeToken
 import org.ndk.godsimulator.GodSimulator
 import org.ndk.godsimulator.database.Database
 import org.ndk.godsimulator.location.SimulatorLocation
+import org.ndk.minecraft.Utils.debug
 import java.lang.reflect.Type
 
 class ProfileLocations(val profile: PlayerProfile) : HashSet<SimulatorLocation>() {
 
 
-
-    fun serialize(): String {
-        return map { it.id }.toString()
+    /**
+     * Serialize the locations to a string collection
+     *
+     * Example: ["location1", "location2", "location3"]
+     *
+     * @return The serialized string
+     */
+    fun serialize(): Collection<String> {
+        return map(SimulatorLocation::id)
     }
 
     companion object {
-        val GSON_TYPE: Type = object : TypeToken<HashSet<String>>() {}.type
+
+        val TYPE: Type = object : TypeToken<Array<String>>() {}.type
 
         fun fromSerialized(
             profile: PlayerProfile,
             serialized: String
         ): ProfileLocations {
-            val set = Database.GSON.fromJson<HashSet<String>>(serialized, GSON_TYPE)
+            debug("Serialized locations: $serialized")
+            val list = Database.GSON.fromJson<Array<String>>(serialized, TYPE)
+            debug("Deserialized locations: ${list.joinToString()}")
 
             val locations = ProfileLocations(profile)
 
-            for (id in set) {
+            for (id in list) {
                 val location = GodSimulator.locationsManager.getLocation(id)
                 if (location != null) {
                     locations.add(location)
