@@ -55,7 +55,7 @@ class Zeus : God() {
         override val cooldownMs: Long
     ) : Skill {
         THUNDERBOLT(Zeus_ThunderBolt::class.java, MSG.SKILL_ZEUS_THUNDERBOLT_NAME, 0, 1000),
-        EARTHQUAKE(Zeus_Earthquake::class.java, MSG.SKILL_ZEUS_EARTHQUAKE_NAME, 5, 3 * 1000),
+        EARTHQUAKE(Zeus_Earthquake::class.java, MSG.SKILL_ZEUS_EARTHQUAKE_NAME, 10, 3 * 1000),
         ;
 
         override val id: String = "$ID-$name"
@@ -82,7 +82,7 @@ class Apollo : God() {
         override val cooldownMs: Long
     ) : Skill {
         SUNBEAM(Apollo_SunBeam::class.java, MSG.SKILL_APOLLO_SUNBEAM_NAME, 0, 1000),
-        SOLARBLAST(Apollo_SolarBlast::class.java, MSG.SKILL_APOLLO_SOLARBLAST_NAME, 5, 3 * 1000),
+        SOLARBLAST(Apollo_SolarBlast::class.java, MSG.SKILL_APOLLO_SOLARBLAST_NAME, 10, 3 * 1000),
         ;
         override val id: String = "$ID-$name"
     }
