@@ -9,6 +9,7 @@ import org.ndk.godsimulator.language.MSG
 import org.ndk.godsimulator.language.MSGNameHolder
 import org.ndk.godsimulator.skill.Skill
 import org.ndk.godsimulator.skill.SkillExecution
+import org.ndk.godsimulator.skill.binding.SkillBindings
 import org.ndk.minecraft.item.ItemPattern
 
 
@@ -25,6 +26,12 @@ abstract class God: Placeholder, MSGNameHolder, Snowflake<String> {
             .setLore(MSG.GOD_SELECT_LORE)
             .setTag("god", id)
             .build(player, getFinalPlaceholder(player))
+    }
+
+    fun setDefaultBindings(skillBindings: SkillBindings) {
+        skills.forEachIndexed { index, skill ->
+            skillBindings.bind(index, skill)
+        }
     }
 }
 

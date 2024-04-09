@@ -22,6 +22,7 @@ import org.ndk.godsimulator.language.MSG
 import org.ndk.godsimulator.language.MSGNameHolder
 import org.ndk.godsimulator.location.SimulatorLocation
 import org.ndk.godsimulator.rpg.profile.RPGProfile
+import org.ndk.godsimulator.skill.Skill
 import org.ndk.godsimulator.skill.binding.SkillBindings
 import org.ndk.klib.*
 import org.ndk.minecraft.CooldownHolder
@@ -170,6 +171,7 @@ class PlayerProfile(
 
     fun setGod(god: God, silent: Boolean = false) {
         this.scopes.god = god.id
+        god.setDefaultBindings(skillBindings)
         if (!silent) {
             val player = playerId.onlinePlayerOrNull
             if (player != null) {
@@ -177,6 +179,11 @@ class PlayerProfile(
                 player.sendLangMsg(MSG.GOD_SELECT_SUCCESS, placeholder)
             }
         }
+    }
+
+
+    fun getSkillBinding(key: Int): Skill? {
+        return skillBindings.getBinding(god, key)
     }
 
     val forceSelectGod by scopes::forceSelectGod
@@ -384,7 +391,7 @@ class PlayerProfile(
         unlockedLocations.add(location)
         val player = onlinePlayer
         if (player != null && !silent) {
-            player.sendLangMsg(MSG.LOCATION_UNLOCK_SUCCESS, getFinalPlaceholder(player))
+            player.sendLangMsg(MSG.LOCATION_UNLOCK_SUCCESS, location.getFinalPlaceholder(player))
         }
     }
 

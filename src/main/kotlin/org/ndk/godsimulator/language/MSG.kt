@@ -284,7 +284,6 @@ enum class MSG(val defaultText: String) : MSGHolder {
     /**
      * Placeholders:
      * 1. {location}
-     * 1. {profile}
      */
     LOCATION_UNLOCK_SUCCESS("&aYou have successfully unlocked the location '{location.name}&a'!"),
 
