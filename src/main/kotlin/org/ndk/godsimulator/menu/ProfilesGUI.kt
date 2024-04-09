@@ -1,4 +1,4 @@
-package org.ndk.godsimulator.profile
+package org.ndk.godsimulator.menu
 
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
@@ -8,7 +8,8 @@ import org.ndk.godsimulator.database.Database.Companion.accessorAsync
 import org.ndk.godsimulator.database.PlayerAccessor
 import org.ndk.godsimulator.language.MSG
 import org.ndk.godsimulator.language.Quick
-import org.ndk.godsimulator.lib.ConfirmationGUI
+import org.ndk.godsimulator.utils.ConfirmationGUI
+import org.ndk.godsimulator.profile.PlayerProfile
 import org.ndk.klib.uuid
 import org.ndk.minecraft.extension.*
 import org.ndk.minecraft.gui.GUI

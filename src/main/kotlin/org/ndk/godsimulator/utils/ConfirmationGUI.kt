@@ -1,4 +1,4 @@
-package org.ndk.godsimulator.lib
+package org.ndk.godsimulator.utils
 
 import org.bukkit.Material
 import org.bukkit.entity.Player

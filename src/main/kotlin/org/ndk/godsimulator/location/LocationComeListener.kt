@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack
 import org.ndk.godsimulator.extension.simulatorLocation
 import org.ndk.godsimulator.language.MSG
 import org.ndk.godsimulator.language.Quick
-import org.ndk.godsimulator.lib.ConfirmationGUI
+import org.ndk.godsimulator.utils.ConfirmationGUI
 import org.ndk.godsimulator.profile.PlayerProfile.Companion.profile
 import org.ndk.minecraft.extension.getLangMsg
 import org.ndk.minecraft.movement.OptiPlayerMoveEvent
