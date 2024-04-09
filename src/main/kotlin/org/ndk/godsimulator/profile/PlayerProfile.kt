@@ -14,6 +14,7 @@ import org.ndk.godsimulator.buying.Buyable
 import org.ndk.godsimulator.database.Database.Companion.accessor
 import org.ndk.godsimulator.database.Database.Companion.accessorAsync
 import org.ndk.godsimulator.database.PlayerAccessor
+import org.ndk.godsimulator.event.profile.ProfileLevelChangeEvent
 import org.ndk.godsimulator.event.profile.ProfileStaminaChangeEvent
 import org.ndk.godsimulator.god.ForceGodSelectGUI
 import org.ndk.godsimulator.god.God
@@ -170,7 +171,7 @@ class PlayerProfile(
 
     fun setGod(god: God, silent: Boolean = false) {
         this.scopes.god = god.id
-        god.setupDefault(skills)
+        updateUnlockedSkills(true)
         if (!silent) {
             val player = playerId.onlinePlayerOrNull
             if (player != null) {
@@ -232,9 +233,15 @@ class PlayerProfile(
      */
     fun levelUp(amount: Int = 1) {
         require(amount > 0) { "Amount must be greater than 0" }
-        val level = level + amount
-        scopes.level = level
-        onlinePlayer?.sendLangMsg(MSG.LEVEL_UP, "level" to level)
+        val newRaw = level + amount
+
+        val event = ProfileLevelChangeEvent(this, level, newRaw)
+        callEvent(event)
+        if (event.isCancelled) return
+        val new = event.newLevel
+
+        scopes.level = new
+        onlinePlayer?.sendLangMsg(MSG.LEVEL_UP, "level" to new)
         updateMinecraftXpBar()
     }
 
@@ -419,10 +426,17 @@ class PlayerProfile(
     }
 
 
+    fun updateUnlockedSkills(bind: Boolean = false) {
+        god.updateUnlockedSkills(skills, bind)
+    }
+
+
     fun onSelected(): Boolean {
         rpg.applyOnPlayer()
 
         updateMinecraftXpBar()
+        updateUnlockedSkills()
+
 
         return true
     }

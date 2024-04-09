@@ -28,13 +28,14 @@ abstract class God: Placeholder, MSGNameHolder, Snowflake<String> {
             .build(player, getFinalPlaceholder(player))
     }
 
-    fun setupDefault(skills: ProfileSkills) {
+    open fun updateUnlockedSkills(skills: ProfileSkills, bind : Boolean = false) {
         val profile = skills.profile
         this.skills.forEachIndexed { index, skill ->
             if (profile.level < skill.requiredLevel) return
             if (profile.rebirth < skill.requiredRebirth) return
             skills.unlock(skill)
-            skills.bind(index, skill)
+            if (bind)
+                skills.bind(index, skill)
         }
     }
 }
@@ -45,6 +46,10 @@ class NotSelectedGod : God() {
     override val nameMSG: MSG = MSG.GOD_NOT_SELECTED
     override val isSelectable: Boolean = false
     override val skills: List<Skill> = emptyList()
+
+    override fun updateUnlockedSkills(skills: ProfileSkills, bind: Boolean) {
+        // Do nothing
+    }
 }
 
 class Zeus : God() {
