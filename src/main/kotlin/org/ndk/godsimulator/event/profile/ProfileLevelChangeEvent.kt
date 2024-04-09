@@ -4,18 +4,23 @@ import org.bukkit.event.Cancellable
 import org.bukkit.event.HandlerList
 import org.ndk.godsimulator.profile.PlayerProfile
 
-class ProfileStaminaChangeEvent(
+class ProfileLevelChangeEvent(
     profile: PlayerProfile,
-    val oldStamina: Int,
-    var newStamina: Int
+    val oldLevel: Int,
+    var newLevel: Int
 ) : ProfileEvent(profile), Cancellable {
 
+    override fun getHandlers(): HandlerList {
+        return HANDLERS
+    }
 
-    override fun getHandlers() = HANDLERS
     companion object {
         private val HANDLERS = HandlerList()
+
         @JvmStatic
-        fun getHandlerList() = HANDLERS
+        fun getHandlerList(): HandlerList {
+            return HANDLERS
+        }
     }
 
     var cancel = false
