@@ -22,6 +22,7 @@ import org.ndk.godsimulator.language.MSG
 import org.ndk.godsimulator.language.MSGNameHolder
 import org.ndk.godsimulator.location.SimulatorLocation
 import org.ndk.godsimulator.rpg.profile.RPGProfile
+import org.ndk.godsimulator.skill.binding.SkillBindings
 import org.ndk.klib.*
 import org.ndk.minecraft.CooldownHolder
 import org.ndk.minecraft.extension.*
@@ -59,6 +60,7 @@ class PlayerProfile(
 
     val scopes = ProfileScopes(this, profileAccessor)
     val wallet = ProfileWallet(this)
+    val skillBindings = SkillBindings(this)
     val rpg = RPGProfile(this)
 
 
@@ -404,6 +406,14 @@ class PlayerProfile(
 
     fun updateMinecraftXpBar() {
         val player = playerId.onlinePlayerOrNull ?: return
+
+        // If some xp changes occurs and required xp for the next level is less than current xp
+        // Update the current level
+        if (xp >= xpForNextLevel) {
+            scopes.xp--
+            LevelManager.giveExperience(this, BigInteger.ZERO)
+        }
+
         player.level = level
         player.setExp(xp, xpForNextLevel)
     }

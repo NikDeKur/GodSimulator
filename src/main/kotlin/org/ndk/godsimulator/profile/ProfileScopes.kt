@@ -116,6 +116,11 @@ class ProfileScopes(
     val wallet: MutableMap<String, Any> by accessor.mutableMapBoundVar("wallet")
 
     /**
+     * The map of the skill bindings of the player.
+     */
+    val skillBindings: MutableMap<String, Any> by accessor.mutableMapBoundVar("skillBindings")
+
+    /**
      * The bag fill of the player.
      */
     var bagFill by accessor.bigIntBoundVar("bagFill")
