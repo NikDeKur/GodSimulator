@@ -7,9 +7,9 @@ import org.ndk.global.interfaces.Snowflake
 import org.ndk.global.placeholders.Placeholder
 import org.ndk.godsimulator.language.MSG
 import org.ndk.godsimulator.language.MSGNameHolder
+import org.ndk.godsimulator.profile.ProfileSkills
 import org.ndk.godsimulator.skill.Skill
 import org.ndk.godsimulator.skill.SkillExecution
-import org.ndk.godsimulator.skill.binding.SkillBindings
 import org.ndk.minecraft.item.ItemPattern
 
 
@@ -28,9 +28,13 @@ abstract class God: Placeholder, MSGNameHolder, Snowflake<String> {
             .build(player, getFinalPlaceholder(player))
     }
 
-    fun setDefaultBindings(skillBindings: SkillBindings) {
-        skills.forEachIndexed { index, skill ->
-            skillBindings.bind(index, skill)
+    fun setupDefault(skills: ProfileSkills) {
+        val profile = skills.profile
+        this.skills.forEachIndexed { index, skill ->
+            if (profile.level < skill.requiredLevel) return
+            if (profile.rebirth < skill.requiredRebirth) return
+            skills.unlock(skill)
+            skills.bind(index, skill)
         }
     }
 }
@@ -52,10 +56,11 @@ class Zeus : God() {
         override val executionClass: Class<out SkillExecution>,
         override val nameMSG: MSG,
         override val requiredLevel: Int,
+        override val requiredRebirth: Int,
         override val cooldownMs: Long
     ) : Skill {
-        THUNDERBOLT(Zeus_ThunderBolt::class.java, MSG.SKILL_ZEUS_THUNDERBOLT_NAME, 0, 1000),
-        EARTHQUAKE(Zeus_Earthquake::class.java, MSG.SKILL_ZEUS_EARTHQUAKE_NAME, 10, 3 * 1000),
+        THUNDERBOLT(Zeus_ThunderBolt::class.java, MSG.SKILL_ZEUS_THUNDERBOLT_NAME, 0, 0, 1000),
+        EARTHQUAKE(Zeus_Earthquake::class.java, MSG.SKILL_ZEUS_EARTHQUAKE_NAME, 10, 0, 3 * 1000),
         ;
 
         override val id: String = "$ID-$name"
@@ -79,10 +84,11 @@ class Apollo : God() {
         override val executionClass: Class<out SkillExecution>,
         override val nameMSG: MSG,
         override val requiredLevel: Int,
+        override val requiredRebirth: Int,
         override val cooldownMs: Long
     ) : Skill {
-        SUNBEAM(Apollo_SunBeam::class.java, MSG.SKILL_APOLLO_SUNBEAM_NAME, 0, 1000),
-        SOLARBLAST(Apollo_SolarBlast::class.java, MSG.SKILL_APOLLO_SOLARBLAST_NAME, 10, 3 * 1000),
+        SUNBEAM(Apollo_SunBeam::class.java, MSG.SKILL_APOLLO_SUNBEAM_NAME, 0, 0, 1000),
+        SOLARBLAST(Apollo_SolarBlast::class.java, MSG.SKILL_APOLLO_SOLARBLAST_NAME, 10, 0, 3 * 1000),
         ;
         override val id: String = "$ID-$name"
     }
@@ -104,11 +110,12 @@ class Poseidon : God() {
     enum class Skills(
         override val executionClass: Class<out SkillExecution>,
         override val nameMSG: MSG,
+        override val requiredRebirth: Int,
         override val requiredLevel: Int,
         override val cooldownMs: Long
     ) : Skill {
-        // WATERFALL(Poseidon_Waterfall::class.java, MSG.SKILL_POSEIDON_WATERFALL_NAME, 1000),
-        // TIDALWAVE(Poseidon_TidalWave::class.java, MSG.SKILL_POSEIDON_TIDALWAVE_NAME, 3 * 1000),
+        // WATERFALL(Poseidon_Waterfall::class.java, MSG.SKILL_POSEIDON_WATERFALL_NAME, 0, 0, 1000),
+        // TIDALWAVE(Poseidon_TidalWave::class.java, MSG.SKILL_POSEIDON_TIDALWAVE_NAME, 10, 0, 3 * 1000),
         ;
         override val id: String = "$ID-$name"
     }
@@ -129,10 +136,11 @@ class Hades : God() {
         override val executionClass: Class<out SkillExecution>,
         override val nameMSG: MSG,
         override val requiredLevel: Int,
+        override val requiredRebirth: Int,
         override val cooldownMs: Long
     ) : Skill {
-        // DEATHRAY(Hades_DeathRay::class.java, MSG.SKILL_HADES_DEATHRAY_NAME, 1000),
-        // SOULSUCKER(Hades_SoulSucker::class.java, MSG.SKILL_HADES_SOULSUCKER_NAME, 3 * 1000),
+        // DEATHRAY(Hades_DeathRay::class.java, MSG.SKILL_HADES_DEATHRAY_NAME, 0, 0, 1000),
+        // SOULSUCKER(Hades_SoulSucker::class.java, MSG.SKILL_HADES_SOULSUCKER_NAME, 10, 0, 3 * 1000),
         ;
         override val id: String = "$ID-$name"
     }
@@ -153,10 +161,11 @@ class Ares : God() {
         override val executionClass: Class<out SkillExecution>,
         override val nameMSG: MSG,
         override val requiredLevel: Int,
+        override val requiredRebirth: Int,
         override val cooldownMs: Long
     ) : Skill {
-        // BLOODLUST(Ares_BloodLust::class.java, MSG.SKILL_ARES_BLOODLUST_NAME, 1000),
-        // WARCRY(Ares_WarCry::class.java, MSG.SKILL_ARES_WARCRY_NAME, 3 * 1000),
+        // BLOODLUST(Ares_BloodLust::class.java, MSG.SKILL_ARES_BLOODLUST_NAME, 0, 0, 1000),
+        // WARCRY(Ares_WarCry::class.java, MSG.SKILL_ARES_WARCRY_NAME, 10, 0, 3 * 1000),
         ;
         override val id: String = "$ID-$name"
     }
