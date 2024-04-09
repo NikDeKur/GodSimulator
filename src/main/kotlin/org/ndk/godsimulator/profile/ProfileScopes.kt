@@ -45,9 +45,9 @@ class ProfileScopes(
      */
     var language by notNullClassDataHolder(
         "language",
-        "en"
+        "en",
+        Language.Code::class.java,
     ) { when (it) {
-            is Language.Code -> it
             is String -> Language.Code.fromCode(it) ?: languagesManager.defaultLangCode
             else -> languagesManager.defaultLangCode
         }
@@ -164,11 +164,9 @@ class ProfileScopes(
     val unlockedLocations by notNullClassDataHolder(
         "unlockedLocations",
         "[]",
+        ProfileLocations::class.java,
     ) {
-        when (it) {
-            is ProfileLocations -> it
-            else -> ProfileLocations.fromSerialized(profile, it.toString())
-        }
+        ProfileLocations.fromSerialized(profile, it.toString())
     }
 
     //----------------------------------------
@@ -177,17 +175,19 @@ class ProfileScopes(
     private fun <T : Any> classDataHolder(
         path: String,
         stringDefault: Any,
+        type: Class<T>,
         deserialize: (Any) -> T
     ): ClassDataHolderField<T> {
-        return ClassDataHolderField(profile, path, stringDefault, deserialize)
+        return ClassDataHolderField(profile, path, stringDefault, type, deserialize)
     }
 
     private fun <T : Any> notNullClassDataHolder(
         path: String,
         stringDefault: Any,
+        type: Class<T>,
         deserialize: (Any) -> T
     ): NotNullClassDataHolderField<T> {
-        return NotNullClassDataHolderField(profile, path, stringDefault, deserialize)
+        return NotNullClassDataHolderField(profile, path, stringDefault, type, deserialize)
     }
 
     private fun <T : EquipableType<T>, CLZ : EquipableInventory<T>> inventoryDataHolder(

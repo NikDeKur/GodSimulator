@@ -10,19 +10,19 @@ open class ClassDataHolderField<T : Any>(
     val profile: PlayerProfile,
     path: String,
     default: Any,
+    type: Class<T>,
     deserializer: (Any) -> T
-) : org.ndk.klib.ClassDataHolderField<String, Any, T>(profile.accessor, path, default, deserializer)
+) : org.ndk.klib.ClassDataHolderField<String, Any, T>(profile.accessor, path, default, type, deserializer)
 
 open class NotNullClassDataHolderField<T : Any>(
     val profile: PlayerProfile,
     path: String,
     default: Any,
+    type: Class<T>,
     deserializer: (Any) -> T
-) : org.ndk.klib.NotNullClassDataHolderField<String, Any, T>(profile.accessor, path, default, deserializer)
+) : org.ndk.klib.NotNullClassDataHolderField<String, Any, T>(profile.accessor, path, default, type, deserializer)
 
 
-
-@Suppress("UNCHECKED_CAST")
 class InventoryHolderField<T : EquipableType<T>, CLZ : EquipableInventory<T>>(
     profile: PlayerProfile,
     path: String,
@@ -32,10 +32,9 @@ class InventoryHolderField<T : EquipableType<T>, CLZ : EquipableInventory<T>>(
     profile,
     path,
     "{}",
+    inventoryClazz,
     {
-        if (inventoryClazz.isInstance(it)) {
-            it as CLZ
-        } else if (it is String) {
+        if (it is String) {
             EquipableInventory.fromSerialized(profile, manager::deserialize, inventoryClazz, it)
         } else {
             throw IllegalArgumentException("Invalid inventory type")
