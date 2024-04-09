@@ -42,7 +42,10 @@ fun Player.getTargetBlock(maxDistance: Int): Block? {
 
 class Zeus_ThunderBolt(val player: Player) : SimulatorSkillExecution(player) {
 
-    // Create an empty circle with size of RADIUS from drawing around the target block
+    override fun canExecute(): Boolean {
+        return player.getTargetUpLocation(TARGET_BLOCK_DISTANCE, DEFAULT_TRANSPARENT) != null
+    }
+
     override fun highlightArea() {
         val targetBlock = player.getTargetUpLocation(TARGET_BLOCK_DISTANCE, DEFAULT_TRANSPARENT) ?: return
         val location = targetBlock.first
@@ -77,7 +80,9 @@ class Zeus_ThunderBolt(val player: Player) : SimulatorSkillExecution(player) {
 
 class Zeus_Earthquake(val player: Player) : SimulatorSkillExecution(player) {
 
-
+    override fun canExecute(): Boolean {
+        return player.getTargetUpLocation(DISTANCE, DEFAULT_TRANSPARENT) != null
+    }
 
     override fun highlightArea() {
         val targetBlock = player.getTargetUpLocation(DISTANCE, DEFAULT_TRANSPARENT) ?: return
@@ -134,6 +139,10 @@ class Zeus_Earthquake(val player: Player) : SimulatorSkillExecution(player) {
 
 class Apollo_SunBeam(val player: Player) : SimulatorSkillExecution(player) {
 
+    override fun canExecute(): Boolean {
+        return true
+    }
+
     override fun highlightArea() {}
 
     override fun execute() {
@@ -168,6 +177,10 @@ class Apollo_SunBeam(val player: Player) : SimulatorSkillExecution(player) {
 }
 
 class Apollo_SolarBlast(val player: Player) : SimulatorSkillExecution(player) {
+
+    override fun canExecute(): Boolean {
+        return player.getTargetUpLocation(DISTANCE, DEFAULT_TRANSPARENT) != null
+    }
 
     override fun highlightArea() {
         val targetBlock = player.getTargetUpLocation(DISTANCE, DEFAULT_TRANSPARENT) ?: return

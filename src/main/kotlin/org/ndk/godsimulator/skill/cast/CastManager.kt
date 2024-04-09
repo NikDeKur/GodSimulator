@@ -23,6 +23,8 @@ object CastManager {
         }
 
         val execution = skill.newInstance(player)
+
+        if (!execution.canExecute()) return false
         profile.setCooldown(skill.id, skill.cooldownMs)
         execution.highlightArea()
         execution.execute()

@@ -21,6 +21,16 @@ abstract class SkillExecution(val executor: Entity) {
 
     var distanceFlied: Double = 0.0
 
+
+    /**
+     * Checks if the skill can be executed.
+     *
+     * Function is called before [highlightArea] and [execute].
+     *
+     * If highlightArea or execute may abort, it should be checked here.
+     */
+    abstract fun canExecute(): Boolean
+
     /**
      * Highlights the area where the skill will be executed.
      */
