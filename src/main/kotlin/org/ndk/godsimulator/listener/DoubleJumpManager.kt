@@ -21,31 +21,31 @@ object DoubleJumpManager : Listener, PluginModule {
     override val id: String = "DoubleJumpManager"
 
     fun updateBukkitState(player: Player) {
-        player.allowFlight = !(disallowJumpsJumped.contains(player.uniqueId) || disallowJumpsStamina.contains(player.uniqueId))
+        player.allowFlight = !(disallowJumped.contains(player.uniqueId) || disallowStamina.contains(player.uniqueId))
     }
 
-    val disallowJumpsStamina = HashSet<UUID>()
-    fun allowJumpStamina(player: Player) {
+    val disallowStamina = HashSet<UUID>()
+    fun allowStamina(player: Player) {
         val profile = player.profile
         if (profile.stamina < 20) return
-        disallowJumpsStamina.remove(player.uniqueId)
+        disallowStamina.remove(player.uniqueId)
         updateBukkitState(player)
     }
 
-    fun disallowJumpStamina(player: Player) {
-        disallowJumpsStamina.add(player.uniqueId)
+    fun disallowStamina(player: Player) {
+        disallowStamina.add(player.uniqueId)
         updateBukkitState(player)
     }
 
-    val disallowJumpsJumped = HashSet<UUID>()
-    fun allowJumpJumped(player: Player) {
+    val disallowJumped = HashSet<UUID>()
+    fun allowJumped(player: Player) {
         if (!player.isOnGround) return
-        disallowJumpsJumped.remove(player.uniqueId)
+        disallowJumped.remove(player.uniqueId)
         updateBukkitState(player)
     }
 
-    fun disallowJumpJumped(player: Player) {
-        disallowJumpsJumped.add(player.uniqueId)
+    fun disallowJumped(player: Player) {
+        disallowJumped.add(player.uniqueId)
         updateBukkitState(player)
     }
 
@@ -59,8 +59,8 @@ object DoubleJumpManager : Listener, PluginModule {
      * @return True if player double jumped, false if player can't double jump
      */
     fun doubleJump(player: Player): Boolean {
-        if (disallowJumpsJumped.contains(player.uniqueId)) return false
-        if (disallowJumpsStamina.contains(player.uniqueId)) return false
+        if (disallowJumped.contains(player.uniqueId)) return false
+        if (disallowStamina.contains(player.uniqueId)) return false
         if (!player.profile.takeStamina(20)) return false
 
         val direction = player.eyeLocation.direction
@@ -71,28 +71,28 @@ object DoubleJumpManager : Listener, PluginModule {
 
         player.velocity = player.velocity.add(vector)
 
-        disallowJumpJumped(player)
+        disallowJumped(player)
         return true
     }
 
     @EventHandler
     fun onJoin(event: PlayerJoinEvent) {
-        allowJumpJumped(event.player)
-        allowJumpStamina(event.player)
+        allowJumped(event.player)
+        allowStamina(event.player)
     }
 
     @EventHandler
     fun onPlayerGamemodeChange(event: PlayerGameModeChangeEvent) {
         scheduler.runTask {
-            allowJumpJumped(event.player)
-            allowJumpStamina(event.player)
+            allowJumped(event.player)
+            allowStamina(event.player)
         }
     }
 
     @EventHandler
     fun onQuit(event: PlayerQuitEvent) {
-        disallowJumpJumped(event.player)
-        disallowJumpStamina(event.player)
+        disallowJumped(event.player)
+        disallowStamina(event.player)
     }
 
 
@@ -100,7 +100,7 @@ object DoubleJumpManager : Listener, PluginModule {
     @EventHandler
     fun onOptiMove(event: OptiPlayerMoveEvent) {
         val player = event.player
-        allowJumpJumped(player)
+        allowJumped(player)
     }
 
 
@@ -108,9 +108,9 @@ object DoubleJumpManager : Listener, PluginModule {
     fun onStaminaChange(event: ProfileStaminaChangeEvent) {
         val player = event.profile.onlinePlayer ?: return
         if (event.newStamina < 20) {
-            disallowJumpStamina(player)
+            disallowStamina(player)
         } else {
-            allowJumpStamina(player)
+            allowStamina(player)
         }
     }
 
@@ -120,7 +120,6 @@ object DoubleJumpManager : Listener, PluginModule {
         val player = event.player
         if (player.gameMode in bypassGamemodes) return
         event.cancel()
-
 
         // Bukkit may don't relly like, that we're using this event in survival,
         // so wait for a final result and do our things
