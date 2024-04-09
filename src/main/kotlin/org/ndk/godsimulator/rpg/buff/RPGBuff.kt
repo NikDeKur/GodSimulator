@@ -9,7 +9,7 @@ import java.util.*
 
 open class RPGBuff<T : Comparable<T>>(
     val stat: RPGStat<T>,
-    var value: T
+    open var value: T
 ) : Snowflake<UUID>, MSGNameHolder {
     override val id: UUID = UUID.randomUUID()
 

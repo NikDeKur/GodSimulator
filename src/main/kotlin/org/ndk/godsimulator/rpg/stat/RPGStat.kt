@@ -19,7 +19,17 @@ abstract class RPGStat<T : Comparable<T>,> : Snowflake<String>, MSGNameHolder {
     abstract fun merge(value: T, other: T): T
     abstract fun deMerge(value: T, other: T): T
 
+    /**
+     * Returns the random value between min and max
+     *
+     * @param min the minimum value
+     * @param max the maximum value
+     * @return the random value between min and max
+     */
+    abstract fun range(min: T, max: T): T
+
     abstract fun read(value: String): T?
+
 
     inline fun new(value: T = defaultValue): RPGBuff<T> {
         return RPGBuff(this, value)
@@ -35,6 +45,10 @@ abstract class RPGStat<T : Comparable<T>,> : Snowflake<String>, MSGNameHolder {
         }
         override fun deMerge(value: kotlin.Double, other: kotlin.Double): kotlin.Double {
             return value - other
+        }
+
+        override fun range(min: kotlin.Double, max: kotlin.Double): kotlin.Double {
+            return Tools.randDouble(min, max)
         }
 
         override fun read(value: String): kotlin.Double? {
@@ -66,6 +80,10 @@ abstract class RPGStat<T : Comparable<T>,> : Snowflake<String>, MSGNameHolder {
             return value - other
         }
 
+        override fun range(min: kotlin.Float, max: kotlin.Float): kotlin.Float {
+            return Tools.randFloat(min, max)
+        }
+
         override fun read(value: String): kotlin.Float? {
             return value.toFloatOrNull()
         }
@@ -93,6 +111,10 @@ abstract class RPGStat<T : Comparable<T>,> : Snowflake<String>, MSGNameHolder {
         }
         override fun deMerge(value: kotlin.Int, other: kotlin.Int): kotlin.Int {
             return value - other
+        }
+
+        override fun range(min: kotlin.Int, max: kotlin.Int): kotlin.Int {
+            return Tools.randInt(min, max)
         }
 
         override fun read(value: String): kotlin.Int? {
@@ -124,6 +146,10 @@ abstract class RPGStat<T : Comparable<T>,> : Snowflake<String>, MSGNameHolder {
             return value - other
         }
 
+        override fun range(min: java.math.BigInteger, max: java.math.BigInteger): java.math.BigInteger {
+            return Tools.randBigInt(min, max)
+        }
+
         override fun read(value: String): java.math.BigInteger? {
             return value.toBigIntegerOrNull()
         }
@@ -149,6 +175,11 @@ abstract class RPGStat<T : Comparable<T>,> : Snowflake<String>, MSGNameHolder {
         override fun merge(value: kotlin.Boolean, other: kotlin.Boolean): kotlin.Boolean {
             return value || other
         }
+
+        override fun range(min: kotlin.Boolean, max: kotlin.Boolean): kotlin.Boolean {
+            throw UnsupportedOperationException("Boolean stat can't be ranged")
+        }
+
         override fun deMerge(value: kotlin.Boolean, other: kotlin.Boolean): kotlin.Boolean {
             return value && other
         }
