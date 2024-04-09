@@ -10,7 +10,7 @@ object CastManager {
 
     fun cast(player: Player, index: Int): Boolean {
         val profile = player.accessor.profile
-        val skill = profile.getSkillBinding(index) ?: return false
+        val skill = profile.skills.getBinding(index) ?: return false
         val cooldown = profile.getCooldown(skill.id)
         if (cooldown != null && cooldown > 0) {
             Quick.sendCooldown(player, cooldown, MSG.SKILL_CAST_COOLDOWN, skill.getFinalPlaceholder(player))

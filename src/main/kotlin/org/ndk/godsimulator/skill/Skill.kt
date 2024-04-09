@@ -6,6 +6,7 @@ import org.ndk.godsimulator.language.MSGNameHolder
 
 interface Skill : MSGNameHolder, Snowflake<String> {
     val executionClass: Class<out SkillExecution>
+    val requiredRebirth: Int
     val requiredLevel: Int
     val cooldownMs: Long
 
