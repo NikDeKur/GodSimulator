@@ -13,19 +13,16 @@ import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
-import org.ndk.godsimulator.god.Apollo_SolarBlast.Companion.PARTICLE_AMOUNT
 import org.ndk.godsimulator.profile.PlayerProfile.Companion.profile
 import org.ndk.godsimulator.skill.SimulatorSkillExecution
 import org.ndk.minecraft.drawing.DrawingManager
 import org.ndk.minecraft.drawing.shape.CircleShape
 import org.ndk.minecraft.extension.broadcast
 import org.ndk.minecraft.extension.getTargetLocation
+import org.ndk.minecraft.extension.getTargetUpLocation
 import org.ndk.minecraft.extension.strikeLightningEffect
 import java.math.BigDecimal
 import java.math.BigInteger
-import kotlin.math.ceil
-import kotlin.math.cos
-import kotlin.math.sin
 
 
 val DEFAULT_TRANSPARENT = setOf(
@@ -47,14 +44,11 @@ class Zeus_ThunderBolt(val player: Player) : SimulatorSkillExecution(player) {
 
     // Create an empty circle with size of RADIUS from drawing around the target block
     override fun highlightArea() {
-        val targetBlock = player.getTargetBlock(TARGET_BLOCK_DISTANCE) ?: return
-        val location = targetBlock.location
-        for (i in 0 until PARTICLE_AMOUNT) {
-            val angle = i * Math.PI * 2 / PARTICLE_AMOUNT
-            val x = location.x + cos(angle) * RADIUS
-            val z = location.z + sin(angle) * RADIUS
-            location.world.spawnParticle(Particle.FLAME, x, location.y, z, 1)
-        }
+        val targetBlock = player.getTargetUpLocation(TARGET_BLOCK_DISTANCE, DEFAULT_TRANSPARENT) ?: return
+        val location = targetBlock.first
+        location.y += 0.15
+        val shape = CircleShape(Particle.SPELL, location, RADIUS, 2, extra = 0.0)
+        DrawingManager.addShape(shape, 0, 20, 1000)
     }
 
     override val listenBlocks: Boolean = false
@@ -86,11 +80,10 @@ class Zeus_Earthquake(val player: Player) : SimulatorSkillExecution(player) {
 
 
     override fun highlightArea() {
-        val targetBlock = player.getTargetLocation(DISTANCE, DEFAULT_TRANSPARENT) ?: return
+        val targetBlock = player.getTargetUpLocation(DISTANCE, DEFAULT_TRANSPARENT) ?: return
         val location = targetBlock.first
-        location.y = ceil(location.y)
         location.y += 0.15
-        val shape = CircleShape(Particle.FLAME, location, RADIUS, PARTICLE_AMOUNT, extra = 0.0)
+        val shape = CircleShape(Particle.FLAME, location, RADIUS, 2, extra = 0.0)
         DrawingManager.addShape(shape, 0, 20, EXPLOSION_DELAY * INTENSITY)
     }
 
@@ -177,15 +170,11 @@ class Apollo_SunBeam(val player: Player) : SimulatorSkillExecution(player) {
 class Apollo_SolarBlast(val player: Player) : SimulatorSkillExecution(player) {
 
     override fun highlightArea() {
-        val pair = player.getTargetLocation(DISTANCE, DEFAULT_TRANSPARENT) ?: return
-        val location = pair.first
-
-        for (i in 0 until PARTICLE_AMOUNT) {
-            val angle = i * Math.PI * 2 / PARTICLE_AMOUNT
-            val x = location.x + cos(angle) * RADIUS
-            val z = location.z + sin(angle) * RADIUS
-            location.world.spawnParticle(Particle.FLAME, x, location.y, z, 1)
-        }
+        val targetBlock = player.getTargetUpLocation(DISTANCE, DEFAULT_TRANSPARENT) ?: return
+        val location = targetBlock.first
+        location.y += 0.15
+        val shape = CircleShape(Particle.FLAME, location, RADIUS, 2, extra = 0.0)
+        DrawingManager.addShape(shape, 0, 20, 1000)
     }
 
     @DelicateCoroutinesApi
