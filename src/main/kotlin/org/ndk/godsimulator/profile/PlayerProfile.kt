@@ -22,8 +22,6 @@ import org.ndk.godsimulator.language.MSG
 import org.ndk.godsimulator.language.MSGNameHolder
 import org.ndk.godsimulator.location.SimulatorLocation
 import org.ndk.godsimulator.rpg.profile.RPGProfile
-import org.ndk.godsimulator.skill.Skill
-import org.ndk.godsimulator.skill.binding.SkillBindings
 import org.ndk.klib.*
 import org.ndk.minecraft.CooldownHolder
 import org.ndk.minecraft.extension.*
@@ -41,11 +39,11 @@ class PlayerProfile(
     val globalAccessor: PlayerAccessor,
     override val nameMSG: MSGHolder,
     override val id: UUID,
-    profileAccessor: MutableMap<String, Any>
+    val accessor: MutableMap<String, Any>
 ) : Placeholder, MSGNameHolder, CooldownHolder, Snowflake<UUID> {
 
     init {
-        profileAccessor["iconName"] = nameMSG.id
+        accessor["iconName"] = nameMSG.id
     }
 
     override val defaultPhName: String = "profile"
@@ -59,15 +57,16 @@ class PlayerProfile(
 
 
 
-    val scopes = ProfileScopes(this, profileAccessor)
+    val scopes = ProfileScopes(this)
     val wallet = ProfileWallet(this)
-    val skillBindings = SkillBindings(this)
+    val skills = ProfileSkills(this)
     val rpg = RPGProfile(this)
 
 
 
 
-    override val cooldowns: MutableMap<String, Double> by profileAccessor.mutableMapBoundVar("cooldowns")
+    override val cooldowns: MutableMap<String, Double> by accessor.mutableMapBoundVar("cooldowns")
+    override var passCooldown by accessor.booleanBoundVar("passCooldown", default = false)
 
     override val placeholderMap: MutableMap<String, Any>
         get() = super<MSGNameHolder>.placeholderMap.also {
@@ -171,7 +170,7 @@ class PlayerProfile(
 
     fun setGod(god: God, silent: Boolean = false) {
         this.scopes.god = god.id
-        god.setDefaultBindings(skillBindings)
+        god.setupDefault(skills)
         if (!silent) {
             val player = playerId.onlinePlayerOrNull
             if (player != null) {
@@ -179,11 +178,6 @@ class PlayerProfile(
                 player.sendLangMsg(MSG.GOD_SELECT_SUCCESS, placeholder)
             }
         }
-    }
-
-
-    fun getSkillBinding(key: Int): Skill? {
-        return skillBindings.getBinding(god, key)
     }
 
     val forceSelectGod by scopes::forceSelectGod
@@ -310,7 +304,7 @@ class PlayerProfile(
 
 
 
-    var rebirth by profileAccessor.intBoundVar("rebirth", default = 0)
+    val rebirth by scopes::rebirth
 
     fun canRebirth(): Boolean {
         return level >= ((rebirth + 1) * 100)
@@ -336,7 +330,7 @@ class PlayerProfile(
             return false
         }
 
-        rebirth += amount
+        scopes.rebirth += amount
 
         // Reset Everything, except god
         scopes.level = 1
@@ -371,10 +365,9 @@ class PlayerProfile(
 
 
 
-    var passLocations by profileAccessor.booleanBoundVar("passLocations", default = false)
-    var passSkillCast by profileAccessor.booleanBoundVar("passSlotLock", default = false)
-    var passAdventure by profileAccessor.booleanBoundVar("passAdventure", default = false)
-    override var passCooldown by profileAccessor.booleanBoundVar("passCooldown", default = false)
+    var passLocations by accessor.booleanBoundVar("passLocations", default = false)
+    var passSkillCast by accessor.booleanBoundVar("passSlotLock", default = false)
+    var passAdventure by accessor.booleanBoundVar("passAdventure", default = false)
 
     val unlockedLocations by scopes::unlockedLocations
 
