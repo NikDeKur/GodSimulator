@@ -10,6 +10,7 @@ import org.ndk.godsimulator.equipable.type.EquipableType
 import org.ndk.godsimulator.equipable.type.EquipableTypesManager
 import org.ndk.godsimulator.utils.ClassDataHolderField
 import org.ndk.godsimulator.utils.InventoryHolderField
+import org.ndk.godsimulator.utils.NotNullClassDataHolderField
 import org.ndk.klib.*
 import org.ndk.minecraft.language.Language
 
@@ -37,19 +38,12 @@ class ProfileScopes(
      *
      * If no value was provided for some reason, it will be set to the current time.
      */
-    var created by classDataHolder(
-        "created",
-        System.currentTimeMillis()
-    ) { when (it) {
-        is Long -> it
-        is Number -> it.toLong()
-        else -> System.currentTimeMillis()
-    } }
+    var created by accessor.longBoundVar("created", default = System.currentTimeMillis())
 
     /**
-     * The language of the player profile.
+     * The language code of the player profile or the default language code if not set.
      */
-    var language by classDataHolder(
+    var language by notNullClassDataHolder(
         "language",
         "en"
     ) { when (it) {
@@ -167,10 +161,15 @@ class ProfileScopes(
     )
 
 
-    val unlockedLocations by classDataHolder(
+    val unlockedLocations by notNullClassDataHolder(
         "unlockedLocations",
         "[]",
-    ) { ProfileLocations.fromSerialized(profile, it.toString()) }
+    ) {
+        when (it) {
+            is ProfileLocations -> it
+            else -> ProfileLocations.fromSerialized(profile, it.toString())
+        }
+    }
 
     //----------------------------------------
     // Utils Start
@@ -181,6 +180,14 @@ class ProfileScopes(
         deserialize: (Any) -> T
     ): ClassDataHolderField<T> {
         return ClassDataHolderField(profile, path, stringDefault, deserialize)
+    }
+
+    private fun <T : Any> notNullClassDataHolder(
+        path: String,
+        stringDefault: Any,
+        deserialize: (Any) -> T
+    ): NotNullClassDataHolderField<T> {
+        return NotNullClassDataHolderField(profile, path, stringDefault, deserialize)
     }
 
     private fun <T : EquipableType<T>, CLZ : EquipableInventory<T>> inventoryDataHolder(
