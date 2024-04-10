@@ -29,9 +29,7 @@ class ProfileLocations(val profile: PlayerProfile) : HashSet<SimulatorLocation>(
             profile: PlayerProfile,
             serialized: String
         ): ProfileLocations {
-            debug("Serialized locations: $serialized")
             val list = Database.GSON.fromJson<Array<String>>(serialized, TYPE)
-            debug("Deserialized locations: ${list.joinToString()}")
 
             val locations = ProfileLocations(profile)
 
