@@ -5,6 +5,7 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.ndk.global.interfaces.Snowflake
 import org.ndk.global.placeholders.Placeholder
+import org.ndk.godsimulator.extension.setTexture
 import org.ndk.godsimulator.language.MSG
 import org.ndk.godsimulator.language.MSGNameHolder
 import org.ndk.godsimulator.profile.ProfileSkills
@@ -25,6 +26,7 @@ abstract class God: Placeholder, MSGNameHolder, Snowflake<String> {
             .setDisplayName(nameMSG)
             .setLore(MSG.GOD_SELECT_LORE)
             .setTag("god", id)
+            .setTexture(id)
             .build(player, getFinalPlaceholder(player))
     }
 
@@ -53,7 +55,7 @@ class NotSelectedGod : God() {
 }
 
 class Zeus : God() {
-    override val id: String = "Zeus"
+    override val id: String = ID
     override val nameMSG: MSG = MSG.GOD_NAME_ZEUS
     override val skills: List<Skill> = Skills.entries
 
@@ -73,7 +75,7 @@ class Zeus : God() {
 
 
     companion object {
-        const val ID = "Zeus"
+        const val ID = "zeus"
     }
 }
 
@@ -100,7 +102,7 @@ class Apollo : God() {
 
 
     companion object {
-        const val ID = "Apollo"
+        const val ID = "apollo"
     }
 }
 
@@ -108,7 +110,7 @@ class Apollo : God() {
 // Боги: Посейдон (Вода), Аид (Смерть), Арес (Войны)
 
 class Poseidon : God() {
-    override val id: String = "Poseidon"
+    override val id: String = ID
     override val nameMSG: MSG = MSG.GOD_NAME_POSEIDON
     override val skills: List<Skill> = Skills.entries
 
@@ -127,13 +129,13 @@ class Poseidon : God() {
 
 
     companion object {
-        const val ID = "Poseidon"
+        const val ID = "poseidon"
     }
 }
 
 // Аид
 class Hades : God() {
-    override val id: String = "Hades"
+    override val id: String = ID
     override val nameMSG: MSG = MSG.GOD_NAME_HADES
     override val skills: List<Skill> = Skills.entries
 
@@ -152,13 +154,13 @@ class Hades : God() {
 
 
     companion object {
-        const val ID = "Hades"
+        const val ID = "hades"
     }
 }
 
 
 class Ares : God() {
-    override val id: String = "Ares"
+    override val id: String = ID
     override val nameMSG: MSG = MSG.GOD_NAME_ARES
     override val skills: List<Skill> = Skills.entries
 
@@ -177,6 +179,6 @@ class Ares : God() {
 
 
     companion object {
-        const val ID = "Ares"
+        const val ID = "ares"
     }
 }

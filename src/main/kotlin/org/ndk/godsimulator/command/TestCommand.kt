@@ -327,7 +327,7 @@ class TestCommand : SimulatorCommand() {
                     "balance" to "2250",
                     "unlockedLocations" to listOf("nether"),
                     "bag" to "infinity",
-                    "god" to "Zeus",
+                    "god" to "zeus",
                     "level" to 5,
                     "exp" to 121,
                     "skills" to mapOf(
