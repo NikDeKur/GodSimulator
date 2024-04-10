@@ -326,9 +326,11 @@ enum class MSG(val defaultText: String) : MSGHolder {
     PLAYER_MENU_SHOP_ITEM_DISPLAY("&6Shop"),
 
     SHOP_GUI_TITLE("&6Shop"),
-    SHOP_NPC_NAME("&6Shop"),
-    SHOP_BAG_TITLE("&6Shop -> Bags"),
-    SHOP_AURA_TITLE("&6Shop -> Auras"),
+    SHOP_NPC_BAG_NAME("&6Bags Shop"),
+    SHOP_NPC_AURA_NAME("&6Auras Shop"),
+
+    BAGS_SHOP_GUI_TITLE("&6Bags"),
+    AURAS_SHOP_GUI_TITLE("&6Auras"),
 
     SHOP_BUY("&7[LMB] &aBuy"),
     SHOP_EQUIP("&7[RMB] &aEquip"),
@@ -336,8 +338,6 @@ enum class MSG(val defaultText: String) : MSGHolder {
 
     SHOP_BACK_DISPLAY("&6Back"),
     SHOP_BACK_LORE("", "&fClick to go back to shop"),
-
-    PROFILES_GUI_TITLE("&6Profiles"),
 
     PROFILE_RANDOM_NAME_1("&dStar"),
     PROFILE_RANDOM_NAME_2("&6Phoenix"),
@@ -349,33 +349,6 @@ enum class MSG(val defaultText: String) : MSGHolder {
     PROFILE_RANDOM_NAME_8("&7Moon"),
     PROFILE_RANDOM_NAME_9("&cRuby"),
     PROFILE_RANDOM_NAME_10("&eBeach"),
-
-    PROFILE_ICON_DISPLAY("{profile.name}"),
-    PROFILE_ICON_LORE(
-        "",
-        "&eGod: {god.name}",
-        "&eBalance: &a{profile.wallet.coins}",
-        "&eSouls: &a{profile.wallet.souls}",
-        "&eLevel: &a{profile.level}",
-        "&eExp: &a{profile.xp}/{profile.xpForNextLevel}",
-        "&eCreated: &a{profile.created}"
-    ),
-    PROFILE_ICON_SELECTED("&6You currently have this profile selected!"),
-    PROFILE_ICON_NOT_SELECTED("&aClick to select!"),
-
-    PROFILE_NOT_FOUND("&cProfile not found!"),
-
-    PROFILE_GUI_CONFIRM_TITLE("&6Are you sure want to delete the profile?"),
-
-    PROFILE_SELECTED("&aYou have successfully selected the profile '{profile.name}&a'!"),
-    PROFILE_CREATED("&aYou have successfully created the new profile '{profile.name}&a'!"),
-    PROFILE_DELETED("&aYou have successfully deleted the profile '{profile.name}&a'!"),
-
-    PROFILE_CREATE_ICON_DISPLAY("&6Add profile"),
-    PROFILE_CREATE_ICON_LORE("", "&fClick to create a new profile!"),
-    PROFILE_CREATE_ICON_REQUIRE_DONATE_LORE("", "&cYou need donate '{donate}' to unlock this feature!"),
-
-    PROFILE_SELECT_COOLDOWN("&cYou can change the profile in &6{time} &cseconds!"),
 
     BAG_1("&aStarter Bag"),
     BAG_2("&aSmall Bag"),
@@ -415,17 +388,13 @@ enum class MSG(val defaultText: String) : MSGHolder {
 
     ENTITY_NAME_SKELETON("&6Skeleton"),
 
-
-    PET_GUI_TITLE("&6Pets"),
-    PET_ICON_DISPLAY("{pet.name}"),
-    PET_TEST_NAME("&7Test Pet"),
-
-    AURA_GUI_TITLE("&6Auras"),
     AURA_ICON_DISPLAY("{aura.name}"),
     AURA_TEST_NAME("&7Test Aura"),
 
     AURA_NAME_SPEED("&6Speed Aura"),
     AURA_NAME_HEALTH("&cHealth Aura"),
+
+    ITEM_NAME_IRON_SWORD("&7Iron Sword"),
 
     RPG_STAT_NAME_SPEED_BONUS("Speed"),
     RPG_STAT_NAME_BUFF_SPEED_BONUS("&7{buff.name} &6+{buff.value}"),
@@ -433,23 +402,23 @@ enum class MSG(val defaultText: String) : MSGHolder {
     RPG_STAT_NAME_HEALTH("Health"),
     RPG_STAT_NAME_BUFF_HEALTH("&7{buff.name}: &6+{buff.value}"),
 
-    RPG_STAT_NAME_HEALTH_PROCENT("Health"),
-    RPG_STAT_NAME_BUFF_HEALTH_PROCENT("&7{buff.name}: &6+{buff.value}%"),
+    RPG_STAT_NAME_HEALTH_MULTIPLIER("Health"),
+    RPG_STAT_NAME_BUFF_HEALTH_MULTIPLIER("&7{buff.name}: &6+{buff.value}%"),
 
     RPG_STAT_NAME_REGENERATION("Regeneration"),
     RPG_STAT_NAME_BUFF_REGENERATION("&7{buff.name}: &6+{buff.value}"),
 
-    RPG_STAT_NAME_REGENERATION_PROCENT("Regeneration"),
-    RPG_STAT_NAME_BUFF_REGENERATION_PROCENT("&7{buff.name}: &6+{buff.value}%"),
+    RPG_STAT_NAME_REGENERATION_MULTIPLIER("Regeneration"),
+    RPG_STAT_NAME_BUFF_REGENERATION_MULTIPLIER("&7{buff.name}: &6+{buff.value}%"),
 
-    RPG_STAT_NAME_DAMAGE_PROCENT("Damage"),
-    RPG_STAT_NAME_BUFF_DAMAGE_PROCENT("&7{buff.name}: &6+{buff.value}%"),
+    RPG_STAT_NAME_DAMAGE_MULTIPLIER("Damage"),
+    RPG_STAT_NAME_BUFF_DAMAGE_MULTIPLIER("&7{buff.name}: &6+{buff.value}%"),
 
-    RPG_STAT_NAME_EXP_PROCENT("Experience"),
-    RPG_STAT_NAME_BUFF_EXP_PROCENT("&7{buff.name}: &6+{buff.value}%"),
+    RPG_STAT_NAME_EXP_MULTIPLIER("Experience"),
+    RPG_STAT_NAME_BUFF_EXP_MULTIPLIER("&7{buff.name}: &6+{buff.value}%"),
 
-    RPG_STAT_NAME_BAG_FILL_PROCENT("Blocks"),
-    RPG_STAT_NAME_BUFF_BAG_FILL_PROCENT("&7{buff.name}: &6+{buff.value}%"),
+    RPG_STAT_NAME_BAG_FILL_MULTIPLIER("Blocks"),
+    RPG_STAT_NAME_BUFF_BAG_FILL_MULTIPLIER("&7{buff.name}: &6+{buff.value}%"),
 
     REBIRTH_ONCE_SUCCESS("&aYou have successfully rebirthed!"),
     REBIRTH_SEVERAL_TIMES_SUCCESS("&aYou have successfully rebirthed {rebirth.given} times!"),
@@ -468,40 +437,92 @@ enum class MSG(val defaultText: String) : MSGHolder {
         "Blocks Bonus: &a+{rebirth.bagFillBonus}%"
     ),
 
-    QUEST_BOOK_TITLE("&6Quests"),
-
     CURRENCY_COINS("&6Coins"),
     CURRENCY_SOULS("&6Souls"),
 
+
+
+    //----------------------------------------
+    // GLOBAL MENU START
+    //----------------------------------------
     GLOBAL_MENU_TITLE("&6Menu"),
+
 
     GLOBAL_MENU_SKILLS_ITEM_DISPLAY("&6Skills"),
     GLOBAL_MENU_SKILLS_ITEM_LORE("", "&fClick to open the skills menu"),
 
+    MENU_SKILLS_TITLE("&6Skills"),
+
+
+
     GLOBAL_MENU_PROFILE_ITEM_DISPLAY("&6Profiles"),
     GLOBAL_MENU_PROFILE_ITEM_LORE("", "&fClick to open the profiles menu"),
 
+    PROFILES_GUI_TITLE("&6Profiles"),
+
+    PROFILE_ICON_DISPLAY("{profile.name}"),
+    PROFILE_ICON_LORE(
+        "",
+        "&eGod: {god.name}",
+        "&eBalance: &a{profile.wallet.coins}",
+        "&eSouls: &a{profile.wallet.souls}",
+        "&eLevel: &a{profile.level}",
+        "&eExp: &a{profile.xp}/{profile.xpForNextLevel}",
+        "&eCreated: &a{profile.created}"
+    ),
+
+    PROFILE_ICON_SELECTED("&6You currently have this profile selected!"),
+    PROFILE_ICON_NOT_SELECTED("&aClick to select!"),
+
+    PROFILE_NOT_FOUND("&cProfile not found!"),
+
+    PROFILE_GUI_CONFIRM_TITLE("&6Are you sure want to delete the profile?"),
+
+    PROFILE_SELECTED("&aYou have successfully selected the profile '{profile.name}&a'!"),
+    PROFILE_CREATED("&aYou have successfully created the new profile '{profile.name}&a'!"),
+    PROFILE_DELETED("&aYou have successfully deleted the profile '{profile.name}&a'!"),
+
+    PROFILE_CREATE_ICON_DISPLAY("&6Add profile"),
+    PROFILE_CREATE_ICON_LORE("", "&fClick to create a new profile!"),
+    PROFILE_CREATE_ICON_REQUIRE_DONATE_LORE("", "&cYou need donate '{donate}' to unlock this feature!"),
+
+    PROFILE_SELECT_COOLDOWN("&cYou can change the profile in &6{time} &cseconds!"),
+
+
     GLOBAL_MENU_REBIRTH_ITEM_DISPLAY("&6Rebirth"),
     GLOBAL_MENU_REBIRTH_ITEM_LORE("", "&fClick to open the rebirth menu"),
+    GLOBAL_MENU_REBIRTH_TITLE("&6Rebirth"),
 
     GLOBAL_MENU_QUESTS_ITEM_DISPLAY("&6Quests"),
     GLOBAL_MENU_QUESTS_ITEM_LORE("", "&fClick to open the quests menu"),
+    GLOBAL_MENU_QUESTS_TITLE("&6Quests"),
+
+
 
     GLOBAL_MENU_PETS_ITEM_DISPLAY("&6Pets"),
     GLOBAL_MENU_PETS_ITEM_LORE("", "&fClick to open the pets menu"),
+    GLOBAL_MENU_PETS_TITLE("&6Pets"),
 
-    GLOBAL_MENU_AURAS_ITEM_DISPLAY("&6Auras"),
-    GLOBAL_MENU_AURAS_ITEM_LORE("", "&fClick to open the auras menu"),
+    PET_ICON_DISPLAY("{pet.name}"),
+    PET_TEST_NAME("&7Test Pet"),
 
     GLOBAL_MENU_ITEMS_ITEM_DISPLAY("&6Items"),
     GLOBAL_MENU_ITEMS_ITEM_LORE("", "&fClick to open the items menu"),
+    GLOBAL_MENU_ITEMS_TITLE("&6Items"),
+
 
     GLOBAL_MENU_STATISTICS_ITEM_DISPLAY("&6Statistics"),
     GLOBAL_MENU_STATISTICS_ITEM_LORE("", "&fClick to open the statistics menu"),
+    GLOBAL_MENU_STATISTICS_TITLE("&6Statistics"),
+
 
     GLOBAL_MENU_SETTINGS_ITEM_DISPLAY("&6Settings"),
     GLOBAL_MENU_SETTINGS_ITEM_LORE("", "&fClick to open the settings menu"),
+    GLOBAL_MENU_SETTINGS_TITLE("&6Settings"),
 
+    //----------------------------------------
+    // GLOBAL MENU END
+    //----------------------------------------
     ;
 
     constructor(vararg lines: String) : this(lines.joinToString("\n"))

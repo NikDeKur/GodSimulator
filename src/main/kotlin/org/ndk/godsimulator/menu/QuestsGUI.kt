@@ -13,6 +13,6 @@ class QuestsGUI(player: Player) : PagedGUI(player, 54) {
         }
 
     override fun getTitle(): String {
-        return player.getLangMsg(MSG.QUEST_BOOK_TITLE).text
+        return player.getLangMsg(MSG.GLOBAL_MENU_QUESTS_TITLE).text
     }
 }
