@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack
 import org.ndk.godsimulator.equipable.inventory.EquipableInventory
 import org.ndk.godsimulator.language.MSG
 import org.ndk.godsimulator.profile.PlayerProfile.Companion.profile
+import org.ndk.godsimulator.utils.SimPattern
 import org.ndk.klib.sub
 import org.ndk.minecraft.extension.*
 import org.ndk.minecraft.gui.PagedGUI
@@ -22,8 +23,8 @@ abstract class EquipableGUI(player: Player) : PagedGUI(player, 54) {
     override val nextArrowPos = NEXT_ARROW_POS
     override val previousArrowPos = PREVIOUS_ARROW_POS
 
-    override val previousArrow = Patterns.ARROW_PREVIOUS.build(player)
-    override val nextArrow = Patterns.ARROW_NEXT.build(player)
+    override val previousArrow = SimPattern.ARROW_PREVIOUS.build(player)
+    override val nextArrow = SimPattern.ARROW_NEXT.build(player)
 
     val profile = player.profile
     override val startInventoryFrom = START_INVENTORY_FROM

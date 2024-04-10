@@ -1,15 +1,17 @@
 package org.ndk.godsimulator.menu
 
+import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
 import org.ndk.godsimulator.database.Database.Companion.accessor
 import org.ndk.godsimulator.database.Database.Companion.accessorAsync
 import org.ndk.godsimulator.database.PlayerAccessor
+import org.ndk.godsimulator.extension.setTexture
 import org.ndk.godsimulator.language.MSG
 import org.ndk.godsimulator.language.Quick
-import org.ndk.godsimulator.utils.ConfirmationGUI
 import org.ndk.godsimulator.profile.PlayerProfile
+import org.ndk.godsimulator.utils.ConfirmationGUI
 import org.ndk.klib.uuid
 import org.ndk.minecraft.extension.*
 import org.ndk.minecraft.gui.GUI
@@ -65,11 +67,13 @@ class ProfilesGUI(player: Player) : GUI(player, 27) {
                                     "donate" to require)
                                     .listText
                                 )
+                                it.setTexture("lock")
                                 it.setTag("canCreate", false)
                                 return@onBuild
                             }
                         }
                         it.setLore(player.getLangMsg(MSG.PROFILE_CREATE_ICON_LORE).listText)
+                        it.setTexture("available")
                         it.setTag("canCreate", true)
                     }
                     inventory.addItem(pattern.build(player))
@@ -148,7 +152,6 @@ class ProfilesGUI(player: Player) : GUI(player, 27) {
 
 
 
-    @Suppress("SpellCheckingInspection")
     companion object {
 
         class DeleteConfirmGUI(player: Player, val profile: PlayerProfile) : ConfirmationGUI(player) {
@@ -168,27 +171,27 @@ class ProfilesGUI(player: Player) : GUI(player, 27) {
             }
         }
 
-        val CREATE_PROFILE_FREE = ItemPattern.fromSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjMyZmZmMTYzZTIzNTYzMmY0MDQ3ZjQ4NDE1OTJkNDZmODVjYmJmZGU4OWZjM2RmNjg3NzFiZmY2OWE2NjIifX19")
+        val CREATE_PROFILE_FREE = ItemPattern.from(Material.BARRIER)
             .setDisplayName(MSG.PROFILE_CREATE_ICON_DISPLAY)
             .setTouchable(false)
             .setTag("isProfileAdd", true)
             .setTag("profileAdd", "FREE")
 
-        val CREATE_PROFILE_GOLD = ItemPattern.fromSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWRmZmYxYjNjNWQ4NWZlM2NkZDU2NTY4NjliYWEwZWFkZTVlNTNhY2E5ZDU2MTQyNzY0OGNjNzJmNWUyNWE5In19fQ==")
+        val CREATE_PROFILE_GOLD = ItemPattern.from(Material.BARRIER)
             .setDisplayName(MSG.PROFILE_CREATE_ICON_DISPLAY)
             .setTouchable(false)
             .setTag("isProfileAdd", true)
             .setTag("requireDonate", true)
             .setTag("requiredDonate", "Gold")
 
-        val CREATE_PROFILE_PREMIUM = ItemPattern.fromSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjA1NmJjMTI0NGZjZmY5OTM0NGYxMmFiYTQyYWMyM2ZlZTZlZjZlMzM1MWQyN2QyNzNjMTU3MjUzMWYifX19")
+        val CREATE_PROFILE_PREMIUM = ItemPattern.from(Material.BARRIER)
             .setDisplayName(MSG.PROFILE_CREATE_ICON_DISPLAY)
             .setTouchable(false)
             .setTag("isProfileAdd", true)
             .setTag("requireDonate", true)
             .setTag("requiredDonate", "Premium")
 
-        val CREATE_PROFILE_MVP = ItemPattern.fromSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmQ4NmRiOWExNGQ1ODc5ZmEyODExZDMwMWNjYmQ1MjY5OTRmODcxMjQ3YjYyZjJkOWE0ODE4M2U5NjQxYWQ2OSJ9fX0=")
+        val CREATE_PROFILE_MVP = ItemPattern.from(Material.BARRIER)
             .setDisplayName(MSG.PROFILE_CREATE_ICON_DISPLAY)
             .setTouchable(false)
             .setTag("isProfileAdd", true)
