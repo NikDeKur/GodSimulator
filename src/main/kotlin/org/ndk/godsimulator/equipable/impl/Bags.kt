@@ -12,7 +12,7 @@ import org.ndk.godsimulator.equipable.inventory.EquipableInventory
 import org.ndk.godsimulator.equipable.inventory.SingleEquipableInventory
 import org.ndk.godsimulator.equipable.type.BuyableEquipableType
 import org.ndk.godsimulator.equipable.type.EquipableTypesManager
-import org.ndk.godsimulator.extension.readMSGOrThrow
+import org.ndk.godsimulator.extension.readMSGHolderOrThrow
 import org.ndk.godsimulator.language.MSG
 import org.ndk.godsimulator.profile.PlayerProfile
 import org.ndk.godsimulator.shop.ShopGUI
@@ -132,7 +132,7 @@ class BagsManager : EquipableTypesManager<BagType>() {
         typesSection.forEachSectionSafe {
             val id = it.name
             val hierarchy = it.getIntOr("hierarchy", types.size + 1)!!
-            val name = it.readMSGOrThrow("name")
+            val name = it.readMSGHolderOrThrow("name")
             val size = it.readBigIntegerOrThrow("size")
             val price = it.readBigInteger("price", Constants.BIGINT_MINUS1)!!
             val type = BagType(this, hierarchy, id, name, size, price)
@@ -163,7 +163,7 @@ class BagsShopGUI(
 ) {
 
     override fun getTitle(): String {
-        return player.getLangMsg(MSG.SHOP_BAG_TITLE).text
+        return player.getLangMsg(MSG.BAGS_SHOP_GUI_TITLE).text
     }
 
     override fun clone(): ShopGUI<BagType> {

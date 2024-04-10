@@ -12,7 +12,7 @@ import org.ndk.godsimulator.equipable.inventory.EquipableInventory
 import org.ndk.godsimulator.equipable.inventory.SingleEquipableInventory
 import org.ndk.godsimulator.equipable.type.BuyableEquipableType
 import org.ndk.godsimulator.equipable.type.EquipableTypesManager
-import org.ndk.godsimulator.extension.readMSGOrThrow
+import org.ndk.godsimulator.extension.readMSGHolderOrThrow
 import org.ndk.godsimulator.extension.readStats
 import org.ndk.godsimulator.language.MSG
 import org.ndk.godsimulator.profile.PlayerProfile
@@ -20,6 +20,7 @@ import org.ndk.godsimulator.rpg.buff.ImaginaryBuffsList
 import org.ndk.godsimulator.shop.ShopGUI
 import org.ndk.minecraft.extension.*
 import org.ndk.minecraft.item.ItemPattern
+import org.ndk.minecraft.language.MSGHolder
 import org.ndk.minecraft.plugin.ServerPlugin
 import java.math.BigInteger
 import java.util.*
@@ -32,7 +33,7 @@ data class AuraType(
     override val hierarchy: Int,
     override val id: String,
     val icon: Material,
-    override val nameMSG: MSG,
+    override val nameMSG: MSGHolder,
     val priceSouls: BigInteger,
     val buffs: ImaginaryBuffsList,
 ) : BuyableEquipableType<AuraType> {
@@ -92,7 +93,7 @@ class AurasManager : EquipableTypesManager<AuraType>() {
             val id = it.name
             val hierarchy = this.types.size + 1
             val icon = it.readMaterialOrThrow("icon")
-            val name = it.readMSGOrThrow("name")
+            val name = it.readMSGHolderOrThrow("name")
             val price = it.readBigInteger("price") ?: BigInteger.ZERO
             val buffs = it.readStats("stats")
 
@@ -107,7 +108,7 @@ class AurasManager : EquipableTypesManager<AuraType>() {
 }
 
 class AurasInventory(profile: PlayerProfile) : SingleEquipableInventory<AuraType>(profile) {
-    override val allLimit by profile::aurasLimit
+    override val allLimit = -1
 }
 
 class AurasShopGUI(
@@ -117,7 +118,7 @@ class AurasShopGUI(
     GodSimulator.equipableManager.auras
 ) {
     override fun getTitle(): String {
-        return player.getLangMsg(MSG.SHOP_AURA_TITLE).text
+        return player.getLangMsg(MSG.AURAS_SHOP_GUI_TITLE).text
     }
 
     override fun clone(): ShopGUI<AuraType> {
