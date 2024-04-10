@@ -43,23 +43,18 @@ class RPGProfile(val profile: PlayerProfile) {
                     playerSpeed = stat.merge(playerSpeed, value as Int)
                 }
                 is RPGHealthStat -> {
-                    healthValue = stat.merge(healthValue, value as BigInteger)
+                    maxHealth = stat.merge(maxHealth.toBigInteger(), value as BigInteger).toBigDecimal()
                     val added = updateMaxHealth()
                     heal(added)
                 }
-                is RPGHealthExtraProcentStat -> {
-                    healthExtraProcent = stat.merge(healthExtraProcent, value as BigInteger)
-                    val added = updateMaxHealth()
-                    heal(added)
+                is RPGDamageMultiplierStat -> {
+                    damageProcent = stat.merge(damageProcent, value as Double)
                 }
-                is RPGDamageExtraProcentStat -> {
-                    damageProcent = stat.merge(damageProcent, value as BigInteger)
+                is RPGExpMultiplierStat -> {
+                    expProcent = stat.merge(expProcent, value as Double)
                 }
-                is RPGExpExtraProcentStat -> {
-                    expProcent = stat.merge(expProcent, value as BigInteger)
-                }
-                is RPGBagFillExtraProcentStat -> {
-                    bagFillProcent = stat.merge(bagFillProcent, value as BigInteger)
+                is RPGBagFillMultiplierStat -> {
+                    bagFillProcent = stat.merge(bagFillProcent, value as Double)
                 }
             }
         }
@@ -72,25 +67,19 @@ class RPGProfile(val profile: PlayerProfile) {
                     playerSpeed = stat.deMerge(playerSpeed, value as Int)
                 }
                 is RPGHealthStat -> {
-                    healthValue = stat.deMerge(healthValue, value as BigInteger)
+                    maxHealth = stat.deMerge(maxHealth.toBigInteger(), value as BigInteger).toBigDecimal()
                     val taken = updateMaxHealth().abs()
                     if (health != maxHealth)
                         unHeal(taken)
                 }
-                is RPGHealthExtraProcentStat -> {
-                    healthExtraProcent = stat.deMerge(healthExtraProcent, value as BigInteger)
-                    val taken = updateMaxHealth().abs()
-                    if (health != maxHealth)
-                        unHeal(taken)
+                is RPGDamageMultiplierStat -> {
+                    damageProcent = stat.deMerge(damageProcent, value as Double)
                 }
-                is RPGDamageExtraProcentStat -> {
-                    damageProcent = stat.deMerge(damageProcent, value as BigInteger)
+                is RPGExpMultiplierStat -> {
+                    expProcent = stat.deMerge(expProcent, value as Double)
                 }
-                is RPGExpExtraProcentStat -> {
-                    expProcent = stat.deMerge(expProcent, value as BigInteger)
-                }
-                is RPGBagFillExtraProcentStat -> {
-                    bagFillProcent = stat.deMerge(bagFillProcent, value as BigInteger)
+                is RPGBagFillMultiplierStat -> {
+                    bagFillProcent = stat.deMerge(bagFillProcent, value as Double)
                 }
             }
         }
@@ -166,20 +155,6 @@ class RPGProfile(val profile: PlayerProfile) {
 
 
     /**
-     * Field to store the not scaled player health
-     *
-     * The health is controlled by the RPGHealthStat
-     */
-    var healthValue: BigInteger = BigInteger("20")
-
-    /**
-     * Field to store the scaling health value
-     *
-     * The health is controlled by the RPGHealthExtraProcentStat
-     */
-    var healthExtraProcent: BigInteger = BigInteger.ZERO
-
-    /**
      * The max health of the player
      *
      * It is calculated by the health and healthExtraProcent
@@ -219,12 +194,9 @@ class RPGProfile(val profile: PlayerProfile) {
     fun updateMaxHealth(heal: Boolean = false): BigDecimal {
         val maxHealthBefore = maxHealth
 
-        // maxHealth = health + healthExtraProcent%
-        maxHealth = calculateMaxHealth(healthValue, healthExtraProcent)
-
         // This should never happen, but if it does, set the max health to 1 and log the error
         if (maxHealth < BigDecimal.ONE) {
-            logger.warning("Player max health is less than 1, setting to 1. Player: (${player.name} | ${player.uniqueId}) | Health: $healthValue | HealthExtraProcent: $healthExtraProcent | MaxHealth: $maxHealth")
+            logger.warning("Player max health is less than 1, setting to 1. Player: (${player.name} | ${player.uniqueId}) health: $health | max health: $maxHealth")
             maxHealth = BigDecimal.ONE
         }
 
@@ -238,6 +210,7 @@ class RPGProfile(val profile: PlayerProfile) {
             if (heal)
                 player.health = maxHealth.toDouble()
         }
+
         return maxHealth - maxHealthBefore
     }
 
@@ -303,20 +276,23 @@ class RPGProfile(val profile: PlayerProfile) {
     }
 
 
-    var damageProcent: BigInteger = BigInteger.ZERO
+    var damageProcent: Double = 0.0
     fun scaleDamage(damage: BigInteger): BigInteger {
+        if (damageProcent == 0.0) return damage
         val bonus = damage.toBigDecimal().divide(BIGDEC_100) * damageProcent.toBigDecimal()
         return damage.plus(bonus.toBigInteger())
     }
 
-    var expProcent: BigInteger = BigInteger.ZERO
+    var expProcent: Double = 0.0
     fun scaleExp(exp: BigInteger): BigInteger {
+        if (expProcent == 0.0) return exp
         val bonus = exp.toBigDecimal().divide(BIGDEC_100) * expProcent.toBigDecimal()
         return exp.plus(bonus.toBigInteger())
     }
 
-    var bagFillProcent: BigInteger = BigInteger.ZERO
+    var bagFillProcent: Double = 0.0
     fun scaleBagFill(fill: BigInteger): BigInteger {
+        if (bagFillProcent == 0.0) return fill
         val bonus = fill.toBigDecimal().divide(BIGDEC_100) * bagFillProcent.toBigDecimal()
         return fill.plus(bonus.toBigInteger())
     }
@@ -337,15 +313,6 @@ class RPGProfile(val profile: PlayerProfile) {
             scopes.pets.profile
             scopes.auras.profile
             scopes.bags.profile
-        }
-    }
-
-
-    companion object {
-
-        @JvmStatic
-        fun calculateMaxHealth(health: BigInteger, healthExtraProcent: BigInteger): BigDecimal {
-            return health.toBigDecimal().divide(BIGDEC_100) * (BIGDEC_100 + healthExtraProcent.toBigDecimal())
         }
     }
 }

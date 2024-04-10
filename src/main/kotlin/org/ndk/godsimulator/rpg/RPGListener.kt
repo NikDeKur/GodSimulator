@@ -4,8 +4,6 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.ndk.godsimulator.equipable.BuffsEquipable
 import org.ndk.godsimulator.event.equipable.EquipableUnEquipEvent
-import org.ndk.godsimulator.rpg.profile.RPGProfile
-import org.ndk.godsimulator.rpg.stat.RPGHealthExtraProcentStat
 import org.ndk.godsimulator.rpg.stat.RPGHealthStat
 
 class RPGListener : Listener {
@@ -21,12 +19,8 @@ class RPGListener : Listener {
         val item = event.equipable
         if (item !is BuffsEquipable<*>) return
         val itemHealthBuff = item.equipBuffs.getBuffValue(RPGHealthStat)
-        val itemHealthProcentBuff = item.equipBuffs.getBuffValue(RPGHealthExtraProcentStat)
 
-        val maxHealthBonus = RPGProfile.calculateMaxHealth(
-            (rpg.healthValue + itemHealthBuff),
-            (rpg.healthExtraProcent * itemHealthProcentBuff)
-        ) - rpg.maxHealth
+        val maxHealthBonus = itemHealthBuff.toBigDecimal() - rpg.maxHealth
 
         if (maxHealthBonus >= rpg.health) {
             event.isCancelled = true
