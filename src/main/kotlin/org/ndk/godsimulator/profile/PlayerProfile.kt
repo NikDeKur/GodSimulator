@@ -243,6 +243,7 @@ class PlayerProfile(
         scopes.level = new
         onlinePlayer?.sendLangMsg(MSG.LEVEL_UP, "level" to new)
         updateMinecraftXpBar()
+        updateUnlockedSkills()
     }
 
 
@@ -351,6 +352,9 @@ class PlayerProfile(
         bags.clear()
 
         // Do not clear auras and pets
+
+        updateMinecraftXpBar()
+        updateUnlockedSkills()
 
 
         if (player != null) {
