@@ -13,7 +13,7 @@ import org.bukkit.Location
 import org.bukkit.entity.Player
 import org.ndk.godsimulator.GodSimulator
 import org.ndk.godsimulator.GodSimulator.Companion.scheduler
-import org.ndk.godsimulator.extension.readMSGOrThrow
+import org.ndk.godsimulator.extension.readMSGHolderOrThrow
 import org.ndk.godsimulator.world.WorldsManager.Companion.data
 import org.ndk.minecraft.plugin.ServerPlugin
 import org.ndk.minecraft.extension.*
@@ -125,7 +125,7 @@ class BuildingsManager : PluginModule {
         val patternsCFG = plugin.configsManager.load("buildings_patterns")
         for (it in patternsCFG.getListSection()) {
             val id = it.name
-            val name = it.readMSGOrThrow("name")
+            val name = it.readMSGHolderOrThrow("name")
             val schemName = it.getStringOrThrow("schematic")
             val hpHologramVector = it.readVector("hologramTranslation", VECTOR_ZERO)!!
             patterns[id] = BuildingPattern(this, id, name, schemName, hpHologramVector)

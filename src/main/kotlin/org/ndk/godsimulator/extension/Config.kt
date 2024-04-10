@@ -8,13 +8,13 @@ import com.sk89q.worldedit.regions.factory.SphereRegionFactory
 import com.sk89q.worldedit.world.World
 import org.bukkit.configuration.ConfigurationSection
 import org.ndk.godsimulator.GodSimulator
+import org.ndk.godsimulator.GodSimulator.Companion.languagesManager
 import org.ndk.godsimulator.GodSimulator.Companion.logger
-import org.ndk.godsimulator.language.MSG
-import org.ndk.godsimulator.language.MSG_FROM_ID
 import org.ndk.godsimulator.rpg.buff.EmptyImaginaryBuffsList
 import org.ndk.godsimulator.rpg.buff.ImaginaryBuffsList
 import org.ndk.godsimulator.rpg.buff.ImaginaryBuffsListImpl
 import org.ndk.minecraft.extension.*
+import org.ndk.minecraft.language.MSGHolder
 
 
 val WEVECTOR_ZERO = com.sk89q.worldedit.Vector(0, 0, 0)
@@ -104,13 +104,13 @@ fun ConfigurationSection.readRegionOrThrow(path: String): Region {
     return readRegion(path) ?: throwNotFound(path)
 }
 
-fun ConfigurationSection.readMSG(path: String, default: MSG? = null): MSG? {
+fun ConfigurationSection.readMSGHolder(path: String, default: MSGHolder? = null): MSGHolder? {
     val msgId = getString(path) ?: return null
-    return MSG_FROM_ID[msgId] ?: default
+    return languagesManager.getMessage(msgId) ?: default
 }
 
-fun ConfigurationSection.readMSGOrThrow(path: String): MSG {
-    return readMSG(path) ?: throwNotFound(path)
+fun ConfigurationSection.readMSGHolderOrThrow(path: String): MSGHolder {
+    return readMSGHolder(path) ?: throwNotFound(path)
 }
 
 

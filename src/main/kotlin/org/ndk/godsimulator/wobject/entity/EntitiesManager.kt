@@ -7,7 +7,7 @@ import net.minecraft.server.v1_12_R1.EntityTypes
 import org.bukkit.Location
 import org.bukkit.entity.Player
 import org.ndk.godsimulator.GodSimulator
-import org.ndk.godsimulator.extension.readMSGOrThrow
+import org.ndk.godsimulator.extension.readMSGHolderOrThrow
 import org.ndk.godsimulator.world.WorldsManager.Companion.data
 import org.ndk.klib.withUnlock
 import org.ndk.minecraft.extension.*
@@ -35,7 +35,7 @@ class EntitiesManager : PluginModule {
         for (patternS in patternsConfig.getListSection1()) {
             try {
                 val id = patternS.name
-                val nameMSG = patternS.readMSGOrThrow("name")
+                val nameMSG = patternS.readMSGHolderOrThrow("name")
                 val mobId = patternS.getStringOrThrow("mob")
                 val mobPattern = getMobPattern(mobId) ?: throw NoSuchElementException("MobPattern '$mobId' not found")
                 val hologramTranslation = patternS.readVectorOrThrow("hologramTranslation")

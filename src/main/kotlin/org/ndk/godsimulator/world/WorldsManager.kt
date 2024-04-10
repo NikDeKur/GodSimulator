@@ -7,7 +7,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerRespawnEvent
 import org.ndk.godsimulator.GodSimulator
-import org.ndk.godsimulator.extension.readMSGOrThrow
+import org.ndk.godsimulator.extension.readMSGHolderOrThrow
 import org.ndk.godsimulator.extension.readRegionOrThrow
 import org.ndk.godsimulator.shop.ShopManager
 import org.ndk.godsimulator.shop.ShopManager.Companion.readShopOrThrow
@@ -64,11 +64,13 @@ class WorldsManager : PluginModule, Listener {
 
                 // Load shops as scheduled task, because ShopManager loads after WorldsManager
                 plugin.modulesManager.addTask(TaskMoment.AFTER_LOAD, "LoadShops_${worldBukkit.name}", ShopManager::class.java) {
-                    config.readShopOrThrow("shop", world = worldBukkit)
+                    config.forEachSectionSafe("shops") {
+                        it.readShopOrThrow("", world = worldBukkit)
+                    }
                 }
 
                 config.getListSection("portals").forEach {
-                    val name = it.readMSGOrThrow("name")
+                    val name = it.readMSGHolderOrThrow("name")
                     val hologramTranslation = it.readVector("hologramTranslation", VECTOR_ZERO)!!
                     val region = it.readRegionOrThrow("region")
                     val destination = it.readLocationOrThrow("destination", world = worldBukkit)
