@@ -4,6 +4,7 @@ import org.ndk.godsimulator.GodSimulator.Companion.equipableManager
 import org.ndk.godsimulator.GodSimulator.Companion.languagesManager
 import org.ndk.godsimulator.equipable.impl.AurasInventory
 import org.ndk.godsimulator.equipable.impl.BagsInventory
+import org.ndk.godsimulator.equipable.impl.ItemsInventory
 import org.ndk.godsimulator.equipable.impl.PetsInventory
 import org.ndk.godsimulator.equipable.inventory.EquipableInventory
 import org.ndk.godsimulator.equipable.type.EquipableType
@@ -126,16 +127,23 @@ class ProfileScopes(
     var bagFill by accessor.bigIntBoundVar("bagFill")
 
 
+    var itemsEquipLimit by accessor.intBoundVar("itemsEquipLimit", default = 3)
+    val items by inventoryDataHolder(
+        "items",
+        ItemsInventory::class.java,
+        equipableManager.items
+    )
+
 
     /**
      * The limit of the pets, that the player can have. Include equipped and unequipped pets.
      */
-    val petsLimit by accessor.intBoundVar("petsLimit", default = 200)
+    var petsLimit by accessor.intBoundVar("petsLimit", default = 200)
 
     /**
      * The limit of the pets, that the player can have equipped.
      */
-    val petsEquipLimit by accessor.intBoundVar("petsEquipLimit", default = 3)
+    var petsEquipLimit by accessor.intBoundVar("petsEquipLimit", default = 3)
     val pets by inventoryDataHolder(
         "pets",
         PetsInventory::class.java,
@@ -143,8 +151,6 @@ class ProfileScopes(
     )
 
 
-
-    val aurasLimit by accessor.intBoundVar("petsLimit", default = 200)
     val auras by inventoryDataHolder(
         "auras",
         AurasInventory::class.java,

@@ -296,12 +296,13 @@ class PlayerProfile(
         scopes.bagFill = BigInteger.ZERO
     }
 
+    val items by scopes::items
+    val itemsEquipLimit by scopes::itemsEquipLimit
 
     val petsLimit by scopes::petsLimit
     val petsEquipLimit by scopes::petsEquipLimit
     val pets by scopes::pets
 
-    val aurasLimit by scopes::aurasLimit
     val auras by scopes::auras
 
 
