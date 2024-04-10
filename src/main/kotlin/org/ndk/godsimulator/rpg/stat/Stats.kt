@@ -66,7 +66,7 @@ object RPGDamageMultiplierStat : RPGStat.Double() {
 // EXPERIENCE
 // ----------------------------
 object RPGExpMultiplierStat : RPGStat.Double() {
-    override val id: String = "exp_multiplier"
+    override val id: String = "xp_multiplier"
     override val nameMSG: MSG = MSG.RPG_STAT_NAME_EXP_MULTIPLIER
     override val nameBuffMSG: MSG = MSG.RPG_STAT_NAME_BUFF_EXP_MULTIPLIER
 }
