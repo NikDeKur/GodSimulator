@@ -36,6 +36,7 @@ data class PetType(
         return ItemPattern.from(Material.MONSTER_EGG)
             .setDisplayName(MSG.PET_ICON_DISPLAY)
             .setEggType(icon)
+            .setHideAttributes(true)
             .setTouchable(false)
             .apply {
                 val lore = GodSimulator.rpgManager.formatToLore(buffs, player)

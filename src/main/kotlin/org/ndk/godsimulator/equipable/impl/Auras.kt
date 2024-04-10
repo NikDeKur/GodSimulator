@@ -42,6 +42,7 @@ data class AuraType(
         return ItemPattern.from(icon)
             .setDisplayName(MSG.AURA_ICON_DISPLAY)
             .setTouchable(false)
+            .setHideAttributes(true)
             .apply {
                 val lore = GodSimulator.rpgManager.formatToLore(buffs, player)
                 if (lore.isEmpty()) return@apply

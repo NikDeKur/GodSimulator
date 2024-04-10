@@ -109,6 +109,7 @@ data class BagType(
 
     companion object {
         val PATTERN = ItemPattern.from(Material.CHEST)
+            .setHideAttributes(true)
             .setDisplayName(MSG.BAG_ICON_DISPLAY)
             .setLore(MSG.BAG_ICON_LORE)
             .setTag("isBag", true)
