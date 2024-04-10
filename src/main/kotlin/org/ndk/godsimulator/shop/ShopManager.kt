@@ -9,27 +9,19 @@ import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.util.Vector
 import org.ndk.godsimulator.GodSimulator
 import org.ndk.godsimulator.GodSimulator.Companion.shopManager
-import org.ndk.godsimulator.equipable.impl.AurasShopGUI
-import org.ndk.godsimulator.equipable.impl.BagsShopGUI
-import org.ndk.godsimulator.extension.readMSG
+import org.ndk.godsimulator.extension.readMSGHolder
 import org.ndk.minecraft.extension.*
 import org.ndk.minecraft.modules.PluginModule
 import org.ndk.minecraft.plugin.ServerPlugin
 import java.util.*
-import java.util.concurrent.ConcurrentHashMap
 
 class ShopManager : PluginModule {
 
     override val id: String = "ShopManager"
 
-    val patterns = ConcurrentHashMap<String, Shop.Pattern>()
-    val shops = ConcurrentHashMap<UUID, Shop>()
-    val shopsEntitiesUUIDs = HashSet<UUID>()
-    val shopGUIs = HashMap<String, Class<out ShopGUI<*>>>()
-        .apply {
-            put("bag", BagsShopGUI::class.java)
-            put("aura", AurasShopGUI::class.java)
-        }
+    val patterns = HashMap<String, Shop.Pattern>()
+    val shops = HashMap<UUID, Shop>()
+    val entityIdToShopId = HashMap<UUID, Shop>()
 
     override fun onLoad(plugin: ServerPlugin) {
         val config = plugin.configsManager.load("shops")
@@ -46,7 +38,7 @@ class ShopManager : PluginModule {
         }
         patterns.clear()
         shops.clear()
-        shopsEntitiesUUIDs.clear()
+        entityIdToShopId.clear()
     }
 
 
@@ -57,13 +49,17 @@ class ShopManager : PluginModule {
         val shop = Shop(id, pattern, location)
         shop.spawn()
         shops[shop.id] = shop
-        shopsEntitiesUUIDs.add(shop.entity.uniqueId)
         shop.world.objectsManager.register(shop)
+        entityIdToShopId[shop.entity.uniqueId] = shop
         return shop
     }
 
+    fun getShop(uuid: UUID): Shop? = shops[uuid]
+
+    fun getShopByEntity(uuid: UUID): Shop? = entityIdToShopId[uuid]
+
     fun isShopEntity(uuid: UUID): Boolean {
-        return shopsEntitiesUUIDs.contains(uuid)
+        return shops.containsKey(uuid)
     }
 
 
@@ -71,7 +67,7 @@ class ShopManager : PluginModule {
         fun ConfigurationSection.readShopPattern(path: String, def: Shop.Pattern? = null): Shop.Pattern? {
             val section = getSection(path) ?: return def
             val id = section.name
-            val msgName = section.readMSG("name") ?: return def
+            val msgName = section.readMSGHolder("name") ?: return def
             val entityType = section.readEntityType("entity") ?: return def
             val hologramTranslation = section.readVector("hologramTranslation") ?: Vector(0.0, 0.0, 0.0)
             return Shop.Pattern(id, msgName, entityType, hologramTranslation)

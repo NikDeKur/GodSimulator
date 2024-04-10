@@ -69,9 +69,6 @@ abstract class ShopGUI<T : BuyableEquipableType<T>>(
                 else false
             ) update()
 
-        } else {
-            if (item.getBooleanTag("isBack") != true) return
-            ShopMainGUI(player).open()
         }
     }
 
@@ -92,7 +89,6 @@ abstract class ShopGUI<T : BuyableEquipableType<T>>(
     override fun changeInventory(inventory: Inventory) {
         inventory.setRow(1, Patterns.EMPTY_SLOT)
         inventory.setRow(6, Patterns.EMPTY_SLOT)
-        inventory.setItem(0, ShopMainGUI.BACK_ITEM.build(player))
     }
 
     abstract fun clone(): ShopGUI<T>
