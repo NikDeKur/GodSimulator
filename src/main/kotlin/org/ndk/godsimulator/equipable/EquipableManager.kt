@@ -4,6 +4,7 @@ package org.ndk.godsimulator.equipable
 import org.ndk.godsimulator.GodSimulator
 import org.ndk.godsimulator.equipable.impl.AurasManager
 import org.ndk.godsimulator.equipable.impl.BagsManager
+import org.ndk.godsimulator.equipable.impl.ItemsManager
 import org.ndk.godsimulator.equipable.impl.PetsManager
 import org.ndk.godsimulator.equipable.type.EquipableTypesManager
 import org.ndk.klib.forEachSafe
@@ -15,12 +16,14 @@ import java.util.*
 class EquipableManager : PluginModule {
     override val id: String = "EquipableManager"
 
+    val items: ItemsManager = ItemsManager()
     val pets: PetsManager = PetsManager()
     val auras: AurasManager = AurasManager()
     val bags: BagsManager = BagsManager()
 
     val managers = LinkedList<EquipableTypesManager<*>>()
         .apply {
+            add(items)
             add(pets)
             add(auras)
             add(bags)
