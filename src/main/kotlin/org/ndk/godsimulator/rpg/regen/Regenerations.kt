@@ -21,6 +21,6 @@ object StaminaRegeneration : Regeneration {
     override val delay: Long = 10
 
     override fun regenerate(rpg: RPGProfile) {
-        rpg.profile.fillStamina(1)
+        rpg.profile.fillStamina(2)
     }
 }
