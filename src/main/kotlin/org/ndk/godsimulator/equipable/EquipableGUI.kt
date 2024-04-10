@@ -97,20 +97,19 @@ abstract class EquipableGUI(player: Player) : PagedGUI(player, 54) {
         const val NEXT_ARROW_POS = 53
         const val START_INVENTORY_FROM = 18
 
+        fun items(player: Player) = object : EquipableGUI(player) {
+            override var equipInventory: EquipableInventory<*> = profile.items
+
+            override fun getTitle(): String {
+                return player.getLangMsg(MSG.GLOBAL_MENU_ITEMS_TITLE).text
+            }
+        }
 
         fun pets(player: Player) = object : EquipableGUI(player) {
             override var equipInventory: EquipableInventory<*> = profile.pets
 
             override fun getTitle(): String {
-                return player.getLangMsg(MSG.PET_GUI_TITLE).text
-            }
-        }
-
-        fun auras(player: Player) = object : EquipableGUI(player) {
-            override var equipInventory: EquipableInventory<*> = profile.auras
-
-            override fun getTitle(): String {
-                return player.getLangMsg(MSG.AURA_GUI_TITLE).text
+                return player.getLangMsg(MSG.GLOBAL_MENU_PETS_TITLE).text
             }
         }
     }
