@@ -16,6 +16,7 @@ import org.ndk.godsimulator.listener.GlobalEventListener
 import org.ndk.godsimulator.listener.OtherCommandsTabCompletion
 import org.ndk.godsimulator.location.LocationComeListener
 import org.ndk.godsimulator.location.LocationsManager
+import org.ndk.godsimulator.menu.GlobalMenuListener
 import org.ndk.godsimulator.rpg.RPGListener
 import org.ndk.godsimulator.rpg.RPGManager
 import org.ndk.godsimulator.rpg.regen.RegenerationManager
@@ -71,12 +72,12 @@ class GodSimulator : ServerPlugin() {
             SellZoneListener(), ShopListener(),
             LocationComeListener(), GlobalEventListener(),
             AdminStickCommand.Companion.StickListener(),
-            RPGListener(),
+            RPGListener(), GlobalMenuListener(),
 
             // Commands
             TestCommand(), SpawnBuildingCommand(), LanguageCommand(),
             SaveBuildingCommand(), AdminBaseCommand(), ProfilesCommand(),
-            PetsCommand(), AurasCommand(),
+            PetsCommand(),
 
             // Modules
             BeforeModulesTask(),
