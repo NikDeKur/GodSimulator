@@ -30,7 +30,7 @@ class LocationsManager : PluginModule {
         for (loc in config.getListSection()) {
             val locations = try {
                 val id = loc.name
-                val name = loc.readMSGOrThrow("name")
+                val name = loc.readMSGHolderOrThrow("name")
                 val price = loc.readBigInteger("price", Constants.BIGINT_MINUS1)!!
                 val material = loc.readMaterial("material", Material.STONE)!!
                 val region = loc.readRegionOrThrow("region")
@@ -51,7 +51,7 @@ class LocationsManager : PluginModule {
             for (zone in sellZonesSection) {
                 try {
                     val zoneId = zone.name
-                    val nameMSG = zone.readMSG("name") ?: MSG.SELL_ZONE_MAIN_NAME
+                    val nameMSG = zone.readMSGHolder("name") ?: MSG.SELL_ZONE_MAIN_NAME
                     val zoneRegion = zone.readRegionOrThrow("region")
                     val zoneMultiplier = zone.getDouble("multiplier", 1.0)
                     for (location in locations) {
