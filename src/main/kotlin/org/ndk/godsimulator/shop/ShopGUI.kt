@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack
 import org.ndk.godsimulator.equipable.type.BuyableEquipableType
 import org.ndk.godsimulator.equipable.type.EquipableTypesManager
 import org.ndk.godsimulator.language.MSG
+import org.ndk.godsimulator.language.Quick
 import org.ndk.godsimulator.profile.PlayerProfile
 import org.ndk.godsimulator.profile.PlayerProfile.Companion.profile
 import org.ndk.minecraft.extension.*
@@ -21,9 +22,9 @@ abstract class ShopGUI<T : BuyableEquipableType<T>>(
     override val content: List<ItemStack>
         get() {
             val list = ArrayList<ItemStack>()
-            manager.types.forEach { (_, type) ->
-                if (!type.buyable) return@forEach
-                val item = getIcon(type)
+            manager.types.values.sortedBy { it.hierarchy }.forEach {
+                if (!it.buyable) return@forEach
+                val item = getIcon(it)
                 list.add(item)
             }
             return list
@@ -31,18 +32,32 @@ abstract class ShopGUI<T : BuyableEquipableType<T>>(
 
     fun getIcon(type: T): ItemStack {
         val icon = type.getIcon(player)
+        val inventory = manager.getInventory(player.profile)
+
+        val has = inventory.has(type)
+        val equipped = has && inventory.isEquipped(type)
+
         val lore = ArrayList<String>(2)
         lore.add("")
-        val inventory = manager.getInventory(player.profile)
-        lore.add(player.getLangMsg(
-            if (inventory.has(type))
-                if (inventory.isEquipped(type))
+
+        if (!has) {
+            Quick.priceMessage(player, type.price).split("\n").forEach {
+                lore.add(it)
+            }
+            lore.add("")
+        }
+
+        lore.add(
+            player.getLangMsg(
+                if (equipped)
                     MSG.SHOP_EQUIPPED
-                else
+                else if (has)
                     MSG.SHOP_EQUIP
-            else
-                MSG.SHOP_BUY
-        ).text)
+                else
+                    MSG.SHOP_BUY
+            ).text
+        )
+
         icon.addLore(lore)
         return icon
     }

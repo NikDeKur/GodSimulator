@@ -215,6 +215,16 @@ object Quick {
         sender.sendLangMsg(MSG.CANNOT_AFFORD, "entries" to entries)
     }
 
+    fun priceMessage(sender: CommandSender, price: Wallet): String {
+        val entries = StringBuilder()
+        price.forEach { currency, value ->
+            val placeholder = currency.getFinalPlaceholder(sender)
+            placeholder["price"] = value.toBeautifulString().toSingletonSet()
+            entries.append("\n" + SimulatorLangManager.PREFIX + sender.getLangMsg(MSG.PRICE_ENTRY, placeholder).text)
+        }
+        return sender.getLangMsg(MSG.PRICE, "entries" to entries).text
+    }
+
     fun internalError(sender: CommandSender, comment: String) {
         sender.sendLangMsg(DefaultMSG.INTERNAL_ERROR, "time" to Tools.packDateTimeBeautiful(), "comment" to comment)
     }

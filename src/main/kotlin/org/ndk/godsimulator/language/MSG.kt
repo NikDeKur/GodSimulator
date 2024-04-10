@@ -75,6 +75,9 @@ enum class MSG(val defaultText: String) : MSGHolder {
     CANNOT_AFFORD("&cYou cannot afford this!{entries}"),
     CANNOT_AFFORD_ENTRY("  &fYou need &c{price} &f{currency.name}&f, but you have &e{balance}"),
 
+    PRICE("&fPrice:{entries}"),
+    PRICE_ENTRY("&6{price} {currency.name}"),
+
     /**
      * Placeholders:
      * 1. {time}
@@ -350,18 +353,30 @@ enum class MSG(val defaultText: String) : MSGHolder {
     PROFILE_RANDOM_NAME_9("&cRuby"),
     PROFILE_RANDOM_NAME_10("&eBeach"),
 
-    BAG_1("&aStarter Bag"),
-    BAG_2("&aSmall Bag"),
-    BAG_3("&aMedium Bag"),
-    BAG_4("&aBig Bag"),
+    BAG_LITTLE("&6Little Bag"),
+    BAG_SMALL("&eSmall Bag"),
+    BAG_MEDIUM("&aMedium Bag"),
+    BAG_ENHANCED("&bEnhanced Bag"),
+    BAG_PREMIUM("&9Premium Bag"),
+    BAG_GRAND("&dGrand Bag"),
+    BAG_MASTERWORK("&5Masterwork Bag"),
+    BAG_ULTIMATE("&3Ultimate Bag"),
+    BAG_MYTHICAL("&dMythical Bag"),
+    BAG_CELESTIAL("&bCelestial Bag"),
+    BAG_LEGENDARY("&6Legendary Bag"),
+    BAG_ETERNAL("&fEternal Bag"),
+    BAG_ROYAL("&bRoyal Bag"),
+    BAG_IMPERIAL("&cImperial Bag"),
+    BAG_EXALTED("&5Exalted Bag"),
+    BAG_MAJESTIC("&2Majestic Bag"),
+    BAG_OMEGA("&9Omega Bag"),
     BAG_INFINITY("&dInfinity Bag"),
     BAG_AUTOSELL("&dAutoSell Bag"),
 
     BAG_ICON_DISPLAY("&6{bag.name}"),
     BAG_ICON_LORE(
         "",
-        "&eSize: &a{bag.size}",
-        "&ePrice: &a{bag.price}"
+        "&fSize: &6{bag.size}",
     ),
 
     SKILL_CAST_COOLDOWN("&cYou can use skill '{skill.name}&c' in &6{time} &cseconds!"),
@@ -391,34 +406,46 @@ enum class MSG(val defaultText: String) : MSGHolder {
     AURA_ICON_DISPLAY("{aura.name}"),
     AURA_TEST_NAME("&7Test Aura"),
 
-    AURA_NAME_SPEED("&6Speed Aura"),
-    AURA_NAME_HEALTH("&cHealth Aura"),
+    AURA_NAME_SPARKS("&eSparks"),
+    AURA_NAME_EMBERS("&cEmbers"),
+    AURA_NAME_GREEN_ENERGY("&aGreen Energy"),
+    AURA_NAME_MALEVOLENCE("&5Malevolence"),
+    AURA_NAME_LIGHTNING("&eLightning"),
+    AURA_NAME_GRAVITY("&7Gravity"),
+    AURA_NAME_PURPLE_ENERGY("&5Purple Energy"),
+    AURA_NAME_BLUE_ENERGY("&9Blue Energy"),
+    AURA_NAME_RADIANCE("&4Radiance"),
+    AURA_NAME_MELONS("&aMelons"),
+    AURA_NAME_PIERCING("&3Piercing"),
+    AURA_NAME_ULTRAVIOLET("&dUltraviolet"),
+    AURA_NAME_VITALITY("&4Vitality"),
+    AURA_NAME_DARKNESS("&8Darkness"),
+    AURA_NAME_PURITY("&ePurity"),
+    AURA_NAME_LUSTROUS("&2Lustrous"),
+    AURA_NAME_DARK_MATTER("&0Dark Matter"),
 
     ITEM_NAME_IRON_SWORD("&7Iron Sword"),
 
     RPG_STAT_NAME_SPEED_BONUS("Speed"),
-    RPG_STAT_NAME_BUFF_SPEED_BONUS("&7{buff.name} &6+{buff.value}"),
+    RPG_STAT_NAME_BUFF_SPEED_BONUS("&f{buff.name} &6+{buff.value}"),
 
     RPG_STAT_NAME_HEALTH("Health"),
-    RPG_STAT_NAME_BUFF_HEALTH("&7{buff.name}: &6+{buff.value}"),
-
-    RPG_STAT_NAME_HEALTH_MULTIPLIER("Health"),
-    RPG_STAT_NAME_BUFF_HEALTH_MULTIPLIER("&7{buff.name}: &6+{buff.value}%"),
+    RPG_STAT_NAME_BUFF_HEALTH("&f{buff.name}: &6+{buff.value}"),
 
     RPG_STAT_NAME_REGENERATION("Regeneration"),
-    RPG_STAT_NAME_BUFF_REGENERATION("&7{buff.name}: &6+{buff.value}"),
+    RPG_STAT_NAME_BUFF_REGENERATION("&f{buff.name}: &6+{buff.value}"),
 
     RPG_STAT_NAME_REGENERATION_MULTIPLIER("Regeneration"),
-    RPG_STAT_NAME_BUFF_REGENERATION_MULTIPLIER("&7{buff.name}: &6+{buff.value}%"),
+    RPG_STAT_NAME_BUFF_REGENERATION_MULTIPLIER("&f{buff.name}: &6x{buff.value}"),
 
     RPG_STAT_NAME_DAMAGE_MULTIPLIER("Damage"),
-    RPG_STAT_NAME_BUFF_DAMAGE_MULTIPLIER("&7{buff.name}: &6+{buff.value}%"),
+    RPG_STAT_NAME_BUFF_DAMAGE_MULTIPLIER("&f{buff.name}: &6x{buff.value}"),
 
     RPG_STAT_NAME_EXP_MULTIPLIER("Experience"),
-    RPG_STAT_NAME_BUFF_EXP_MULTIPLIER("&7{buff.name}: &6+{buff.value}%"),
+    RPG_STAT_NAME_BUFF_EXP_MULTIPLIER("&f{buff.name}: &6x{buff.value}"),
 
     RPG_STAT_NAME_BAG_FILL_MULTIPLIER("Blocks"),
-    RPG_STAT_NAME_BUFF_BAG_FILL_MULTIPLIER("&7{buff.name}: &6+{buff.value}%"),
+    RPG_STAT_NAME_BUFF_BAG_FILL_MULTIPLIER("&f{buff.name}: &6x{buff.value}"),
 
     REBIRTH_ONCE_SUCCESS("&aYou have successfully rebirthed!"),
     REBIRTH_SEVERAL_TIMES_SUCCESS("&aYou have successfully rebirthed {rebirth.given} times!"),
@@ -438,7 +465,7 @@ enum class MSG(val defaultText: String) : MSGHolder {
     ),
 
     CURRENCY_COINS("&6Coins"),
-    CURRENCY_SOULS("&6Souls"),
+    CURRENCY_SOULS("&bSouls"),
 
 
 
