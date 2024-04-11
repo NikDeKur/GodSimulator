@@ -10,7 +10,6 @@ import org.bukkit.block.Block
 import org.bukkit.entity.Entity
 import org.bukkit.util.Vector
 import org.ndk.klib.addIfNotContains
-import java.util.concurrent.CompletableFuture
 
 abstract class SkillExecution(val executor: Entity) {
 
@@ -66,37 +65,42 @@ abstract class SkillExecution(val executor: Entity) {
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    fun particleBeam(from: Location, direction0: Vector, particle: Particle, range: Double, speed: Double, spacing: Double, spawnAmount: Number = 1): CompletableFuture<Unit> {
-        val future = CompletableFuture<Unit>()
-        val delayMillis = (500 / speed * spacing).toLong() // рассчитываем задержку
+    /**
+     * Creates a particle beam
+     *
+     * Particles spawn asynchrously using kotlin coroutines.
+     * Particles spawn with no gravitation (extra = 0.0)
+     *
+     * @param from The location where the beam starts
+     * @param direction The direction of the beam
+     * @param particle The particle to spawn
+     * @param range The range of the beam, how far the beam will go
+     * @param speed The speed of the beam, how fast the beam will move (blocks per second)
+     * @param spacing The spacing between particles in blocks
+     * @param particleNumber The number of particles to spawn per-beam move in the world.spawnParticle
+     */
+    fun particleBeam(
+        from: Location,
+        direction: Vector,
+        particle: Particle,
+        range: Double,
+        speed: Double,
+        spacing: Double,
+        particleNumber: Int = 1
+    ) {
+        val step = direction.clone().multiply(spacing)
+        val steps = (range / spacing).toInt()
 
-        val direction = direction0.clone()
-        val location = from.clone()
-
-        // debug("speed = $speed | space = $space | delay = $delayMillis")
         GlobalScope.launch {
-            val world = location.world
-
-            val repeat = (range / spacing).toInt()
-            for (i in 1..repeat) {
-                direction.multiply(spacing)
-                location.add(direction)
-
-                distanceFlied += spacing
-
-                processEvents(location.clone())
-                if (!active)
-                    break
-
-                world.spawnParticle(particle, location.x, location.y, location.z, spawnAmount.toInt(), 0.0, 0.0, 0.0, 0.0)
-
-                delay(delayMillis)
+            for (i in 0 until steps) {
+                processEvents(from)
+                if (!active) break
+                from.world.spawnParticle(particle, from.x, from.y, from.z, particleNumber, 0.0, 0.0, 0.0, 0.0, null)
+                from.add(step)
+                delay((1000 / speed).toLong())
             }
-
-            future.complete(Unit)
         }
 
-        return future
     }
 
 }

@@ -168,8 +168,8 @@ class Apollo_SunBeam(val player: Player) : SimulatorSkillExecution(player) {
 
     companion object {
         const val BEAM_RANGE = 15.0
-        const val BEAM_SPEED = 35.0
-        const val BEAM_SPACING = 1.05
+        const val BEAM_SPEED = 50.0
+        const val BEAM_SPACING = 0.5
         val BEAM_PARTICLE: Particle = Particle.FLAME
         const val BEAM_PARTICLE_AMOUNT = 10
         val DAMAGE: BigDecimal = BigDecimal.valueOf(40.0)
