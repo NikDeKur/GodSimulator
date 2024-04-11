@@ -24,11 +24,5 @@ commands:
     description: "Admin command"
   language:
     description: "Language command"
-  profiles:
-    description: "Profiles command"
   spawnbuilding:
     description: "Spawn building command"
-  pets:
-    description: "Pets command"
-  auras:
-    description: "Pets command"

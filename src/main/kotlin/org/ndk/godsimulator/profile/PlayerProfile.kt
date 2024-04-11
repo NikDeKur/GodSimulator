@@ -247,6 +247,25 @@ class PlayerProfile(
     }
 
 
+    fun sellBagFill(): BigInteger {
+        val final = rpg.scaleCoins(bagFill)
+        clearBag()
+        wallet.giveCoins(final)
+        return final
+    }
+
+
+    fun giveCoins(amount: BigInteger) {
+        val final = rpg.scaleCoins(amount)
+        wallet.giveCoins(final)
+    }
+
+    fun giveSouls(amount: BigInteger) {
+        val final = rpg.scaleSouls(amount)
+        wallet.giveSouls(final)
+    }
+
+
 
 
 
@@ -271,23 +290,21 @@ class PlayerProfile(
      * @return has a bag been fully filled
      */
     fun fillBag(amount: BigInteger, silent: Boolean = false): Boolean {
-        val finalAmount = rpg.scaleBagFill(amount)
-
         val type = bag.type
 
         if (type.isAutoSell) {
-            wallet.giveCoins(finalAmount)
+            wallet.giveCoins(amount)
             return true
         }
 
         val bagSize = type.size
-        if (!bag.type.isInfinity && (bagFill + finalAmount) >= bagSize) {
+        if (!bag.type.isInfinity && (bagFill + amount) >= bagSize) {
             scopes.bagFill = bagSize
             if (!silent)
                 playerId.onlinePlayerOrNull?.sendTitleLangMsg(MSG.BAG_FULL)
             return true
         } else {
-            scopes.bagFill += finalAmount
+            scopes.bagFill += amount
         }
         return false
     }

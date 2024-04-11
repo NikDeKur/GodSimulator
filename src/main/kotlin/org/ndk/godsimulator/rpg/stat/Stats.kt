@@ -73,10 +73,20 @@ object RPGExpMultiplierStat : RPGStat.Double() {
 
 
 // ----------------------------
-// BAG FILL
+// Coins
 // ----------------------------
-object RPGBagFillMultiplierStat : RPGStat.Double() {
-    override val id: String = "bag_fill_multiplier"
-    override val nameMSG: MSG = MSG.RPG_STAT_NAME_BAG_FILL_MULTIPLIER
-    override val nameBuffMSG: MSG = MSG.RPG_STAT_NAME_BUFF_BAG_FILL_MULTIPLIER
+object RPGCoinsMultiplierStat : RPGStat.Double() {
+    override val id: String = "coins_multiplier"
+    override val nameMSG: MSG = MSG.RPG_STAT_NAME_COINS_MULTIPLIER
+    override val nameBuffMSG: MSG = MSG.RPG_STAT_NAME_BUFF_COINS_MULTIPLIER
+}
+
+
+// ----------------------------
+// Souls
+// ----------------------------
+object RPGSoulsMultiplierStat : RPGStat.Double() {
+    override val id: String = "coins_multiplier"
+    override val nameMSG: MSG = MSG.RPG_STAT_NAME_SOULS_MULTIPLIER
+    override val nameBuffMSG: MSG = MSG.RPG_STAT_NAME_BUFF_SOULS_MULTIPLIER
 }

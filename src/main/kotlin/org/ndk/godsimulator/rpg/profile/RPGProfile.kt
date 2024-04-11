@@ -48,13 +48,16 @@ class RPGProfile(val profile: PlayerProfile) {
                     heal(added)
                 }
                 is RPGDamageMultiplierStat -> {
-                    damageProcent = stat.merge(damageProcent, value as Double)
+                    damageMultiplier = stat.merge(damageMultiplier, value as Double)
                 }
                 is RPGExpMultiplierStat -> {
-                    expProcent = stat.merge(expProcent, value as Double)
+                    expMultiplier = stat.merge(expMultiplier, value as Double)
                 }
-                is RPGBagFillMultiplierStat -> {
-                    bagFillProcent = stat.merge(bagFillProcent, value as Double)
+                is RPGCoinsMultiplierStat -> {
+                    coinsMultiplier = stat.merge(coinsMultiplier, value as Double)
+                }
+                is RPGSoulsMultiplierStat -> {
+                    soulsMultiplier = stat.merge(soulsMultiplier, value as Double)
                 }
             }
         }
@@ -73,13 +76,16 @@ class RPGProfile(val profile: PlayerProfile) {
                         unHeal(taken)
                 }
                 is RPGDamageMultiplierStat -> {
-                    damageProcent = stat.deMerge(damageProcent, value as Double)
+                    damageMultiplier = stat.deMerge(damageMultiplier, value as Double)
                 }
                 is RPGExpMultiplierStat -> {
-                    expProcent = stat.deMerge(expProcent, value as Double)
+                    expMultiplier = stat.deMerge(expMultiplier, value as Double)
                 }
-                is RPGBagFillMultiplierStat -> {
-                    bagFillProcent = stat.deMerge(bagFillProcent, value as Double)
+                is RPGCoinsMultiplierStat -> {
+                    coinsMultiplier = stat.deMerge(coinsMultiplier, value as Double)
+                }
+                is RPGSoulsMultiplierStat -> {
+                    soulsMultiplier = stat.deMerge(soulsMultiplier, value as Double)
                 }
             }
         }
@@ -276,25 +282,28 @@ class RPGProfile(val profile: PlayerProfile) {
     }
 
 
-    var damageProcent: Double = 0.0
+    var damageMultiplier: Double = 0.0
     fun scaleDamage(damage: BigInteger): BigInteger {
-        if (damageProcent == 0.0) return damage
-        val bonus = damage.toBigDecimal().divide(BIGDEC_100) * damageProcent.toBigDecimal()
-        return damage.plus(bonus.toBigInteger())
+        if (damageMultiplier == 0.0) return damage
+        return (damage.toDouble() * damageMultiplier).toBigDecimal().toBigInteger()
     }
 
-    var expProcent: Double = 0.0
+    var expMultiplier: Double = 0.0
     fun scaleExp(exp: BigInteger): BigInteger {
-        if (expProcent == 0.0) return exp
-        val bonus = exp.toBigDecimal().divide(BIGDEC_100) * expProcent.toBigDecimal()
-        return exp.plus(bonus.toBigInteger())
+        if (expMultiplier == 0.0) return exp
+        return (exp.toDouble() * expMultiplier).toBigDecimal().toBigInteger()
     }
 
-    var bagFillProcent: Double = 0.0
-    fun scaleBagFill(fill: BigInteger): BigInteger {
-        if (bagFillProcent == 0.0) return fill
-        val bonus = fill.toBigDecimal().divide(BIGDEC_100) * bagFillProcent.toBigDecimal()
-        return fill.plus(bonus.toBigInteger())
+    var coinsMultiplier: Double = 0.0
+    fun scaleCoins(coins: BigInteger): BigInteger {
+        if (coinsMultiplier == 0.0) return coins
+        return (coins.toDouble() * coinsMultiplier).toBigDecimal().toBigInteger()
+    }
+
+    var soulsMultiplier: Double = 0.0
+    fun scaleSouls(souls: BigInteger): BigInteger {
+        if (soulsMultiplier == 0.0) return souls
+        return (souls.toDouble() * soulsMultiplier).toBigDecimal().toBigInteger()
     }
 
 

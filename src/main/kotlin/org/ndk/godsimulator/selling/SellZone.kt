@@ -14,30 +14,20 @@ import org.ndk.godsimulator.language.MSGNameHolder
 import org.ndk.godsimulator.location.SimulatorLocation
 import org.ndk.godsimulator.profile.PlayerProfile
 import org.ndk.godsimulator.wobject.Object
-import org.ndk.klib.format
 import org.ndk.minecraft.extension.getLangMsg
 import org.ndk.minecraft.language.MSGHolder
-import java.math.BigInteger
 
 class SellZone(
     val simulatorLocation: SimulatorLocation,
     val nameId: String,
     override val nameMSG: MSGHolder,
     val region: Region,
-    override val hologramSpawnTranslation: Vector,
-    val multiplier: Double
+    override val hologramSpawnTranslation: Vector
 ) : Object(), Region by region, MSGNameHolder {
 
 
     override val defaultPhName: String = "zone"
-    override val placeholderMap: MutableMap<String, Any>
-        get() = super<Object>.placeholderMap.also {
-            var multiplier = this.multiplier.format(1)
-            if (!multiplier.contains(".")) {
-                multiplier += ".0"
-            }
-            it["multiplier"] = multiplier
-        }
+
     override val location: Location
         get() = minimumPoint.toLocation(simulatorLocation.world.bukkit)
 
@@ -61,24 +51,14 @@ class SellZone(
     }
 
 
-    val multiplierBig = multiplier.toBigDecimal()
     fun isInside(player: Player) = contains(player.location.toWEVector())
 
-    fun getSellPrice(amount: BigInteger): BigInteger {
-        return amount.toBigDecimal().times(multiplierBig).toBigInteger()
-    }
-
-    fun sell(profile: PlayerProfile): BigInteger {
-        val price = getSellPrice(profile.bagFill)
-        profile.clearBag()
-        profile.wallet.giveCoins(price)
-        return price
-    }
+    fun sell(profile: PlayerProfile) = profile.sellBagFill()
 
 
 
 
     override fun toString(): String {
-        return "SellZone(id='$nameId', region=$region, multiplier=$multiplier)"
+        return "SellZone(id='$nameId', region=$region)"
     }
 }

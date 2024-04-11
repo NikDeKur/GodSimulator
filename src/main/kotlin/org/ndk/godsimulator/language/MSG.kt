@@ -11,7 +11,7 @@ val MSG_FROM_ID by lazy {
 
 enum class MSG(val defaultText: String) : MSGHolder {
 
-     // DECIMAL FORMATS
+    // DECIMAL FORMATS
     COORDINATES_FORMAT("#,##0.#"),
     LTFIVE_SECONDS_FORMAT("#.#"),
     GTFIVE_SECONDS_FORMAT("#"),
@@ -498,8 +498,11 @@ enum class MSG(val defaultText: String) : MSGHolder {
     RPG_STAT_NAME_EXP_MULTIPLIER("Experience"),
     RPG_STAT_NAME_BUFF_EXP_MULTIPLIER("&f{buff.name}: &6x{buff.value}"),
 
-    RPG_STAT_NAME_BAG_FILL_MULTIPLIER("Blocks"),
-    RPG_STAT_NAME_BUFF_BAG_FILL_MULTIPLIER("&f{buff.name}: &6x{buff.value}"),
+    RPG_STAT_NAME_COINS_MULTIPLIER("Coins"),
+    RPG_STAT_NAME_BUFF_COINS_MULTIPLIER("&f{buff.name}: &6x{buff.value}"),
+
+    RPG_STAT_NAME_SOULS_MULTIPLIER("Souls"),
+    RPG_STAT_NAME_BUFF_SOULS_MULTIPLIER("&f{buff.name}: &6x{buff.value}"),
 
     REBIRTH_ONCE_SUCCESS("&aYou have successfully rebirthed!"),
     REBIRTH_SEVERAL_TIMES_SUCCESS("&aYou have successfully rebirthed {rebirth.given} times!"),
