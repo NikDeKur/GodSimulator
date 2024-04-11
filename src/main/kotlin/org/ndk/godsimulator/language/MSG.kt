@@ -380,7 +380,6 @@ enum class MSG(val defaultText: String) : MSGHolder {
     ),
 
     SKILL_CAST_COOLDOWN("&cYou can use skill '{skill.name}&c' in &6{time} &cseconds!"),
-    SKILL_REQUIRE_LEVEL("&cYou need to have level &6{skill.requiredLevel} &cto this skill!"),
 
     GOD_NOT_SELECTED_NAME("&cNot selected"),
     GOD_NOT_SELECTED_DESCRIPTION("",
@@ -536,6 +535,13 @@ enum class MSG(val defaultText: String) : MSGHolder {
     GLOBAL_MENU_SKILLS_ITEM_LORE("", "&fClick to open the skills menu"),
 
     MENU_SKILLS_TITLE("&6Skills"),
+
+    SKILL_REQUIRE_LEVEL("&cRequire level &6{skill.requiredLevel} &cto unlock"),
+    SKILL_UNBIND("&7[RMB] &aClick to unbind from the slot '{bind}'!"),
+    SKILL_BIND("&7[LMB] &aClick to bind to a slot!"),
+    SKILL_BIND_CLICK_SLOT("&aClick slot &61-9 &ato bind the skill to the slot!"),
+    SKILL_BIND_SUCCESS("&aYou have successfully binded skill '{skill.name}&a' to the slot &6{slot}&a!"),
+
 
 
 

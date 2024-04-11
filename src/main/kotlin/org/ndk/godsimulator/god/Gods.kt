@@ -21,7 +21,7 @@ abstract class God: Placeholder, MSGNameHolder, MSGDescriptionHolder, Snowflake<
 
     open val isSelectable: Boolean = true
 
-    abstract val skills: List<Skill>
+    abstract val skills: Map<String, Skill>
 
     override fun getIcon(player: Player): ItemStack {
         return ItemPattern.from(Material.BARRIER)
@@ -34,7 +34,7 @@ abstract class God: Placeholder, MSGNameHolder, MSGDescriptionHolder, Snowflake<
 
     open fun updateUnlockedSkills(skills: ProfileSkills, bind : Boolean = false) {
         val profile = skills.profile
-        this.skills.forEachIndexed { index, skill ->
+        this.skills.values.forEachIndexed { index, skill ->
             if (profile.level < skill.requiredLevel) return
             if (profile.rebirth < skill.requiredRebirth) return
             skills.unlock(skill)
@@ -50,7 +50,7 @@ object NotSelectedGod : God() {
     override val nameMSG = MSG.GOD_NOT_SELECTED_NAME
     override val descriptionMSG = MSG.GOD_NOT_SELECTED_DESCRIPTION
     override val isSelectable: Boolean = false
-    override val skills: List<Skill> = emptyList()
+    override val skills = emptyMap<String, Skill>()
 
     // Do nothing
     override fun updateUnlockedSkills(skills: ProfileSkills, bind: Boolean) {}
@@ -60,7 +60,7 @@ object Zeus : God() {
     override val id: String = "zeus"
     override val nameMSG = MSG.GOD_ZEUS_NAME
     override val descriptionMSG = MSG.GOD_ZEUS_DESCRIPTION
-    override val skills: List<Skill> = Skills.entries
+    override val skills = Skills.entries.associateBy { it.name }
 
     enum class Skills(
         override val executionClass: Class<out SkillExecution>,
@@ -86,7 +86,7 @@ object Apollo : God() {
     override val id: String = "apollo"
     override val nameMSG = MSG.GOD_APOLLO_NAME
     override val descriptionMSG = MSG.GOD_APOLLO_DESCRIPTION
-    override val skills: List<Skill> = Skills.entries
+    override val skills = Skills.entries.associateBy { it.name }
 
     enum class Skills(
         override val executionClass: Class<out SkillExecution>,
@@ -109,7 +109,7 @@ object Poseidon : God() {
     override val id: String = "poseidon"
     override val nameMSG = MSG.GOD_POSEIDON_NAME
     override val descriptionMSG = MSG.GOD_POSEIDON_DESCRIPTION
-    override val skills: List<Skill> = Skills.entries
+    override val skills = Skills.entries.associateBy { it.name }
 
     enum class Skills(
         override val executionClass: Class<out SkillExecution>,
@@ -133,7 +133,7 @@ object Hades : God() {
     override val id: String = "hades"
     override val nameMSG = MSG.GOD_HADES_NAME
     override val descriptionMSG = MSG.GOD_HADES_DESCRIPTION
-    override val skills: List<Skill> = Skills.entries
+    override val skills = Skills.entries.associateBy { it.name }
 
     enum class Skills(
         override val executionClass: Class<out SkillExecution>,
@@ -158,7 +158,7 @@ object Ares : God() {
     override val id: String = "ares"
     override val nameMSG = MSG.GOD_ARES_NAME
     override val descriptionMSG = MSG.GOD_ARES_DESCRIPTION
-    override val skills: List<Skill> = Skills.entries
+    override val skills = Skills.entries.associateBy { it.name }
 
     enum class Skills(
         override val executionClass: Class<out SkillExecution>,
