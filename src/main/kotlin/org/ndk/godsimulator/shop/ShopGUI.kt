@@ -18,7 +18,7 @@ import org.ndk.minecraft.item.Patterns
 abstract class ShopGUI<T : BuyableEquipableType<T>>(
     player: Player,
     val manager: EquipableTypesManager<T>
-) : PagedGUI(player, 54)  {
+) : PagedGUI(player, 54) {
 
     override val content: List<ItemStack>
         get() {
@@ -106,6 +106,4 @@ abstract class ShopGUI<T : BuyableEquipableType<T>>(
         inventory.setRow(1, Patterns.EMPTY_SLOT)
         inventory.setRow(6, Patterns.EMPTY_SLOT)
     }
-
-    abstract fun clone(): ShopGUI<T>
 }

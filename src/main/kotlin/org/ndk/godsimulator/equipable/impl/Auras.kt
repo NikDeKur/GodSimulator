@@ -121,8 +121,4 @@ class AurasShopGUI(
     override fun getTitle(): String {
         return player.getLangMsg(MSG.AURAS_SHOP_GUI_TITLE).text
     }
-
-    override fun clone(): ShopGUI<AuraType> {
-        return AurasShopGUI(player)
-    }
 }

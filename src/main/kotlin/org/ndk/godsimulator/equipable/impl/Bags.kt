@@ -166,9 +166,5 @@ class BagsShopGUI(
     override fun getTitle(): String {
         return player.getLangMsg(MSG.BAGS_SHOP_GUI_TITLE).text
     }
-
-    override fun clone(): ShopGUI<BagType> {
-        return BagsShopGUI(player)
-    }
 }
 
