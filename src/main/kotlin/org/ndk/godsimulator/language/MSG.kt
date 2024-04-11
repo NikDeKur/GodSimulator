@@ -266,7 +266,9 @@ enum class MSG(val defaultText: String) : MSGHolder {
         "&fSouls: &a{profile.wallet.souls}",
         "&fBag: &a{profile.bagFill}/{profile.bag.type.size}",
         "&fLevel: &a{profile.level}",
-        "&fExp: &a{profile.xp}/{profile.xpForNextLevel}"
+        "&fExp: &a{profile.xp}/{profile.xpForNextLevel}",
+        "",
+        "&fStamina: &a{profile.stamina}/100",
     ),
 
 
@@ -314,13 +316,12 @@ enum class MSG(val defaultText: String) : MSGHolder {
     ),
 
 
-    GOD_SELECT_TITLE("&6Select a god"),
+    GOD_SELECT_TITLE("&6Select a god!"),
     /**
      * Placeholders:
      * 1. {god}
      */
     GOD_SELECT_SUCCESS("&aYou have successfully chosen the god '{god.name}&a'!"),
-    GOD_SELECT_LORE("", "&7Click to choose"),
 
     LOCATION_NAME_OVERWORLD("&aOverworld"),
     LOCATION_NAME_NETHER("&cNether"),
@@ -339,8 +340,7 @@ enum class MSG(val defaultText: String) : MSGHolder {
     SHOP_EQUIP("&7[RMB] &aEquip"),
     SHOP_EQUIPPED("&aAlready equipped!"),
 
-    SHOP_BACK_DISPLAY("&6Back"),
-    SHOP_BACK_LORE("", "&fClick to go back to shop"),
+
 
     PROFILE_RANDOM_NAME_1("&dStar"),
     PROFILE_RANDOM_NAME_2("&6Phoenix"),
@@ -382,19 +382,74 @@ enum class MSG(val defaultText: String) : MSGHolder {
     SKILL_CAST_COOLDOWN("&cYou can use skill '{skill.name}&c' in &6{time} &cseconds!"),
     SKILL_REQUIRE_LEVEL("&cYou need to have level &6{skill.requiredLevel} &cto this skill!"),
 
-    GOD_NOT_SELECTED("&cNot selected"),
+    GOD_NOT_SELECTED_NAME("&cNot selected"),
+    GOD_NOT_SELECTED_DESCRIPTION("",
+        "&cYou have not selected a god yet, and probably,",
+        "&cthat are seeing this message because of an error!",
+        "&cIf it's, contact the administration!"
+    ),
 
-    GOD_NAME_ZEUS("&6Zeus"),
-    GOD_NAME_APOLLO("&eApollo"),
-    GOD_NAME_POSEIDON("&bPoseidon"),
-    GOD_NAME_HADES("&8Hades"),
-    GOD_NAME_ARES("&cAres"),
+    GOD_ZEUS_NAME("&6Zeus"),
+    GOD_ZEUS_DESCRIPTION("",
+        "&fThe mighty Zeus, the supreme ruler of the skies and thunder",
+        "&fwielding lightning bolts with unrivaled power.",
+        "&fHe is the embodiment of law, order, and justice,",
+        "&fpresiding over the realm of gods and mortals alike, with his",
+        "&fmajestic presence casting a radiant aura across the heavens!"
+    ),
+
+    GOD_APOLLO_NAME("&eApollo"),
+    GOD_APOLLO_DESCRIPTION("",
+        "&fBehold Apollo, the radiant god of music, arts, and knowledge,",
+        "&fwhose divine melody brings harmony to the cosmos.",
+        "&fWith his golden lyre and radiant bow, he guides humanity",
+        "&fthrough the realms of poetry, prophecy, and healing arts, his",
+        "&brilliance illuminating the path to enlightenment and beauty!"
+    ),
+
+    GOD_POSEIDON_NAME("&bPoseidon"),
+    GOD_POSEIDON_DESCRIPTION("",
+        "&fPoseidon, the mighty ruler of the seas, whose trident commands",
+        "&fthe ebb and flow of ocean tides. With unrivaled power over",
+        "&fearthquakes and storms, he reigns over the watery abyss, and his",
+        "&fpresence strikes awe and reverence in the hearts of sailors",
+        "&fand land-dwellers alike, shaping the very fabric",
+        "&fof the aquatic world with his divine will!"
+    ),
+
+    GOD_HADES_NAME("&8Hades"),
+    GOD_HADES_DESCRIPTION("",
+        "&fHades, the enigmatic lord of the underworld, where the souls",
+        "&fof the departed find their eternal rest. Cloaked in shadows,",
+        "&fhe rules over the realm of the dead with stern justice,",
+        "&fyet offers solace to the weary souls seeking refuge in his domain.",
+        "&fHis dark visage conceals profound wisdom and sovereignty over",
+        "&fthe mysteries of life and death, holding sway over",
+        "&fthe fate of all mortal beings!"
+    ),
+
+    GOD_ARES_NAME("&cAres"),
+    GOD_ARES_DESCRIPTION("",
+        "&fAres, the formidable god of war, whose ferocious presence",
+        "&fignites the flames of conflict and strife. Clad in armor forged",
+        "&fof divine steel, he revels in the chaos of battle, inspiring",
+        "&fwarriors to acts of valor and glory. With his relentless spirit",
+        "&fand unyielding determination, he embodies the raw power of warfare,",
+        "&fdriving armies to victory or defeat with the thunderous roar",
+        "&fof battle cries echoing across the battlefield!"
+    ),
 
     SKILL_ZEUS_THUNDERBOLT_NAME("&6Thunderbolt"),
+    SKILL_ZEUS_THUNDERBOLT_DESCRIPTION("", "&fStrike the enemy with a powerful lightning bolt in radius of &63 &fblocks!"),
+
     SKILL_ZEUS_EARTHQUAKE_NAME("&6Earthquake"),
+    SKILL_ZEUS_EARTHQUAKE_DESCRIPTION("", "&fCause an earthquake for &62 &fseconds in radius of &65 &fblocks!"),
 
     SKILL_APOLLO_SUNBEAM_NAME("&eSun Beam"),
+    SKILL_APOLLO_SUNBEAM_DESCRIPTION("", "&fCreate a powerful sun beam that fly &615 &fblocks through the enemies and burn them!"),
+
     SKILL_APOLLO_SOLARBLAST_NAME("&eSolar Blast"),
+    SKILL_APOLLO_SOLARBLAST_DESCRIPTION("", "&eCause a powerful solar blast that deals damage to all enemies in radius of &65 &eblocks!"),
 
 
     BUILDING_NAME_MAYA("&6Maya Temple"),
@@ -473,6 +528,8 @@ enum class MSG(val defaultText: String) : MSGHolder {
     // GLOBAL MENU START
     //----------------------------------------
     GLOBAL_MENU_TITLE("&6Menu"),
+    GLOBAL_MENU_BACK_DISPLAY("&6Back"),
+    GLOBAL_MENU_BACK_LORE("", "&fClick to go back to the profile menu"),
 
 
     GLOBAL_MENU_SKILLS_ITEM_DISPLAY("&6Skills"),
