@@ -30,7 +30,9 @@ interface Skill : MSGNameHolder, MSGDescriptionHolder, Snowflake<String> {
         return ItemPattern.from(Material.BARRIER)
             .setDisplayName(nameMSG)
             .setLore(descriptionMSG)
-            .setTag("god", id)
+            .setTag("skillGlobalId", id)
+            .setTag("skillId", skillId)
+            .setTag("godId", god.id)
             .setTexture(id)
             .build(player, getFinalPlaceholder(player))
     }

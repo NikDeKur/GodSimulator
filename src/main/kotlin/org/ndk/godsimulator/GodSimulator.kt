@@ -3,7 +3,10 @@ package org.ndk.godsimulator
 import com.sk89q.worldedit.bukkit.WorldEditPlugin
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import org.ndk.godsimulator.command.*
+import org.ndk.godsimulator.command.LanguageCommand
+import org.ndk.godsimulator.command.SaveBuildingCommand
+import org.ndk.godsimulator.command.SpawnBuildingCommand
+import org.ndk.godsimulator.command.TestCommand
 import org.ndk.godsimulator.command.admin.AdminBaseCommand
 import org.ndk.godsimulator.command.admin.AdminStickCommand
 import org.ndk.godsimulator.database.Database
@@ -24,7 +27,7 @@ import org.ndk.godsimulator.scoreboard.ScoreboardAdapter
 import org.ndk.godsimulator.selling.SellZoneListener
 import org.ndk.godsimulator.shop.ShopListener
 import org.ndk.godsimulator.shop.ShopManager
-import org.ndk.godsimulator.skill.cast.SkillCastListener
+import org.ndk.godsimulator.skill.cast.SkillListener
 import org.ndk.godsimulator.wobject.building.BuildingsManager
 import org.ndk.godsimulator.wobject.entity.EntitiesManager
 import org.ndk.godsimulator.world.SimulatorWorld
@@ -68,7 +71,7 @@ class GodSimulator : ServerPlugin() {
     override val components
         get() = listOf(
             // Listeners
-            OtherCommandsTabCompletion(), SkillCastListener(),
+            OtherCommandsTabCompletion(), SkillListener,
             SellZoneListener(), ShopListener(),
             LocationComeListener(), GlobalEventListener(),
             AdminStickCommand.Companion.StickListener(),
@@ -76,8 +79,7 @@ class GodSimulator : ServerPlugin() {
 
             // Commands
             TestCommand(), SpawnBuildingCommand(), LanguageCommand(),
-            SaveBuildingCommand(), AdminBaseCommand(), ProfilesCommand(),
-            PetsCommand(),
+            SaveBuildingCommand(), AdminBaseCommand(),
 
             // Modules
             BeforeModulesTask(),
