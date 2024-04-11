@@ -64,8 +64,8 @@ object DoubleJumpManager : Listener, PluginModule {
         if (!player.profile.takeStamina(20)) return false
 
         val direction = player.eyeLocation.direction
-        val x = direction.x
-        val z = direction.z
+        val x = direction.x * 1.5
+        val z = direction.z * 1.5
         val y = 0.3
         val vector = Vector(x, y, z)
 
