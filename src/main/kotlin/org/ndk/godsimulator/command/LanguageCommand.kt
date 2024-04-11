@@ -15,13 +15,13 @@ class LanguageCommand : SimulatorCommand() {
         val sender = execution.sender
         if (sender is OfflinePlayer) {
             sender.accessorAsync.thenAccept {
+
                 it.profile.language = language
 
                 // Send here to reply in selected language!
-                execution.sendLangMsg(MSG.CMD_LANGUAGE_SUCCESS, "lang" to language)
+                sender.sendLangMsg(MSG.CMD_LANGUAGE_SUCCESS, "lang" to language)
             }
         }
-
     }
 
     override fun onTabComplete(execution: CommandTabExecution): MutableList<String>? {
