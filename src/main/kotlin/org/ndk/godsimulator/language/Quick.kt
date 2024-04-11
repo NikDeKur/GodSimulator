@@ -16,7 +16,10 @@ import org.ndk.klib.toSingletonSet
 import org.ndk.minecraft.CooldownHolder
 import org.ndk.minecraft.command.CommandExecution
 import org.ndk.minecraft.command.ServerCommand
-import org.ndk.minecraft.extension.*
+import org.ndk.minecraft.extension.getLangMsg
+import org.ndk.minecraft.extension.language
+import org.ndk.minecraft.extension.msToSecs
+import org.ndk.minecraft.extension.sendLangMsg
 import org.ndk.minecraft.language.DefaultMSG
 import org.ndk.minecraft.language.MSGHolder
 import org.ndk.minecraft.language.Message
@@ -151,13 +154,12 @@ object Quick {
 
     fun formatSecondsValue(ms: Long, sender: CommandSender): String {
         var leftSeconds = ms.msToSecs()
-        val it = getLangCFG(sender)
-        val decimalFormat: DecimalFormat = if (leftSeconds >= 5) {
-            it.getDecimalFormat(MSG.GTFIVE_SECONDS_FORMAT.id)
+        val decimalFormat = DecimalFormat(if (leftSeconds >= 5) {
+            sender.getLangMsg(MSG.GTFIVE_SECONDS_FORMAT).text
         } else {
             if (leftSeconds < 0.1) leftSeconds = 0.1
-            it.getDecimalFormat(MSG.LTFIVE_SECONDS_FORMAT.id)
-        }
+            sender.getLangMsg(MSG.LTFIVE_SECONDS_FORMAT).text
+        })
         return decimalFormat.format(leftSeconds)
     }
 
