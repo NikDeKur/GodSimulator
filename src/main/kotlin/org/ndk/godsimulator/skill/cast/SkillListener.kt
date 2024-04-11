@@ -12,9 +12,6 @@ import java.util.*
 object SkillListener : Listener {
 
     val bindWait = HashMap<UUID, Skill>()
-    fun isWaitingBind(player: Player): Boolean {
-        return bindWait.containsKey(player.uniqueId)
-    }
     fun getBindWait(player: Player): Skill? {
         return bindWait[player.uniqueId]
     }

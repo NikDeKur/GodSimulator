@@ -52,6 +52,8 @@ class SkillsGUI(player: Player) : GUI(player, 27) {
         inventory.setColumn(4, Patterns.EMPTY_SLOT)
         inventory.setColumn(6, Patterns.EMPTY_SLOT)
         inventory.setColumn(9, Patterns.EMPTY_SLOT)
+        inventory.setItem(4, Patterns.EMPTY_SLOT)
+        inventory.setItem(22, Patterns.EMPTY_SLOT)
 
         val godIcon = god.getIcon(player)
         inventory.setItem(13, godIcon)
