@@ -13,6 +13,7 @@ import org.ndk.godsimulator.profile.PlayerProfile
 import org.ndk.godsimulator.profile.PlayerProfile.Companion.profile
 import org.ndk.minecraft.extension.*
 import org.ndk.minecraft.gui.PagedGUI
+import org.ndk.minecraft.item.Patterns
 
 abstract class ShopGUI<T : BuyableEquipableType<T>>(
     player: Player,

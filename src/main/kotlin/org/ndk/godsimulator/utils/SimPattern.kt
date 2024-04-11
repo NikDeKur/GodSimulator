@@ -3,8 +3,8 @@ package org.ndk.godsimulator.utils
 import org.bukkit.Material
 import org.ndk.godsimulator.extension.setTexture
 import org.ndk.godsimulator.language.MSG
-import org.ndk.minecraft.extension.Patterns
 import org.ndk.minecraft.item.ItemPattern
+import org.ndk.minecraft.item.Patterns
 
 object SimPattern {
 

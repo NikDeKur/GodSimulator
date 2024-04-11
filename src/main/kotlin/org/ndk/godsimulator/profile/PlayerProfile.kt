@@ -167,7 +167,7 @@ class PlayerProfile(
      * If the player has no god, it will return [NotSelectedGod].
      */
     val god: God
-        get() = scopes.god?.let { godsManager.getGod(it) } ?: godsManager.notSelectedGod
+        get() = scopes.god?.let { godsManager.getGod(it) } ?: NotSelectedGod
 
     fun setGod(god: God, silent: Boolean = false) {
         this.scopes.god = god.id

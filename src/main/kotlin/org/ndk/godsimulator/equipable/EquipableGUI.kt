@@ -6,11 +6,14 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.ndk.godsimulator.equipable.inventory.EquipableInventory
 import org.ndk.godsimulator.language.MSG
+import org.ndk.godsimulator.menu.GlobalMenu
+import org.ndk.godsimulator.menu.GlobalMenu.Companion.checkGoBack
 import org.ndk.godsimulator.profile.PlayerProfile.Companion.profile
 import org.ndk.godsimulator.utils.SimPattern
 import org.ndk.klib.sub
 import org.ndk.minecraft.extension.*
 import org.ndk.minecraft.gui.PagedGUI
+import org.ndk.minecraft.item.Patterns
 import java.util.*
 
 /**
@@ -56,7 +59,7 @@ abstract class EquipableGUI(player: Player) : PagedGUI(player, 54) {
 
 
     override fun changeInventory(inventory: Inventory) {
-        inventory.setItem(0, Patterns.EMPTY_SLOT)
+        inventory.setItem(0, GlobalMenu.ITEM_GO_BACK.build(player))
         inventory.setItem(8, Patterns.EMPTY_SLOT)
         inventory.setRow(2, Patterns.EMPTY_SLOT)
 
@@ -68,7 +71,7 @@ abstract class EquipableGUI(player: Player) : PagedGUI(player, 54) {
 
 
     override fun whenClick(event: InventoryClickEvent) {
-        val item = event.currentItem ?: return
+        val item = event.currentItem
 
         event.cancel()
         val equipableId = item.getStringTag("equipableId")
@@ -78,6 +81,8 @@ abstract class EquipableGUI(player: Player) : PagedGUI(player, 54) {
             } else {
                 onEquip(UUID.fromString(equipableId))
             }
+        } else {
+            checkGoBack(item)
         }
 
     }

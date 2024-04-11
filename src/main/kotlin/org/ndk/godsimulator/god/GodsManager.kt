@@ -1,12 +1,9 @@
-@file:Suppress("NOTHING_TO_INLINE")
-
 package org.ndk.godsimulator.god
 
+
 import org.ndk.godsimulator.GodSimulator
-import org.ndk.minecraft.plugin.ServerPlugin
-
-
 import org.ndk.minecraft.modules.PluginModule
+import org.ndk.minecraft.plugin.ServerPlugin
 
 class GodsManager : PluginModule {
 
@@ -14,16 +11,14 @@ class GodsManager : PluginModule {
 
     val gods = LinkedHashMap<String, God>()
 
-    lateinit var notSelectedGod: NotSelectedGod
 
     override fun onLoad(plugin: ServerPlugin) {
-        notSelectedGod = NotSelectedGod()
-        addGod(notSelectedGod)
-        addGod(Zeus())
-        addGod(Apollo())
-        addGod(Poseidon())
-        addGod(Hades())
-        addGod(Ares())
+        addGod(NotSelectedGod)
+        addGod(Zeus)
+        addGod(Apollo)
+        addGod(Poseidon)
+        addGod(Hades)
+        addGod(Ares)
 
         GodSimulator.godsManager = this
     }

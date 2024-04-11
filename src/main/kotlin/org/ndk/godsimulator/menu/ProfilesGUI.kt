@@ -17,6 +17,7 @@ import org.ndk.minecraft.extension.*
 import org.ndk.minecraft.gui.GUI
 import org.ndk.minecraft.gui.GUIFlag
 import org.ndk.minecraft.item.ItemPattern
+import org.ndk.minecraft.item.Patterns
 import java.time.Duration
 import java.util.*
 

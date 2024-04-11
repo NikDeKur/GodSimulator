@@ -196,7 +196,7 @@ class Apollo_SolarBlast(val player: Player) : SimulatorSkillExecution(player) {
         val location = pair.first
 
         GlobalScope.launch {
-            location.world.spawnParticle(Particle.EXPLOSION_LARGE, location, PARTICLE_AMOUNT)
+            location.world.spawnParticle(Particle.EXPLOSION_LARGE, location, 1)
             location.world.spawnParticle(Particle.LAVA, location, PARTICLE_AMOUNT)
             delay(400)
             registerDamage(location)
