@@ -10,6 +10,7 @@ import org.bukkit.configuration.ConfigurationSection
 import org.ndk.godsimulator.GodSimulator
 import org.ndk.godsimulator.GodSimulator.Companion.languagesManager
 import org.ndk.godsimulator.GodSimulator.Companion.logger
+import org.ndk.godsimulator.equipable.Rarity
 import org.ndk.godsimulator.rpg.buff.EmptyImaginaryBuffsList
 import org.ndk.godsimulator.rpg.buff.ImaginaryBuffsList
 import org.ndk.godsimulator.rpg.buff.ImaginaryBuffsListImpl
@@ -165,5 +166,17 @@ fun ConfigurationSection.readWallet(path: String): Map<String, Long> {
     return wallet
 }
 
+fun ConfigurationSection.readWalletOrThrow(path: String): Map<String, Long> {
+    return readWallet(path).ifEmpty { throwNotFound(path) }
+}
 
+
+fun ConfigurationSection.readRarity(path: String, default: Rarity? = null): Rarity? {
+    val rarity = getString(path) ?: return default
+    return enumValueOfOrNull<Rarity>(path.uppercase()) ?: default
+}
+
+fun ConfigurationSection.readRarityOrThrow(path: String): Rarity {
+    return readRarity(path) ?: throwNotFound(path)
+}
 

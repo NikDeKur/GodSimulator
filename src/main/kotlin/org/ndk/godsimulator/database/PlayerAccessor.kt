@@ -5,7 +5,7 @@ package org.ndk.godsimulator.database
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import org.ndk.database.session.SessionImpl
-import org.ndk.godsimulator.language.MSG
+import org.ndk.godsimulator.GodSimulator.Companion.languagesManager
 import org.ndk.godsimulator.profile.PlayerProfile
 import org.ndk.klib.mutableMapBoundVar
 import org.ndk.klib.uuid
@@ -86,7 +86,7 @@ open class PlayerAccessor(
             profilesMap.forEach { (profileIdStr, profileMap) ->
                 try {
                     // Get icon from the profile map
-                    val nameMSG = (profileMap["iconName"] as? String)?.let { MSG.fromId(it) }
+                    val nameMSG = (profileMap["iconName"] as? String)?.let(languagesManager::getMessage)
                     var id = profileIdStr.uuid
                     if (id == null) {
                         id = UUID.randomUUID()

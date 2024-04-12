@@ -1,13 +1,7 @@
 package org.ndk.godsimulator.language
 
-import org.ndk.godsimulator.GodSimulator
 import org.ndk.minecraft.language.LanguagesManager
 import org.ndk.minecraft.language.MSGHolder
-
-
-val MSG_FROM_ID by lazy {
-    mutableMapOf<String, MSG>()
-}
 
 enum class MSG(val defaultText: String) : MSGHolder {
 
@@ -590,6 +584,10 @@ enum class MSG(val defaultText: String) : MSGHolder {
     GLOBAL_MENU_QUESTS_ITEM_LORE("", "&fClick to open the quests menu"),
     GLOBAL_MENU_QUESTS_TITLE("&6Quests"),
 
+    QUEST_GOAL_COMPLETED("&aCompleted"),
+    QUEST_GOAL_UNCOMPLETED("&7Uncompleted"),
+    QUEST_GOAL_PROGRESS("&6{progress}/{target}"),
+
 
 
     GLOBAL_MENU_PETS_ITEM_DISPLAY("&6Pets"),
@@ -613,6 +611,14 @@ enum class MSG(val defaultText: String) : MSGHolder {
     GLOBAL_MENU_SETTINGS_ITEM_LORE("", "&fClick to open the settings menu"),
     GLOBAL_MENU_SETTINGS_TITLE("&6Settings"),
 
+    RARITY_NAME_COMMON("&fCommon"),
+    RARITY_NAME_UNCOMMON("&aUncommon"),
+    RARITY_NAME_RARE("&9Rare"),
+    RARITY_NAME_EPIC("&5Epic"),
+    RARITY_NAME_MYTHIC("&dMythic"),
+    RARITY_NAME_LEGENDARY("&6Legendary"),
+    RARITY_NAME_SPECIAL("&eSPECIAL"),
+
     //----------------------------------------
     // GLOBAL MENU END
     //----------------------------------------
@@ -630,36 +636,5 @@ enum class MSG(val defaultText: String) : MSGHolder {
 
     override fun toString(): String {
         return "msg{id=$id, default=$defaultText}"
-    }
-
-    init {
-        MSG_FROM_ID[id] = this
-    }
-
-    companion object {
-
-        /**
-         * Gets the MSG (enum) object by its id.
-         *
-         * @param id The id of the message.
-         * @return The MSG object or null if not found.
-         */
-        fun msgFromId(id: String): MSG? {
-            return MSG_FROM_ID[id]
-        }
-
-        /**
-         * Gets the MSGHolder object by its id.
-         *
-         * This method search the message by id in the languages manager.
-         *
-         * It will be found even if the message was registered by another plugin.
-         *
-         * @param id The id of the message.
-         * @return The MSGHolder object or null if not found.
-         */
-        fun fromId(id: String): MSGHolder? {
-            return GodSimulator.languagesManager.getMessage(id)
-        }
     }
 }
