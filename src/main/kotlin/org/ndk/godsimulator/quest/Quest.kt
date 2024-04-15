@@ -1,11 +1,9 @@
 package org.ndk.godsimulator.quest
 
-import org.bukkit.entity.Player
 import org.ndk.global.interfaces.Snowflake
 import org.ndk.godsimulator.language.MSGDescriptionHolder
 import org.ndk.godsimulator.language.MSGNameHolder
-import org.ndk.godsimulator.quest.manager.QuestsManager
-import org.ndk.godsimulator.quest.objective.Objective
+import org.ndk.godsimulator.quest.goal.abc.GoalPattern
 import org.ndk.minecraft.language.MSGHolder
 
 /**
@@ -21,18 +19,10 @@ data class Quest(
 
     override val defaultPhName: String = "quest"
 
-    val objectives = ArrayList<Objective>()
 
-    fun addObjective(objective: Objective) {
-        objectives.add(objective)
+    val goals = ArrayList<GoalPattern<*>>()
+    fun addGoal(pattern: GoalPattern<*>) {
+        goals.add(pattern)
     }
 
-
-    fun create(manager: QuestsManager, player: Player): PlayerQuest {
-        val playerQuest = PlayerQuest(manager, this, player)
-        objectives.forEach {
-            playerQuest.addObjective(it.clone())
-        }
-        return playerQuest
-    }
 }

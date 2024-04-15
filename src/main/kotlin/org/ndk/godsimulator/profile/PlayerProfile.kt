@@ -61,6 +61,7 @@ class PlayerProfile(
     val scopes = ProfileScopes(this)
     val wallet = ProfileWallet(this)
     val skills = ProfileSkills(this)
+    val quests = ProfileQuests(this)
     val rpg = RPGProfile(this)
 
 

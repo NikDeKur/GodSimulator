@@ -12,7 +12,7 @@ import org.ndk.godsimulator.command.admin.AdminStickCommand
 import org.ndk.godsimulator.database.Database
 import org.ndk.godsimulator.equipable.EquipableManager
 import org.ndk.godsimulator.god.GodsManager
-import org.ndk.godsimulator.language.SimulatorLangManager
+import org.ndk.godsimulator.language.LangManager
 import org.ndk.godsimulator.language.SimulatorLangProvider
 import org.ndk.godsimulator.listener.DoubleJumpManager
 import org.ndk.godsimulator.listener.GlobalEventListener
@@ -20,6 +20,8 @@ import org.ndk.godsimulator.listener.OtherCommandsTabCompletion
 import org.ndk.godsimulator.location.LocationComeListener
 import org.ndk.godsimulator.location.LocationsManager
 import org.ndk.godsimulator.menu.GlobalMenuListener
+import org.ndk.godsimulator.quest.listening.GoalsListener
+import org.ndk.godsimulator.quest.manager.QuestsManager
 import org.ndk.godsimulator.rpg.RPGListener
 import org.ndk.godsimulator.rpg.RPGManager
 import org.ndk.godsimulator.rpg.regen.RegenerationManager
@@ -71,7 +73,7 @@ class GodSimulator : ServerPlugin() {
     override val components
         get() = listOf(
             // Listeners
-            OtherCommandsTabCompletion(), SkillListener,
+            OtherCommandsTabCompletion(), SkillListener, GoalsListener,
             SellZoneListener(), ShopListener(),
             LocationComeListener(), GlobalEventListener(),
             AdminStickCommand.Companion.StickListener(),
@@ -83,10 +85,11 @@ class GodSimulator : ServerPlugin() {
 
             // Modules
             BeforeModulesTask(),
-            SimulatorLangManager(), RPGManager(), GodsManager(),
+            LangManager, RPGManager(), GodsManager(),
             EquipableManager(), Database(), WorldsManager(),
-            ShopManager(), BuildingsManager(), EntitiesManager(),
+            ShopManager(), BuildingsManager(), EntitiesManager,
             LocationsManager(), RegenerationManager, DoubleJumpManager,
+            QuestsManager,
             org.ndk.minecraft.scoreboard.ScoreboardManager(ScoreboardAdapter())
         )
     override val languageProvider: LanguageProvider = SimulatorLangProvider()
@@ -115,7 +118,6 @@ class GodSimulator : ServerPlugin() {
         lateinit var shopManager: ShopManager
         lateinit var worldsManager: WorldsManager
         lateinit var buildingsManager: BuildingsManager
-        lateinit var entitiesManager: EntitiesManager
         lateinit var database: Database
         lateinit var locationsManager: LocationsManager
 

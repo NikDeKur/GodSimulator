@@ -175,6 +175,9 @@ class ProfileScopes(
         ProfileLocations.fromSerialized(profile, it.toString())
     }
 
+
+    val quests: MutableMap<String, Any> by accessor.mutableMapBoundVar("quests")
+
     //----------------------------------------
     // Utils Start
     //----------------------------------------

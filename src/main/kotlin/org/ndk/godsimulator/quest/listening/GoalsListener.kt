@@ -1,38 +1,42 @@
 package org.ndk.godsimulator.quest.listening
 
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import org.bukkit.event.entity.EntityDeathEvent
-import org.ndk.godsimulator.quest.goals.KillEntityGoal
-import org.ndk.godsimulator.quest.goals.WalkToLocationGoal
-import org.ndk.godsimulator.quest.manager.GoalsManager
+import org.ndk.godsimulator.event.wobject.LivingObjectDamageEvent
+import org.ndk.godsimulator.profile.PlayerProfile.Companion.profileAsync
+import org.ndk.godsimulator.quest.goal.abc.GoalPattern
+import org.ndk.godsimulator.quest.goal.impl.BigCounterGoal
+import org.ndk.godsimulator.quest.goal.impl.Goal
+import org.ndk.godsimulator.quest.goal.type.GoalType
+import org.ndk.godsimulator.quest.goal.type.GoalTypes
 import org.ndk.minecraft.movement.OptiPlayerMoveEvent
 
-class GoalsListener(val manager: GoalsManager) : Listener {
-
-    // Kill Entity Goal Listener
-    @EventHandler
-    fun killEntity(event: EntityDeathEvent) {
-        val entity = event.entity
-        val killer = entity.killer ?: return
-        manager.forEachGoal<KillEntityGoal>(killer) {
-            if (it.entity != entity.type) return@forEachGoal
-            it.increment()
+object GoalsListener : Listener {
+    fun <T : GoalPattern<T>> forEachGoal(player: Player, type: GoalType<T>, action: (Goal<T>) -> Unit) {
+        player.profileAsync.thenAccept { profile ->
+            profile.quests.getGoals(type).forEach(action)
         }
     }
 
 
-    // Go to Location Goal Listener
     @EventHandler
     fun goToLocation(event: OptiPlayerMoveEvent) {
         val player = event.player
-        val location = player.location
         val to = event.to
-        manager.forEachGoal<WalkToLocationGoal>(player) {
-            if (it.location.world != location.world) return@forEachGoal
-            if (it.location.distanceSquared(to) <= it.radiusSquared) {
+        forEachGoal(player, GoalTypes.GO_TO_LOCATION) {
+            if (it.pattern.checkPass(to)) {
                 it.complete()
             }
+        }
+    }
+
+    @EventHandler
+    fun dealDamage(event: LivingObjectDamageEvent) {
+        val player = event.damager
+        forEachGoal(player, GoalTypes.DEAL_DAMAGE) {
+            if (it !is BigCounterGoal) return@forEachGoal
+            it.increment(event.damage)
         }
     }
 }
