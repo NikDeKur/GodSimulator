@@ -8,12 +8,12 @@ import org.ndk.godsimulator.world.SimulatorWorld
 import org.ndk.godsimulator.world.WorldsManager.Companion.data
 import java.util.*
 
-abstract class Object : HologramHolder, Region, MSGNameHolder {
+abstract class Object : HologramHolder, MSGNameHolder {
 
     open val id: UUID = UUID.randomUUID()
     abstract val location: Location
 
-    override val world: SimulatorWorld by lazy {
+    val world: SimulatorWorld by lazy {
         location.world.data
     }
 

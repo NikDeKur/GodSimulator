@@ -14,6 +14,7 @@ import org.ndk.godsimulator.equipable.Rarity
 import org.ndk.godsimulator.rpg.buff.EmptyImaginaryBuffsList
 import org.ndk.godsimulator.rpg.buff.ImaginaryBuffsList
 import org.ndk.godsimulator.rpg.buff.ImaginaryBuffsListImpl
+import org.ndk.klib.enumValueOfOrNull
 import org.ndk.minecraft.extension.*
 import org.ndk.minecraft.language.MSGHolder
 
@@ -173,7 +174,7 @@ fun ConfigurationSection.readWalletOrThrow(path: String): Map<String, Long> {
 
 fun ConfigurationSection.readRarity(path: String, default: Rarity? = null): Rarity? {
     val rarity = getString(path) ?: return default
-    return enumValueOfOrNull<Rarity>(path.uppercase()) ?: default
+    return enumValueOfOrNull<Rarity>(rarity.uppercase()) ?: default
 }
 
 fun ConfigurationSection.readRarityOrThrow(path: String): Rarity {

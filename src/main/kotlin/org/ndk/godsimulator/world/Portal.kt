@@ -10,6 +10,7 @@ import org.ndk.godsimulator.extension.toLocation
 import org.ndk.godsimulator.extension.toPoint
 import org.ndk.godsimulator.language.MSGNameHolder
 import org.ndk.godsimulator.wobject.Object
+import org.ndk.godsimulator.wobject.WorldRegion
 import org.ndk.minecraft.extension.getLangMsg
 import org.ndk.minecraft.extension.scanAllPlayers
 import org.ndk.minecraft.extension.tracker
@@ -21,7 +22,7 @@ data class Portal(
     override val hologramSpawnTranslation: org.bukkit.util.Vector,
     val region: Region,
     val destination: Location,
-) : Object(), MSGNameHolder {
+) : Object(), WorldRegion, MSGNameHolder {
 
     override val defaultPhName: String = "portal"
 

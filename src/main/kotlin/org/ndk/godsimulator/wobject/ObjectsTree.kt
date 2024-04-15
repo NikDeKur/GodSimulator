@@ -6,58 +6,58 @@ import org.bukkit.Location
 import org.ndk.global.spatial.Octree
 import org.ndk.klib.removeIfNotAssignable
 
-class ObjectsTree(val manager: ObjectsManager, capacity: Int) : Octree<Region>(capacity) {
+class ObjectsTree(val manager: ObjectsManager, capacity: Int) : Octree<WorldRegion>(capacity) {
 
 
-    inline fun find(location: Location): HashSet<Region> {
+    inline fun find(location: Location): HashSet<WorldRegion> {
         return find(location.blockX, location.blockY, location.blockZ)
     }
-    inline fun findNearby(location: Location, radius: Double): HashSet<Region> {
+    inline fun findNearby(location: Location, radius: Double): HashSet<WorldRegion> {
         return findNearby(location.blockX, location.blockY, location.blockZ, radius)
     }
 
-    override inline fun contains(obj: Region, x: Int, y: Int, z: Int) = obj.contains(x, y, z)
-    override inline fun getMaxPoint(o: Region) = o.maxPoint
-    override inline fun getMinPoint(o: Region) = o.minPoint
+    override inline fun contains(obj: WorldRegion, x: Int, y: Int, z: Int) = obj.contains(x, y, z)
+    override inline fun getMaxPoint(o: WorldRegion) = o.maxPoint
+    override inline fun getMinPoint(o: WorldRegion) = o.minPoint
 
     @Suppress("UNCHECKED_CAST")
-    inline fun <T : Region> findSpecific(x: Int, y: Int, z: Int, clazz: Class<T>): HashSet<T> {
+    inline fun <T : WorldRegion> findSpecific(x: Int, y: Int, z: Int, clazz: Class<T>): HashSet<T> {
         val find = find(x, y, z)
         find.removeIfNotAssignable(clazz)
         return find as HashSet<T>
     }
-    inline fun <T : Region> findSpecific(location: Location, clazz: Class<T>): HashSet<T> {
+    inline fun <T : WorldRegion> findSpecific(location: Location, clazz: Class<T>): HashSet<T> {
         return findSpecific(location.blockX, location.blockY, location.blockZ, clazz)
     }
 
 
 
     @Suppress("UNCHECKED_CAST")
-    inline fun <T : Region> findNearSpecific(x: Int, y: Int, z: Int, radius: Double, clazz: Class<T>): HashSet<T> {
+    inline fun <T : WorldRegion> findNearSpecific(x: Int, y: Int, z: Int, radius: Double, clazz: Class<T>): HashSet<T> {
         val find = findNearby(x, y, z, radius)
         find.removeIfNotAssignable(clazz)
         return find as HashSet<T>
     }
 
-    inline fun <T : Region> findNearSpecific(location: Location, radius: Double, clazz: Class<T>): HashSet<T> {
+    inline fun <T : WorldRegion> findNearSpecific(location: Location, radius: Double, clazz: Class<T>): HashSet<T> {
         return findNearSpecific(location.blockX, location.blockY, location.blockZ, radius, clazz)
     }
 
 
     @Suppress("UNCHECKED_CAST")
-    inline fun <T : Region> findSpecificInRegion(minX: Int, minY: Int, minZ: Int, maxX: Int, maxY: Int, maxZ: Int, clazz: Class<T>): HashSet<T> {
+    inline fun <T : WorldRegion> findSpecificInRegion(minX: Int, minY: Int, minZ: Int, maxX: Int, maxY: Int, maxZ: Int, clazz: Class<T>): HashSet<T> {
         val find = findInRegion(minX, minY, minZ, maxX, maxY, maxZ)
         find.removeIfNotAssignable(clazz)
         return find as HashSet<T>
     }
 
-    inline fun <T : Region> findSpecificInRegion(min: Location, max: Location, clazz: Class<T>): HashSet<T> {
+    inline fun <T : WorldRegion> findSpecificInRegion(min: Location, max: Location, clazz: Class<T>): HashSet<T> {
         return findSpecificInRegion(min.blockX, min.blockY, min.blockZ, max.blockX, max.blockY, max.blockZ, clazz)
     }
 
 
 
-    fun <T : Region> removeSpecific(clazz: Class<T>) {
+    fun <T : WorldRegion> removeSpecific(clazz: Class<T>) {
         removeIf {
             val res = clazz.isInstance(it)
             if (res) {
@@ -73,7 +73,7 @@ class ObjectsTree(val manager: ObjectsManager, capacity: Int) : Octree<Region>(c
 	// Note: 
 	// 1. Call to super is required to find entities that cannot be found by Int locations.
 	// 2. The Method described above can cause problems because of adding to result structures without checking the block contact
-    override fun findNearby(x: Int, y: Int, z: Int, radius: Double): java.util.HashSet<Region> {
+    override fun findNearby(x: Int, y: Int, z: Int, radius: Double): java.util.HashSet<WorldRegion> {
         val result = super.findNearby(x, y, z, radius)
         val world = manager.world.bukkit
 

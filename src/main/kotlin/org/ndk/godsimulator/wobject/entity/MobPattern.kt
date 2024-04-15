@@ -5,7 +5,7 @@ import org.bukkit.Location
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.util.Vector
-import org.ndk.minecraft.extension.spawnEntities
+import org.ndk.minecraft.extension.spawnEntity
 
 interface MobPattern<T : EntityLiving> {
 
@@ -22,7 +22,7 @@ interface MobPattern<T : EntityLiving> {
 
     fun spawnPlayer(player: Player, location: Location): T {
         val entity = createEntity(location)
-        player.spawnEntities(entity)
+        player.spawnEntity(entity)
         return entity
     }
 }

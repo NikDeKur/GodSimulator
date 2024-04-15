@@ -27,7 +27,7 @@ class Building(
     override val maxHealth: BigInteger,
     val expDrop: BigInteger,
     val bagFill: BigInteger,
-) : LootableLivingObject() {
+) : LootableLivingObject(), org.ndk.godsimulator.wobject.WorldRegion {
 
     init {
         reward.addReward(ExperienceReward(expDrop))
