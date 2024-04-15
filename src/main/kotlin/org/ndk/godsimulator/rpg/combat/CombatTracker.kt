@@ -2,6 +2,7 @@ package org.ndk.godsimulator.rpg.combat
 
 import org.ndk.godsimulator.rpg.profile.RPGProfile
 import org.ndk.godsimulator.wobject.LivingObject
+import java.util.*
 
 /**
  * Represents a combat tracker that tracks combat time of living objects.
@@ -14,7 +15,7 @@ import org.ndk.godsimulator.wobject.LivingObject
  */
 class CombatTracker(val rpg: RPGProfile, val combatDelay: Long) {
 
-    val combatTimeMap = LinkedHashMap<LivingObject, Long>()
+    val combatTimeMap = LinkedHashMap<UUID, Long>()
 
     var combatStartTime = 0L
     val isInCombat: Boolean
@@ -23,11 +24,11 @@ class CombatTracker(val rpg: RPGProfile, val combatDelay: Long) {
 
     fun enterCombat(obj: LivingObject) {
         val time = System.currentTimeMillis()
-        combatTimeMap[obj] = time
+        combatTimeMap[obj.id] = time
         combatStartTime = time
     }
 
     fun leaveCombat(obj: LivingObject) {
-        combatTimeMap.remove(obj)
+        combatTimeMap.remove(obj.id)
     }
 }
