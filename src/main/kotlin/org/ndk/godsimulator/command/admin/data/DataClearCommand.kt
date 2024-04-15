@@ -1,7 +1,7 @@
 package org.ndk.godsimulator.command.admin.data
 
 import org.ndk.godsimulator.command.SimulatorCommand
-import org.ndk.godsimulator.database.Database.Companion.accessorAsync
+import org.ndk.godsimulator.database.Database.accessorAsync
 import org.ndk.godsimulator.language.MSG
 import org.ndk.minecraft.plugin.ServerPlugin
 import org.ndk.minecraft.command.CommandExecution

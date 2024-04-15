@@ -1,8 +1,9 @@
 package org.ndk.godsimulator.command
 
+import net.minecraft.server.v1_12_R1.SoundEffects.it
 import org.bukkit.OfflinePlayer
 import org.ndk.godsimulator.GodSimulator
-import org.ndk.godsimulator.database.Database.Companion.accessorAsync
+import org.ndk.godsimulator.database.Database.accessorAsync
 import org.ndk.godsimulator.language.MSG
 import org.ndk.minecraft.command.CommandExecution
 import org.ndk.minecraft.command.CommandTabExecution

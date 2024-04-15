@@ -2,7 +2,7 @@ package org.ndk.godsimulator.wobject
 
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import org.ndk.godsimulator.database.Database.Companion.accessorAsync
+import org.ndk.godsimulator.database.Database.accessorAsync
 import org.ndk.godsimulator.event.wobject.LivingObjectDamageEvent
 import org.ndk.godsimulator.event.wobject.LivingObjectKillEvent
 import org.ndk.godsimulator.event.wobject.LivingObjectSpawnEvent

@@ -5,7 +5,7 @@ package org.ndk.godsimulator.extension
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.ndk.godsimulator.GodSimulator.Companion.instance
-import org.ndk.godsimulator.database.Database.Companion.accessorAsync
+import org.ndk.godsimulator.database.Database.accessorAsync
 import org.ndk.godsimulator.profile.PlayerProfile
 import org.ndk.minecraft.language.Language
 import org.ndk.minecraft.language.MSGHolder

@@ -5,10 +5,6 @@ package org.ndk.godsimulator.database
 
 
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.TypeAdapter
-import com.google.gson.stream.JsonReader
-import com.google.gson.stream.JsonWriter
 import org.bukkit.GameMode
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
@@ -23,10 +19,7 @@ import org.ndk.godsimulator.GodSimulator.Companion.database
 import org.ndk.godsimulator.GodSimulator.Companion.logger
 import org.ndk.godsimulator.GodSimulator.Companion.modulesManager
 import org.ndk.godsimulator.GodSimulator.Companion.scheduler
-import org.ndk.godsimulator.equipable.inventory.EquipableInventory
 import org.ndk.godsimulator.god.ForceGodSelectGUI
-import org.ndk.godsimulator.profile.ProfileLocations
-import org.ndk.godsimulator.profile.ProfileQuests
 import org.ndk.godsimulator.world.WorldsManager
 import org.ndk.godsimulator.world.WorldsManager.Companion.data
 import org.ndk.klib.forEachSafe
@@ -34,12 +27,10 @@ import org.ndk.klib.toTArray
 import org.ndk.minecraft.Utils.debug
 import org.ndk.minecraft.extension.applyColors
 import org.ndk.minecraft.extension.readDBConnector
-import org.ndk.minecraft.language.Language
 import org.ndk.minecraft.modules.PluginModule
 import org.ndk.minecraft.modules.TaskMoment
 import org.ndk.minecraft.plugin.ServerPlugin
 import org.ndk.minecraft.plugin.ServerPlugin.Companion.bLogger
-import java.math.BigInteger
 import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
@@ -47,7 +38,12 @@ import java.util.concurrent.TimeoutException
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.properties.Delegates
 
-class Database : PluginModule, Listener {
+object Database : PluginModule, Listener {
+
+    const val SAVE_DELAY_TICKS = 6000L // 5 minutes
+    const val ACCESSORS_CACHE_SIZE = 100
+    const val LOADING_TIMEOUT = 3000L
+    val getAttempt = AtomicInteger(0)
 
     override val id: String = "DatabaseManager"
 
@@ -212,7 +208,7 @@ class Database : PluginModule, Listener {
         override val database by ::core
         override val tableName: String = "players"
 
-        override val gson: Gson = GSON
+        override val gson: Gson by lazy { GSON.gson }
 
         override fun createSession(holder: OfflinePlayer): PlayerAccessor {
             return PlayerAccessor(this, holder)
@@ -255,133 +251,70 @@ class Database : PluginModule, Listener {
 
 
 
-    companion object {
-        const val SAVE_DELAY_TICKS = 6000L // 5 minutes
-        const val ACCESSORS_CACHE_SIZE = 100
+    val OfflinePlayer.accessorRaw: PlayerAccessor
+        get() = database.playersService.getSession(this)
 
-        val OfflinePlayer.accessorRaw: PlayerAccessor
-            get() = database.playersService.getSession(this)
-
-        val getAttempt = AtomicInteger(0)
-
-        @get:Synchronized
-        val OfflinePlayer.accessorAsync: CompletableFuture<PlayerAccessor>
-            get() {
-                return if (database.connectionEstablished) {
-                    database.playersService.getSessionAsync(this)
-                } else {
-                    // If connection is not established, it means the database hasn't loaded, yet
-                    // We add the task, which will be executed after the database is loaded
-                    // Task will ask for async accessor and return it
-                    val future = CompletableFuture<PlayerAccessor>()
-                    val taskId = "getAccessorAsync_${getAttempt.incrementAndGet()}"
-                    modulesManager.addTask(TaskMoment.AFTER_LOAD, taskId, Database::class.java) { db ->
-                        db.playersService.getSessionAsync(this)
-                            .thenAccept { future.complete(it) }
-                    }
-                    future
+    @get:Synchronized
+    val OfflinePlayer.accessorAsync: CompletableFuture<PlayerAccessor>
+        get() {
+            return if (database.connectionEstablished) {
+                database.playersService.getSessionAsync(this)
+            } else {
+                // If connection is not established, it means the database hasn't loaded, yet
+                // We add the task, which will be executed after the database is loaded
+                // Task will ask for async accessor and return it
+                val future = CompletableFuture<PlayerAccessor>()
+                val taskId = "getAccessorAsync_${getAttempt.incrementAndGet()}"
+                modulesManager.addTask(TaskMoment.AFTER_LOAD, taskId, Database::class.java) { db ->
+                    db.playersService.getSessionAsync(this)
+                        .thenAccept { future.complete(it) }
                 }
+                future
             }
-
-        @get:Synchronized
-        val Player.accessor: PlayerAccessor
-            get() {
-                require(database.connectionEstablished) { "Database is not yet ready to loadData" }
-
-                val accessor = accessorRaw
-
-                return if (accessor.isLoaded)
-                    accessor
-                else {
-                    val async = accessorAsync
-
-                    try {
-                        async.get(3000, TimeUnit.MILLISECONDS)
-                    } catch (e: TimeoutException) {
-                        logger.warning("Can't load player data for $uniqueId ($name) in 1500 milliseconds.")
-                        e.printStackTrace()
-                        kickPlayer("&cCan't load your data. Try to reconnect.".applyColors())
-                        throw e
-                    }
-                    accessor
-                }
-            }
-
-
-        /**
-         * Returns loaded player accessor
-         *
-         * If the database is not connected, returns null
-         *
-         * If the accessor is not loaded (calling this don't start loading), returns null
-         */
-        @get:Synchronized
-        val OfflinePlayer.loadedAccessor: PlayerAccessor?
-            get() {
-                if (!database.connectionEstablished) return null
-                val accessor = accessorRaw
-                return if (accessor.isLoaded) accessor else null
-            }
-
-
-        @Suppress("OVERRIDE_BY_INLINE")
-        class EasyTypeAdapter<T>(
-            val clazz: Class<T>,
-            val writeF: (JsonWriter, T) -> Unit,
-            val readF: (JsonReader) -> T?
-        ) : TypeAdapter<T>() {
-            override inline fun write(out: JsonWriter, value: T) = writeF(out, value)
-            override inline fun read(`in`: JsonReader) = readF(`in`)
-            override fun toString() = "EasyTypeAdapter($clazz)"
         }
 
-        inline fun <reified T> typeAdapter(
-            noinline write: (JsonWriter, T) -> Unit,
-            noinline read: (JsonReader) -> T
-        ) = EasyTypeAdapter(T::class.java, write, read)
+    @get:Synchronized
+    val Player.accessor: PlayerAccessor
+        get() {
+            require(database.connectionEstablished) { "Database is not yet ready to loadData" }
 
-        fun GsonBuilder.register(adapter: EasyTypeAdapter<*>): GsonBuilder = this.registerTypeHierarchyAdapter(adapter.clazz, adapter)
+            val accessor = accessorRaw
 
-        fun JsonWriter.array(value: Iterable<String>) {
-            beginArray()
-            value.forEach { value(it) }
-            endArray()
+            return if (accessor.isLoaded)
+                accessor
+            else {
+                val async = accessorAsync
+
+                try {
+                    async.get(LOADING_TIMEOUT, TimeUnit.MILLISECONDS)
+                } catch (e: TimeoutException) {
+                    logger.warning("Can't load player data for $uniqueId ($name) in $LOADING_TIMEOUT milliseconds.")
+                    e.printStackTrace()
+                    kickPlayer("&cCan't load your data. Try to reconnect.".applyColors())
+                    throw e
+                }
+                accessor
+            }
         }
 
-        val BigIntegerTypeAdapter = typeAdapter(
-            { out, value -> out.value(value.toString()) },
-            { BigInteger(it.nextString()) }
-        )
-        val UUIDTypeAdapter = typeAdapter<UUID>(
-            { out, value -> out.value(value.toString()) },
-            { UUID.fromString(it.nextString()) }
-        )
-        val LanguageCodeTypeAdapter = typeAdapter(
-            { out, value -> out.value(value?.code) },
-            { Language.Code.fromCode(it.nextString()) }
-        )
-        val EquipableInventoryTypeAdapter = typeAdapter<EquipableInventory<*>>(
-            { out, value -> if (value.isNotEmpty()) out.value(value.serialize()) else out.nullValue() },
-            { throw UnsupportedOperationException("Can't deserialize EquipableInventory. Use Fields.InventoryHolderField") }
-        )
-        val ProfileLocationsTypeAdapter = typeAdapter<ProfileLocations>(
-            { out, value -> out.array(value.serialize()) },
-            { throw UnsupportedOperationException("Can't deserialize ProfileLocations. Use Fields.ClassDataHolderField")}
-        )
-        val QuestsTypeAdapter = typeAdapter<ProfileQuests>(
-            { out, value -> value.serialize(out) },
-            { throw UnsupportedOperationException("Can't deserialize Quests. Use ProfileQuests.quests") }
-        )
 
-        val GSON: Gson = GsonBuilder()
-            .register(BigIntegerTypeAdapter)
-            .register(UUIDTypeAdapter)
-            .register(LanguageCodeTypeAdapter)
-            .register(EquipableInventoryTypeAdapter)
-            .register(ProfileLocationsTypeAdapter)
-            .register(QuestsTypeAdapter)
-            .create()
-    }
+    /**
+     * Returns loaded player accessor
+     *
+     * If the database is not connected, returns null
+     *
+     * If the accessor is not loaded (calling this don't start loading), returns null
+     */
+    @get:Synchronized
+    val OfflinePlayer.loadedAccessor: PlayerAccessor?
+        get() {
+            if (!database.connectionEstablished) return null
+            val accessor = accessorRaw
+            return if (accessor.isLoaded) accessor else null
+        }
+
+
+
 }
 
 typealias PlayersDataService = AbstractDataService<OfflinePlayer, UUID, PlayerAccessor>

@@ -2,8 +2,8 @@ package org.ndk.godsimulator.command.admin.data
 import org.bukkit.entity.Player
 import org.ndk.global.tools.SimpleDataType
 import org.ndk.godsimulator.command.SimulatorCommand
-import org.ndk.godsimulator.database.Database.Companion.accessor
-import org.ndk.godsimulator.database.Database.Companion.accessorAsync
+import org.ndk.godsimulator.database.Database.accessor
+import org.ndk.godsimulator.database.Database.accessorAsync
 import org.ndk.godsimulator.language.MSG
 import org.ndk.klib.isBlankOrEmpty
 import org.ndk.klib.toSingletonList

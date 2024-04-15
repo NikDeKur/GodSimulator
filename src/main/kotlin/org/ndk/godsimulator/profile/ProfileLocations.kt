@@ -2,9 +2,8 @@ package org.ndk.godsimulator.profile
 
 import com.google.gson.reflect.TypeToken
 import org.ndk.godsimulator.GodSimulator
-import org.ndk.godsimulator.database.Database
+import org.ndk.godsimulator.database.GSON
 import org.ndk.godsimulator.location.SimulatorLocation
-import org.ndk.minecraft.Utils.debug
 import java.lang.reflect.Type
 
 class ProfileLocations(val profile: PlayerProfile) : HashSet<SimulatorLocation>() {
@@ -29,7 +28,7 @@ class ProfileLocations(val profile: PlayerProfile) : HashSet<SimulatorLocation>(
             profile: PlayerProfile,
             serialized: String
         ): ProfileLocations {
-            val list = Database.GSON.fromJson<Array<String>>(serialized, TYPE)
+            val list = GSON.gson.fromJson<Array<String>>(serialized, TYPE)
 
             val locations = ProfileLocations(profile)
 

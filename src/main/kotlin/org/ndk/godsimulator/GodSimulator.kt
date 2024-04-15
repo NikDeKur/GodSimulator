@@ -86,7 +86,7 @@ class GodSimulator : ServerPlugin() {
             // Modules
             BeforeModulesTask(),
             LangManager, RPGManager(), GodsManager(),
-            EquipableManager(), Database(), WorldsManager(),
+            EquipableManager(), Database, WorldsManager(),
             ShopManager(), BuildingsManager(), EntitiesManager,
             LocationsManager(), RegenerationManager, DoubleJumpManager,
             QuestsManager,

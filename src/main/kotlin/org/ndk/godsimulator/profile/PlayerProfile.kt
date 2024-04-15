@@ -11,8 +11,8 @@ import org.ndk.godsimulator.GodSimulator.Companion.godsManager
 import org.ndk.godsimulator.GodSimulator.Companion.languagesManager
 import org.ndk.godsimulator.GodSimulator.Companion.locationsManager
 import org.ndk.godsimulator.buying.Buyable
-import org.ndk.godsimulator.database.Database.Companion.accessor
-import org.ndk.godsimulator.database.Database.Companion.accessorAsync
+import org.ndk.godsimulator.database.Database.accessor
+import org.ndk.godsimulator.database.Database.accessorAsync
 import org.ndk.godsimulator.database.PlayerAccessor
 import org.ndk.godsimulator.event.profile.ProfileLevelChangeEvent
 import org.ndk.godsimulator.event.profile.ProfileStaminaChangeEvent

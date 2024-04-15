@@ -8,7 +8,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.FoodLevelChangeEvent
 import org.bukkit.event.player.PlayerChangedWorldEvent
-import org.ndk.godsimulator.database.Database.Companion.accessor
+import org.ndk.godsimulator.database.Database.accessor
 import org.ndk.godsimulator.world.WorldsManager.Companion.data
 import org.ndk.minecraft.Utils.debug
 import org.ndk.minecraft.extension.cancel

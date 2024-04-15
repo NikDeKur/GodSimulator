@@ -1,7 +1,7 @@
 package org.ndk.godsimulator.scoreboard
 
 import org.bukkit.entity.Player
-import org.ndk.godsimulator.database.Database.Companion.accessor
+import org.ndk.godsimulator.database.Database.accessor
 import org.ndk.godsimulator.extension.getLangMsg
 import org.ndk.godsimulator.language.MSG
 import org.ndk.klib.toSingletonSet

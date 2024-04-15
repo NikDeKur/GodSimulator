@@ -1,6 +1,6 @@
 package org.ndk.godsimulator.equipable.inventory
 
-import org.ndk.godsimulator.database.Database
+import org.ndk.godsimulator.database.GSON
 import org.ndk.godsimulator.equipable.Equipable
 import org.ndk.godsimulator.equipable.type.EquipableType
 import org.ndk.godsimulator.event.equipable.EquipableEquipEvent
@@ -197,7 +197,7 @@ abstract class EquipableInventory<T : EquipableType<T>>(val profile: PlayerProfi
             clazz: Class<CLZ>,
             serialized: String
         ): CLZ {
-            val map = Database.GSON.fromJson<Map<String, Collection<String>>>(serialized, HashMap::class.java)
+            val map = GSON.gson.fromJson<Map<String, Collection<String>>>(serialized, HashMap::class.java)
 
             val inventory = clazz.construct(profile)
 

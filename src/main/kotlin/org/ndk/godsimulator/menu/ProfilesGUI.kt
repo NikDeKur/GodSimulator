@@ -4,8 +4,8 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
-import org.ndk.godsimulator.database.Database.Companion.accessor
-import org.ndk.godsimulator.database.Database.Companion.accessorAsync
+import org.ndk.godsimulator.database.Database.accessor
+import org.ndk.godsimulator.database.Database.accessorAsync
 import org.ndk.godsimulator.database.PlayerAccessor
 import org.ndk.godsimulator.extension.setTexture
 import org.ndk.godsimulator.language.MSG

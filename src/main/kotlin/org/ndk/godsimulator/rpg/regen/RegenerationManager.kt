@@ -2,7 +2,7 @@ package org.ndk.godsimulator.rpg.regen
 
 import org.bukkit.scheduler.BukkitTask
 import org.ndk.godsimulator.GodSimulator.Companion.scheduler
-import org.ndk.godsimulator.database.Database.Companion.loadedAccessor
+import org.ndk.godsimulator.database.Database.loadedAccessor
 import org.ndk.klib.addById
 import org.ndk.minecraft.modules.PluginModule
 import org.ndk.minecraft.plugin.ServerPlugin

@@ -1,7 +1,7 @@
 package org.ndk.godsimulator.skill.cast
 
 import org.bukkit.entity.Player
-import org.ndk.godsimulator.database.Database.Companion.accessor
+import org.ndk.godsimulator.database.Database.accessor
 import org.ndk.godsimulator.language.MSG
 import org.ndk.godsimulator.language.Quick
 import org.ndk.minecraft.extension.sendLangMsg

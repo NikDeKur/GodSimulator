@@ -1,7 +1,7 @@
 package org.ndk.godsimulator.command
 
 import org.bukkit.entity.Player
-import org.ndk.godsimulator.database.Database.Companion.accessor
+import org.ndk.godsimulator.database.Database.accessor
 import org.ndk.minecraft.command.ServerCommand
 import org.ndk.minecraft.command.ServerRootCommand
 
