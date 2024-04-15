@@ -86,7 +86,7 @@ object RPGCoinsMultiplierStat : RPGStat.Double() {
 // Souls
 // ----------------------------
 object RPGSoulsMultiplierStat : RPGStat.Double() {
-    override val id: String = "coins_multiplier"
+    override val id: String = "souls_multiplier"
     override val nameMSG: MSG = MSG.RPG_STAT_NAME_SOULS_MULTIPLIER
     override val nameBuffMSG: MSG = MSG.RPG_STAT_NAME_BUFF_SOULS_MULTIPLIER
 }

@@ -236,7 +236,7 @@ enum class MSG(val defaultText: String) : MSGHolder {
     SELL_ZONE_MAIN_NAME("&a&lSell Zone"),
     SELL_ZONE_HOLOGRAM_TEXT(
         "{zone.name}",
-        "&6Multiplier: &e&lx{zone.multiplier}"
+        "&fCome here to sell your blocks!"
     ),
     BUILDING_HOLOGRAM_TEXT(
         "&c{building.health}❤"
@@ -618,6 +618,17 @@ enum class MSG(val defaultText: String) : MSGHolder {
     RARITY_NAME_MYTHIC("&dMythic"),
     RARITY_NAME_LEGENDARY("&6Legendary"),
     RARITY_NAME_SPECIAL("&eSPECIAL"),
+
+    PET_NAME_ICE_MINOTAUR("&eIce Minotaur"),
+    PET_NAME_ICE_DOLPHIN("&eIce Dolphin"),
+    PET_NAME_ICE_EAGLE("&eIce Eagle"),
+    PET_NAME_ICE_HYDRA("&eIce Hydra"),
+    PET_NAME_DESERT_DOLPHIN("&eDesert Dolphin"),
+    PET_NAME_DESERT_PEGASUS("&eDesert Pegasus"),
+    PET_NAME_DESERT_CERBERUS("&eDesert Cerberus"),
+    PET_NAME_DESERT_EAGLE("&eDesert Eagle"),
+    PET_NAME_DESERT_HYDRA("&eDesert Hydra"),
+    PET_NAME_DESERT_MINOTAUR("&eDesert Minotaur")
 
     //----------------------------------------
     // GLOBAL MENU END

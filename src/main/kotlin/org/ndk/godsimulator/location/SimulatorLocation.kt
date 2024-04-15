@@ -31,7 +31,7 @@ class SimulatorLocation(
     val region: Region,
     val priceCoins: BigInteger,
     val material: Material
-) : Region by region, Snowflake<String>, MSGNameHolder, org.ndk.godsimulator.wobject.Region, Buyable {
+) : Region by region, Snowflake<String>, MSGNameHolder, org.ndk.godsimulator.wobject.WorldRegion, Buyable {
 
     override val buyable: Boolean
         get() = priceCoins > BigInteger.ZERO
@@ -71,8 +71,8 @@ class SimulatorLocation(
 
     val sellZones = HashMap<String, SellZone>()
 
-    fun addSellZone(id: String, msgName: MSGHolder, region: Region, nameHologramVector: Vector, multiplier: Double) {
-        val zone = SellZone(this, id, msgName, region, nameHologramVector, multiplier)
+    fun addSellZone(id: String, msgName: MSGHolder, region: Region, nameHologramVector: Vector) {
+        val zone = SellZone(this, id, msgName, region, nameHologramVector)
         sellZones[zone.nameId] = zone
         zone.spawn()
         world.objectsManager.register(zone)

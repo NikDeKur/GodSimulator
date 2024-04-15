@@ -1,20 +1,19 @@
 package org.ndk.godsimulator.location
 
+
 import com.sk89q.worldedit.regions.Region
 import org.bukkit.Material
 import org.ndk.godsimulator.GodSimulator
 import org.ndk.godsimulator.extension.*
 import org.ndk.godsimulator.language.MSG
-
-
 import org.ndk.godsimulator.world.SimulatorWorld
 import org.ndk.klib.Constants
-import org.ndk.minecraft.plugin.ServerPlugin
 import org.ndk.minecraft.extension.getListSection
 import org.ndk.minecraft.extension.readBigInteger
 import org.ndk.minecraft.extension.readMaterial
 import org.ndk.minecraft.language.MSGHolder
 import org.ndk.minecraft.modules.PluginModule
+import org.ndk.minecraft.plugin.ServerPlugin
 import java.math.BigInteger
 
 class LocationsManager : PluginModule {
@@ -53,10 +52,9 @@ class LocationsManager : PluginModule {
                     val zoneId = zone.name
                     val nameMSG = zone.readMSGHolder("name") ?: MSG.SELL_ZONE_MAIN_NAME
                     val zoneRegion = zone.readRegionOrThrow("region")
-                    val zoneMultiplier = zone.getDouble("multiplier", 1.0)
                     for (location in locations) {
                         val nameHologramVector = zone.readWEVector("hologramTranslation", location.region.center)!!.toBukkitVector()
-                        location.addSellZone(zoneId, nameMSG, zoneRegion, nameHologramVector, zoneMultiplier)
+                        location.addSellZone(zoneId, nameMSG, zoneRegion, nameHologramVector)
                     }
                 } catch (e: Exception) {
                     plugin.logger.warning("Error while loading sell zone $zone")

@@ -9,12 +9,13 @@ import org.bukkit.util.Vector
 import org.ndk.global.spatial.Point
 import org.ndk.godsimulator.language.MSGNameHolder
 import org.ndk.godsimulator.wobject.Object
+import org.ndk.godsimulator.wobject.WorldRegion
 import org.ndk.klib.ceil
 import org.ndk.klib.floor
 import org.ndk.minecraft.extension.getLangMsg
 import org.ndk.minecraft.extension.handle
 import org.ndk.minecraft.extension.removeEntities
-import org.ndk.minecraft.extension.spawnEntities
+import org.ndk.minecraft.extension.spawnEntity
 import org.ndk.minecraft.language.MSGHolder
 import kotlin.properties.Delegates.notNull
 
@@ -22,7 +23,7 @@ class Shop(
     val shopId: String,
     val pattern: Pattern,
     override val location: Location,
-) : Object(), MSGNameHolder {
+) : Object(), WorldRegion, MSGNameHolder {
 
     override val hologramSpawnTranslation: Vector = pattern.hologramTranslation
 
@@ -79,7 +80,7 @@ class Shop(
     ) {
 
         fun spawn(location: Location): Entity {
-            val entity = location.spawnEntities(entityType) ?: throw RuntimeException("Failed to spawn shop entity")
+            val entity = location.spawnEntity(entityType) ?: throw RuntimeException("Failed to spawn shop entity")
             if (entity is LivingEntity) {
                 entity.setAI(false)
                 entity.isCollidable = false

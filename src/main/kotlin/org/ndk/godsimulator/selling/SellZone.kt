@@ -14,6 +14,7 @@ import org.ndk.godsimulator.language.MSGNameHolder
 import org.ndk.godsimulator.location.SimulatorLocation
 import org.ndk.godsimulator.profile.PlayerProfile
 import org.ndk.godsimulator.wobject.Object
+import org.ndk.godsimulator.wobject.WorldRegion
 import org.ndk.minecraft.extension.getLangMsg
 import org.ndk.minecraft.language.MSGHolder
 
@@ -23,7 +24,7 @@ class SellZone(
     override val nameMSG: MSGHolder,
     val region: Region,
     override val hologramSpawnTranslation: Vector
-) : Object(), Region by region, MSGNameHolder {
+) : Object(), Region by region, WorldRegion, MSGNameHolder {
 
 
     override val defaultPhName: String = "zone"
