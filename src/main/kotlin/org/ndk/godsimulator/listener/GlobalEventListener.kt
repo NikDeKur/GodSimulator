@@ -3,6 +3,7 @@ package org.ndk.godsimulator.listener
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.entity.EntityCombustEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.FoodLevelChangeEvent
@@ -60,5 +61,11 @@ class GlobalEventListener : Listener {
         val player = event.player
         val world = player.world.data
         world.objectsManager.showForPlayer(player)
+    }
+
+
+    @EventHandler
+    fun entityFire(event: EntityCombustEvent) {
+        event.cancel()
     }
 }
