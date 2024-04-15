@@ -26,6 +26,7 @@ import org.ndk.godsimulator.GodSimulator.Companion.scheduler
 import org.ndk.godsimulator.equipable.inventory.EquipableInventory
 import org.ndk.godsimulator.god.ForceGodSelectGUI
 import org.ndk.godsimulator.profile.ProfileLocations
+import org.ndk.godsimulator.profile.ProfileQuests
 import org.ndk.godsimulator.world.WorldsManager
 import org.ndk.godsimulator.world.WorldsManager.Companion.data
 import org.ndk.klib.forEachSafe
@@ -197,16 +198,9 @@ class Database : PluginModule, Listener {
     fun saveCachedPlayersDataAsync(): CompletableFuture<Void> = savePlayersDataAsync(playersService.sessions.values)
 
 
-    @Synchronized
-    fun loadDataAsync(players: Iterable<OfflinePlayer>): CompletableFuture<Void> {
-        val futures = players.map { it.accessorAsync }.toTypedArray()
-        return CompletableFuture.allOf(*futures)
-    }
-
     fun loadCachedPlayersDataAsync(): CompletableFuture<Void> {
         return CompletableFuture.allOf(*playersService.sessions.values.map { it.loadData() }.toTypedArray())
     }
-    fun loadOnlinePlayerDataAsync() = loadDataAsync(ServerPlugin.online)
 
 
     fun saveAndUnloadAccessor(player: OfflinePlayer): PlayerAccessor? {
@@ -288,10 +282,6 @@ class Database : PluginModule, Listener {
                     future
                 }
             }
-
-
-        val OfflinePlayer.isAccessorLoaded: Boolean
-            get() = accessorRaw.isLoaded
 
         @get:Synchronized
         val Player.accessor: PlayerAccessor
@@ -378,6 +368,10 @@ class Database : PluginModule, Listener {
             { out, value -> out.array(value.serialize()) },
             { throw UnsupportedOperationException("Can't deserialize ProfileLocations. Use Fields.ClassDataHolderField")}
         )
+        val QuestsTypeAdapter = typeAdapter<ProfileQuests>(
+            { out, value -> value.serialize(out) },
+            { throw UnsupportedOperationException("Can't deserialize Quests. Use ProfileQuests.quests") }
+        )
 
         val GSON: Gson = GsonBuilder()
             .register(BigIntegerTypeAdapter)
@@ -385,6 +379,7 @@ class Database : PluginModule, Listener {
             .register(LanguageCodeTypeAdapter)
             .register(EquipableInventoryTypeAdapter)
             .register(ProfileLocationsTypeAdapter)
+            .register(QuestsTypeAdapter)
             .create()
     }
 }

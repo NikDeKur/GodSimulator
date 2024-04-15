@@ -212,7 +212,7 @@ object Quick {
             val placeholder = currency.getFinalPlaceholder(sender)
             placeholder["price"] = value.toBeautifulString().toSingletonSet()
             placeholder["balance"] = balanceValue.toBeautifulString().toSingletonSet()
-            entries.append("\n" + SimulatorLangManager.PREFIX + sender.getLangMsg(MSG.CANNOT_AFFORD_ENTRY, placeholder).text)
+            entries.append("\n" + LangManager.PREFIX + sender.getLangMsg(MSG.CANNOT_AFFORD_ENTRY, placeholder).text)
         }
         sender.sendLangMsg(MSG.CANNOT_AFFORD, "entries" to entries)
     }
@@ -222,7 +222,7 @@ object Quick {
         price.forEach { currency, value ->
             val placeholder = currency.getFinalPlaceholder(sender)
             placeholder["price"] = value.toBeautifulString().toSingletonSet()
-            entries.append("\n" + SimulatorLangManager.PREFIX + sender.getLangMsg(MSG.PRICE_ENTRY, placeholder).text)
+            entries.append("\n" + LangManager.PREFIX + sender.getLangMsg(MSG.PRICE_ENTRY, placeholder).text)
         }
         return sender.getLangMsg(MSG.PRICE, "entries" to entries).text
     }

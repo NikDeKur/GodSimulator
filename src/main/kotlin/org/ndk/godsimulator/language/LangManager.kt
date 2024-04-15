@@ -2,8 +2,9 @@ package org.ndk.godsimulator.language
 
 import org.ndk.minecraft.language.LanguagesManager
 
-class SimulatorLangManager : LanguagesManager() {
+object LangManager : LanguagesManager() {
 
+    const val PREFIX = "&7> &r"
     override val prefix: String = PREFIX
 
     init {
@@ -12,7 +13,4 @@ class SimulatorLangManager : LanguagesManager() {
         }
     }
 
-    companion object {
-        const val PREFIX = "&7> &r"
-    }
 }

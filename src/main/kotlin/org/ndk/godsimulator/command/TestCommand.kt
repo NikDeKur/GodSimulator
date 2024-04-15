@@ -67,6 +67,15 @@ class TestCommand : SimulatorCommand() {
         return if (execution.argsSize == 1) optionsStr.toMutableList() else null
     }
 
+
+    fun buffsAttaches(execution: CommandExecution) {
+        val player = execution.player
+        val profile = player.profile
+        val rpg = profile.rpg
+        val buffs = rpg.buffs
+        debug(buffs.attaches)
+    }
+
     fun isInCombat(execution: CommandExecution) {
         val player = execution.player
         val profile = player.profile
