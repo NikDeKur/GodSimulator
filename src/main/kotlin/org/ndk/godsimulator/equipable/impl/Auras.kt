@@ -3,19 +3,19 @@ package org.ndk.godsimulator.equipable.impl
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import org.ndk.godsimulator.GodSimulator
-import org.ndk.godsimulator.buying.Currency
-import org.ndk.godsimulator.buying.Wallet
-import org.ndk.godsimulator.buying.WalletImpl
+import org.ndk.godsimulator.economy.currency.Currency
+import org.ndk.godsimulator.economy.wallet.Wallet
+import org.ndk.godsimulator.economy.wallet.WalletImpl
 import org.ndk.godsimulator.equipable.BuffsEquipable
+import org.ndk.godsimulator.equipable.EquipableManager
 import org.ndk.godsimulator.equipable.inventory.EquipableInventory
 import org.ndk.godsimulator.equipable.inventory.SingleEquipableInventory
 import org.ndk.godsimulator.equipable.type.BuyableEquipableType
 import org.ndk.godsimulator.equipable.type.EquipableTypesManager
-import org.ndk.godsimulator.extension.readMSGHolderOrThrow
 import org.ndk.godsimulator.extension.readStats
 import org.ndk.godsimulator.language.MSG
 import org.ndk.godsimulator.profile.PlayerProfile
+import org.ndk.godsimulator.rpg.RPGManager
 import org.ndk.godsimulator.rpg.buff.ImaginaryBuffsList
 import org.ndk.godsimulator.shop.ShopGUI
 import org.ndk.minecraft.extension.*
@@ -44,7 +44,7 @@ data class AuraType(
             .setTouchable(false)
             .setHideAttributes(true)
             .apply {
-                val lore = GodSimulator.rpgManager.formatToLore(buffs, player)
+                val lore = RPGManager.formatToLore(buffs, player)
                 if (lore.isEmpty()) return@apply
                 lore.add(0, "")
                 this.setLore(lore)
@@ -116,7 +116,7 @@ class AurasShopGUI(
     player: Player
 ) : ShopGUI<AuraType>(
     player,
-    GodSimulator.equipableManager.auras
+    EquipableManager.auras
 ) {
     override fun getTitle(): String {
         return player.getLangMsg(MSG.AURAS_SHOP_GUI_TITLE).text

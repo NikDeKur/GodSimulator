@@ -1,6 +1,6 @@
 package org.ndk.godsimulator.rpg.combat
 
-import org.ndk.godsimulator.rpg.profile.RPGProfile
+import org.ndk.godsimulator.rpg.profile.RPGPlayerProfile
 import org.ndk.godsimulator.wobject.LivingObject
 import java.util.*
 
@@ -13,7 +13,7 @@ import java.util.*
  * @param rpg Player RPG profile
  * @param combatDelay Combat Delay in ms
  */
-class CombatTracker(val rpg: RPGProfile, val combatDelay: Long) {
+class CombatTracker(val rpg: RPGPlayerProfile, val combatDelay: Long) {
 
     val combatTimeMap = LinkedHashMap<UUID, Long>()
 

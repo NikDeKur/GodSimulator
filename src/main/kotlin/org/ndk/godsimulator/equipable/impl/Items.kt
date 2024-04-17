@@ -3,17 +3,17 @@ package org.ndk.godsimulator.equipable.impl
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import org.ndk.godsimulator.GodSimulator
 import org.ndk.godsimulator.equipable.BuffsEquipable
 import org.ndk.godsimulator.equipable.inventory.EquipableInventory
 import org.ndk.godsimulator.equipable.type.EquipableType
 import org.ndk.godsimulator.equipable.type.EquipableTypesManager
-import org.ndk.godsimulator.extension.readMSGHolderOrThrow
 import org.ndk.godsimulator.extension.readStats
 import org.ndk.godsimulator.language.MSG
 import org.ndk.godsimulator.profile.PlayerProfile
+import org.ndk.godsimulator.rpg.RPGManager
 import org.ndk.godsimulator.rpg.buff.ImaginaryBuffsList
 import org.ndk.minecraft.extension.forEachSectionSafe
+import org.ndk.minecraft.extension.readMSGHolderOrThrow
 import org.ndk.minecraft.extension.readMaterialOrThrow
 import org.ndk.minecraft.item.ItemPattern
 import org.ndk.minecraft.language.MSGHolder
@@ -37,7 +37,7 @@ data class ItemType(
             .setTouchable(false)
             .setHideAttributes(true)
             .apply {
-                val lore = GodSimulator.rpgManager.formatToLore(buffs, player)
+                val lore = RPGManager.formatToLore(buffs, player)
                 if (lore.isEmpty()) return@apply
                 lore.add(0, "")
                 this.setLore(lore)

@@ -1,8 +1,8 @@
 package org.ndk.godsimulator.profile
 
 import com.google.gson.reflect.TypeToken
-import org.ndk.godsimulator.GodSimulator
 import org.ndk.godsimulator.database.GSON
+import org.ndk.godsimulator.location.LocationsManager
 import org.ndk.godsimulator.location.SimulatorLocation
 import java.lang.reflect.Type
 
@@ -33,7 +33,7 @@ class ProfileLocations(val profile: PlayerProfile) : HashSet<SimulatorLocation>(
             val locations = ProfileLocations(profile)
 
             for (id in list) {
-                val location = GodSimulator.locationsManager.getLocation(id)
+                val location = LocationsManager.getLocation(id)
                 if (location != null) {
                     locations.add(location)
                 }

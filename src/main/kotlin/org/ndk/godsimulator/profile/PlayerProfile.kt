@@ -7,10 +7,8 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.ndk.global.interfaces.Snowflake
 import org.ndk.global.placeholders.Placeholder
-import org.ndk.godsimulator.GodSimulator.Companion.godsManager
 import org.ndk.godsimulator.GodSimulator.Companion.languagesManager
-import org.ndk.godsimulator.GodSimulator.Companion.locationsManager
-import org.ndk.godsimulator.buying.Buyable
+import org.ndk.godsimulator.economy.Buyable
 import org.ndk.godsimulator.database.Database.accessor
 import org.ndk.godsimulator.database.Database.accessorAsync
 import org.ndk.godsimulator.database.PlayerAccessor
@@ -18,11 +16,15 @@ import org.ndk.godsimulator.event.profile.ProfileLevelChangeEvent
 import org.ndk.godsimulator.event.profile.ProfileStaminaChangeEvent
 import org.ndk.godsimulator.god.ForceGodSelectGUI
 import org.ndk.godsimulator.god.God
+import org.ndk.godsimulator.god.GodsManager
 import org.ndk.godsimulator.god.NotSelectedGod
+import org.ndk.godsimulator.language.LangManager
 import org.ndk.godsimulator.language.MSG
 import org.ndk.godsimulator.language.MSGNameHolder
+import org.ndk.godsimulator.location.LocationsManager
 import org.ndk.godsimulator.location.SimulatorLocation
-import org.ndk.godsimulator.rpg.profile.RPGProfile
+import org.ndk.godsimulator.reward.Reward
+import org.ndk.godsimulator.rpg.profile.RPGPlayerProfile
 import org.ndk.klib.*
 import org.ndk.minecraft.CooldownHolder
 import org.ndk.minecraft.extension.*
@@ -62,7 +64,7 @@ class PlayerProfile(
     val wallet = ProfileWallet(this)
     val skills = ProfileSkills(this)
     val quests = ProfileQuests(this)
-    val rpg = RPGProfile(this)
+    val rpg = RPGPlayerProfile(this)
 
 
 
@@ -95,7 +97,7 @@ class PlayerProfile(
      *
      * Example format: en_us, ru_ru
      *
-     * If the language is not found, it will return the .
+     * If the language is not found, it will return the [LangManager.defaultLang].
      */
     var languageCode by scopes::language
 
@@ -168,7 +170,7 @@ class PlayerProfile(
      * If the player has no god, it will return [NotSelectedGod].
      */
     val god: God
-        get() = scopes.god?.let { godsManager.getGod(it) } ?: NotSelectedGod
+        get() = scopes.god?.let { GodsManager.getGod(it) } ?: NotSelectedGod
 
     fun setGod(god: God, silent: Boolean = false) {
         this.scopes.god = god.id
@@ -249,22 +251,13 @@ class PlayerProfile(
 
 
     fun sellBagFill(): BigInteger {
-        val final = rpg.scaleCoins(bagFill)
-        clearBag()
-        wallet.giveCoins(final)
-        return final
+        return wallet.giveCoins(bagFill)
+            .also { clearBag() }
     }
 
 
-    fun giveCoins(amount: BigInteger) {
-        val final = rpg.scaleCoins(amount)
-        wallet.giveCoins(final)
-    }
-
-    fun giveSouls(amount: BigInteger) {
-        val final = rpg.scaleSouls(amount)
-        wallet.giveSouls(final)
-    }
+    inline fun giveCoins(amount: BigInteger) = wallet.giveCoins(amount)
+    inline fun giveSouls(amount: BigInteger) = wallet.giveSouls(amount)
 
 
 
@@ -376,15 +369,13 @@ class PlayerProfile(
         updateUnlockedSkills()
 
 
-        if (player != null) {
-            if (!silent) {
-                val msg = if (amount > 1)
-                    MSG.REBIRTH_SEVERAL_TIMES_SUCCESS
-                else
-                    MSG.REBIRTH_ONCE_SUCCESS
+        if (player != null && !silent) {
+            val msg = if (amount > 1)
+                MSG.REBIRTH_SEVERAL_TIMES_SUCCESS
+            else
+                MSG.REBIRTH_ONCE_SUCCESS
 
-                player.sendLangMsg(msg, placeholder)
-            }
+            player.sendLangMsg(msg, placeholder)
         }
 
         return true
@@ -419,7 +410,7 @@ class PlayerProfile(
     }
 
     fun hasUnlockedLocation(location: SimulatorLocation): Boolean {
-        return locationsManager.defaultLocations.contains(location.id) ||
+        return LocationsManager.defaultLocations.contains(location.id) ||
                 unlockedLocations.contains(location) ||
                 passLocations
     }
@@ -427,6 +418,10 @@ class PlayerProfile(
 
     inline fun buy(buyable: Buyable) {
         buyable.buy(this)
+    }
+
+    inline fun reward(reward: Reward) {
+        reward.giveReward(this)
     }
 
 
@@ -560,8 +555,6 @@ class PlayerProfile(
 
 
     companion object {
-        fun Player.getProfile(profileId: UUID) = accessor.getProfile(profileId)
-
         /**
          * Static access method to
          * ```
@@ -572,18 +565,6 @@ class PlayerProfile(
          */
         fun OfflinePlayer.getProfileAsync(profileId: UUID): CompletableFuture<PlayerProfile> {
             return accessorAsync.thenApply { it.getProfile(profileId) }
-        }
-
-        /**
-         * Static access method to
-         * ```
-         * accessor.getProfileOrNull(profileId)
-         * ```
-         * @see PlayerAccessor.getProfileOrNull
-         * @see accessor
-         */
-        fun Player.getProfileOrNull(profileId: UUID): PlayerProfile? {
-            return accessor.getProfileOrNull(profileId)
         }
 
         fun randomName(accessor: PlayerAccessor): MSGHolder {

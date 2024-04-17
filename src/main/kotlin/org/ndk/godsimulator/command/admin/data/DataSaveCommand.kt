@@ -1,28 +1,29 @@
 package org.ndk.godsimulator.command.admin.data
 
-import org.ndk.godsimulator.GodSimulator.Companion.database
 import org.ndk.godsimulator.command.SimulatorCommand
+import org.ndk.godsimulator.database.Database
 import org.ndk.godsimulator.database.Database.accessorAsync
 import org.ndk.godsimulator.language.MSG
 import org.ndk.klib.format
-import org.ndk.minecraft.plugin.ServerPlugin
 import org.ndk.minecraft.command.CommandExecution
 import org.ndk.minecraft.command.CommandTabExecution
 import org.ndk.minecraft.extension.nanosToMs
 import org.ndk.minecraft.extension.sendLangMsg
 import org.ndk.minecraft.language.MSGHolder
+import org.ndk.minecraft.plugin.ServerPlugin
 
 class DataSaveCommand : SimulatorCommand() {
     override fun onCommand(execution: CommandExecution) {
         val start = System.nanoTime()
         if (execution.args.isEmpty()) {
-            database.saveCachedPlayersDataAsync()
+            Database.saveCachedPlayersDataAsync()
                 .thenAccept {
                     val time = (System.nanoTime() - start).nanosToMs().format(2)
                     execution.sendLangMsg(MSG.CMD_ADMIN_DATA_SAVE_SUCCESS, "time" to time)
                 }
         } else {
-            val player = execution.getOnlinePlayer(0)
+            val player = execution.getOfflinePlayer(0)
+
             player.accessorAsync
                 .thenApply { it.saveData() }
                 .thenAccept {

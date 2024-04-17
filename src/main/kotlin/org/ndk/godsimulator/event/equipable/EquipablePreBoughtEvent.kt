@@ -3,7 +3,7 @@ package org.ndk.godsimulator.event.equipable
 import org.bukkit.event.Cancellable
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
-import org.ndk.godsimulator.buying.Buyable
+import org.ndk.godsimulator.economy.Buyable
 import org.ndk.godsimulator.profile.PlayerProfile
 
 /**

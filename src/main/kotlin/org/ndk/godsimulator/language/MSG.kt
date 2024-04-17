@@ -628,7 +628,13 @@ enum class MSG(val defaultText: String) : MSGHolder {
     PET_NAME_DESERT_CERBERUS("&eDesert Cerberus"),
     PET_NAME_DESERT_EAGLE("&eDesert Eagle"),
     PET_NAME_DESERT_HYDRA("&eDesert Hydra"),
-    PET_NAME_DESERT_MINOTAUR("&eDesert Minotaur")
+    PET_NAME_DESERT_MINOTAUR("&eDesert Minotaur"),
+
+    QUEST_TEST_NAME("&6Deal &c{damage} &6to anything!"),
+    QUEST_TEST_DESCRIPTION("",
+        "&fYou need to deal &c{damage} &fdamage to complete it!",
+        "&fYou can damage anything: players, mobs, blocks, etc.",
+    ),
 
     //----------------------------------------
     // GLOBAL MENU END

@@ -10,7 +10,7 @@ class GoToLocationGoalPattern(
     val y: Double,
     val z: Double,
     val radius: Double
-) : GoalPattern<GoToLocationGoalPattern> {
+) : GoalPattern<GoToLocationGoalPattern>() {
     val radiusSquared = radius * radius
     override val type = GoalTypes.GO_TO_LOCATION
 
@@ -25,7 +25,7 @@ class GoToLocationGoalPattern(
 
 class DealDamageGoalPattern(
     override val target: BigInteger
-) : GoalCountPattern<DealDamageGoalPattern, BigInteger> {
+) : GoalCountPattern<DealDamageGoalPattern, BigInteger>() {
 
     override val type = GoalTypes.DEAL_DAMAGE
 }

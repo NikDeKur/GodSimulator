@@ -1,6 +1,6 @@
 package org.ndk.godsimulator.equipable.type
 
-import org.ndk.godsimulator.buying.Buyable
+import org.ndk.godsimulator.economy.Buyable
 import org.ndk.godsimulator.profile.PlayerProfile
 
 interface BuyableEquipableType<T>

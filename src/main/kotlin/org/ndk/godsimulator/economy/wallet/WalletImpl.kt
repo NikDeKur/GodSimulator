@@ -1,5 +1,6 @@
-package org.ndk.godsimulator.buying
+package org.ndk.godsimulator.economy.wallet
 
+import org.ndk.godsimulator.economy.currency.Currency
 import java.math.BigInteger
 import java.math.BigInteger.ZERO
 
@@ -16,9 +17,11 @@ open class WalletImpl : HashMap<Currency, BigInteger>(), Wallet {
         put(currency, current + value)
     }
 
-    override fun giveBalance(currency: Currency, value: BigInteger) {
+    override fun giveBalance(currency: Currency, value: BigInteger): BigInteger {
         val current = get(currency) ?: ZERO
-        put(currency, current + value)
+        val new = current + value
+        put(currency, new)
+        return new
     }
 
     override fun takeBalance(currency: Currency, value: BigInteger): Boolean {

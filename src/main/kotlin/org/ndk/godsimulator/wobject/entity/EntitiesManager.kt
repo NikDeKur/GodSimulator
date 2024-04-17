@@ -6,7 +6,6 @@ import org.bukkit.Location
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.ndk.godsimulator.GodSimulator
-import org.ndk.godsimulator.extension.readMSGHolderOrThrow
 import org.ndk.klib.withUnlock
 import org.ndk.minecraft.extension.*
 import org.ndk.minecraft.modules.PluginModule
@@ -65,7 +64,7 @@ object EntitiesManager : PluginModule {
             val soulDrop = it.readBigInteger("soulDrop", BigInteger.ZERO)!!
 
             for (world in worlds) {
-                val spawnpoint = it.readLocationOrThrow("spawnpoint", world = world.bukkit)
+                val spawnpoint = it.readLocationOrThrow("spawnpoint", defWorld = world.bukkit)
                 addEntity(entityPattern, respawnTicks, spawnpoint, level, maxHealth, expDrop, bagFill, soulDrop)
             }
         }

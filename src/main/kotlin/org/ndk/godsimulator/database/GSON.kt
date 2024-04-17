@@ -11,7 +11,9 @@ import org.ndk.godsimulator.equipable.inventory.EquipableInventory
 import org.ndk.godsimulator.language.LangManager
 import org.ndk.godsimulator.profile.ProfileLocations
 import org.ndk.godsimulator.profile.ProfileQuests
-import org.ndk.minecraft.Utils.debug
+import org.ndk.godsimulator.quest.ProfileQuest
+import org.ndk.godsimulator.quest.goal.impl.Goal
+import org.ndk.godsimulator.reward.Reward
 import org.ndk.minecraft.language.Language
 import org.ndk.minecraft.language.MSGHolder
 import java.math.BigInteger
@@ -35,6 +37,7 @@ inline fun <reified T> typeAdapter(
 ) = EasyTypeAdapter(T::class.java, write, read)
 
 fun GsonBuilder.register(adapter: EasyTypeAdapter<*>): GsonBuilder = this.registerTypeHierarchyAdapter(adapter.clazz, adapter)
+fun GsonBuilder.registerNotHierarchy(adapter: EasyTypeAdapter<*>): GsonBuilder = this.registerTypeAdapter(adapter.clazz, adapter)
 
 fun JsonWriter.array(value: Iterable<String>) {
     beginArray()
@@ -65,10 +68,6 @@ object GSON {
         { out, value -> out.array(value.serialize()) },
         { throw UnsupportedOperationException("Can't deserialize ProfileLocations. Use Fields.ClassDataHolderField")}
     )
-    val QuestsTypeAdapter = typeAdapter<ProfileQuests>(
-        { out, value -> debug("serializing"); value.serialize(out) },
-        { throw UnsupportedOperationException("Can't deserialize Quests. Use ProfileQuests.quests") }
-    )
     val MSGHolderTypeAdapter = typeAdapter<MSGHolder>(
         { out, value -> out.value(value.id) },
         { LangManager.getMessage(it.nextString()) }
@@ -80,7 +79,10 @@ object GSON {
         .register(LanguageCodeTypeAdapter)
         .register(EquipableInventoryTypeAdapter)
         .register(ProfileLocationsTypeAdapter)
-        .register(QuestsTypeAdapter)
         .register(MSGHolderTypeAdapter)
+        .register(Reward.TypeAdapter)
+        .registerTypeHierarchyAdapter(ProfileQuests::class.java, ProfileQuests.TypeAdapter)
+        .registerTypeHierarchyAdapter(ProfileQuest::class.java, ProfileQuest.TypeAdapter)
+        .registerTypeHierarchyAdapter(Goal::class.java, Goal.TypeAdapter)
         .create()
 }

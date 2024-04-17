@@ -1,7 +1,7 @@
 package org.ndk.godsimulator.profile
 
-import org.ndk.godsimulator.GodSimulator.Companion.equipableManager
 import org.ndk.godsimulator.GodSimulator.Companion.languagesManager
+import org.ndk.godsimulator.equipable.EquipableManager
 import org.ndk.godsimulator.equipable.impl.AurasInventory
 import org.ndk.godsimulator.equipable.impl.BagsInventory
 import org.ndk.godsimulator.equipable.impl.ItemsInventory
@@ -9,7 +9,6 @@ import org.ndk.godsimulator.equipable.impl.PetsInventory
 import org.ndk.godsimulator.equipable.inventory.EquipableInventory
 import org.ndk.godsimulator.equipable.type.EquipableType
 import org.ndk.godsimulator.equipable.type.EquipableTypesManager
-import org.ndk.godsimulator.utils.ClassDataHolderField
 import org.ndk.godsimulator.utils.InventoryHolderField
 import org.ndk.godsimulator.utils.NotNullClassDataHolderField
 import org.ndk.klib.*
@@ -131,7 +130,7 @@ class ProfileScopes(
     val items by inventoryDataHolder(
         "items",
         ItemsInventory::class.java,
-        equipableManager.items
+        EquipableManager.items
     )
 
 
@@ -147,14 +146,14 @@ class ProfileScopes(
     val pets by inventoryDataHolder(
         "pets",
         PetsInventory::class.java,
-        equipableManager.pets
+        EquipableManager.pets
     )
 
 
     val auras by inventoryDataHolder(
         "auras",
         AurasInventory::class.java,
-        equipableManager.auras
+        EquipableManager.auras
     )
 
 
@@ -163,7 +162,7 @@ class ProfileScopes(
     val bags by inventoryDataHolder(
         "bags",
         BagsInventory::class.java,
-        equipableManager.bags
+        EquipableManager.bags
     )
 
 
@@ -181,15 +180,6 @@ class ProfileScopes(
     //----------------------------------------
     // Utils Start
     //----------------------------------------
-    private fun <T : Any> classDataHolder(
-        path: String,
-        stringDefault: Any,
-        type: Class<T>,
-        deserialize: (Any) -> T
-    ): ClassDataHolderField<T> {
-        return ClassDataHolderField(profile, path, stringDefault, type, deserialize)
-    }
-
     private fun <T : Any> notNullClassDataHolder(
         path: String,
         stringDefault: Any,

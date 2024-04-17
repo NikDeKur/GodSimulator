@@ -3,11 +3,11 @@ package org.ndk.godsimulator.command
 import com.sk89q.worldedit.IncompleteRegionException
 import com.sk89q.worldedit.WorldEdit
 import com.sk89q.worldedit.world.World
-import org.ndk.godsimulator.GodSimulator
 import org.ndk.godsimulator.GodSimulator.Companion.worldedit
 import org.ndk.godsimulator.extension.sendSimulatorMessage
 import org.ndk.godsimulator.extension.toWEVector
 import org.ndk.godsimulator.language.MSG
+import org.ndk.godsimulator.wobject.building.BuildingsManager
 import org.ndk.klib.format
 import org.ndk.klib.measureAverageTime
 import org.ndk.minecraft.command.CommandExecution
@@ -25,7 +25,7 @@ class SaveBuildingCommand : SimulatorCommand() {
         val time = measureAverageTime(1) {
             val wgPlayer = worldedit.wrapPlayer(player)
             val selection = try {
-                val session = WorldEdit.getInstance().sessionManager.get(wgPlayer)
+                val session = WorldEdit.getInstance().sessionManager[wgPlayer]
                 session.getSelection(wgPlayer.world as World)
             } catch (e: IncompleteRegionException) {
                 player.sendSimulatorMessage("&cВыделите область с помощью WorldEdit!")
@@ -33,7 +33,7 @@ class SaveBuildingCommand : SimulatorCommand() {
             }
             val origin = player.location.toWEVector()
             origin.x += 2
-            GodSimulator.buildingsManager.saveBuilding(selection, origin, execution.getArg(0))
+            BuildingsManager.saveBuilding(selection, origin, execution.getArg(0))
         }
         player.sendSimulatorMessage("&aСхематика успешно сохранена! &7(${time.nanosToMs().format(2)} ms)")
     }

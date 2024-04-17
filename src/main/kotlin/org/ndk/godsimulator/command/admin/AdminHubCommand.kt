@@ -2,9 +2,9 @@ package org.ndk.godsimulator.command.admin
 
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerTeleportEvent
-import org.ndk.godsimulator.GodSimulator.Companion.worldsManager
 import org.ndk.godsimulator.command.SimulatorCommand
 import org.ndk.godsimulator.language.MSG
+import org.ndk.godsimulator.world.WorldsManager
 import org.ndk.minecraft.command.CommandExecution
 import org.ndk.minecraft.command.CommandTabExecution
 import org.ndk.minecraft.extension.sendLangMsg
@@ -24,7 +24,7 @@ class AdminHubCommand : SimulatorCommand() {
         }
 
         val worldName = player.world.name
-        val worldData = worldsManager.getWorldData(worldName) ?: kotlin.run {
+        val worldData = WorldsManager.getWorldData(worldName) ?: kotlin.run {
             execution.internalError("WorldData not found for world $worldName")
             return
         }

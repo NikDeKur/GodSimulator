@@ -4,6 +4,8 @@ import org.ndk.minecraft.language.LanguagesManager
 
 object LangManager : LanguagesManager() {
 
+    override val id: String = "LanguagesManager"
+
     const val PREFIX = "&7> &r"
     override val prefix: String = PREFIX
 

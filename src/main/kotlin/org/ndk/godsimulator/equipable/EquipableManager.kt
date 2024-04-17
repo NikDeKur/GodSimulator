@@ -1,7 +1,6 @@
 package org.ndk.godsimulator.equipable
 
 
-import org.ndk.godsimulator.GodSimulator
 import org.ndk.godsimulator.equipable.impl.AurasManager
 import org.ndk.godsimulator.equipable.impl.BagsManager
 import org.ndk.godsimulator.equipable.impl.ItemsManager
@@ -13,8 +12,7 @@ import org.ndk.minecraft.plugin.ServerPlugin
 import org.ndk.minecraft.plugin.ServerPlugin.Companion.bLogger
 import java.util.*
 
-class EquipableManager : PluginModule {
-    override val id: String = "EquipableManager"
+object EquipableManager : PluginModule {
 
     val items: ItemsManager = ItemsManager()
     val pets: PetsManager = PetsManager()
@@ -40,8 +38,6 @@ class EquipableManager : PluginModule {
         managers.forEachSafe(::onException) {
             it.load(plugin)
         }
-
-        GodSimulator.equipableManager = this
     }
 
     override fun onUnload(plugin: ServerPlugin) {

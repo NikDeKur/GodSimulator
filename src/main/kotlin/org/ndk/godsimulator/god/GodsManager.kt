@@ -5,9 +5,7 @@ import org.ndk.godsimulator.GodSimulator
 import org.ndk.minecraft.modules.PluginModule
 import org.ndk.minecraft.plugin.ServerPlugin
 
-class GodsManager : PluginModule {
-
-    override val id: String = "GodsManager"
+object GodsManager : PluginModule {
 
     val gods = LinkedHashMap<String, God>()
 
@@ -19,8 +17,6 @@ class GodsManager : PluginModule {
         addGod(Poseidon)
         addGod(Hades)
         addGod(Ares)
-
-        GodSimulator.godsManager = this
     }
 
     override fun onUnload(plugin: ServerPlugin) {

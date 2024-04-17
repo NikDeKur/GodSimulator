@@ -9,7 +9,7 @@ import org.ndk.global.tools.Tools
 import org.ndk.minecraft.command.CommandExecution
 
 
-class OtherCommandsTabCompletion : Listener {
+object OtherCommandsTabCompletion : Listener {
 
     val register = HashMap<String, (CommandExecution) -> List<String>?>()
     init {

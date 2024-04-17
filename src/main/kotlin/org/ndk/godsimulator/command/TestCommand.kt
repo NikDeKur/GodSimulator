@@ -12,26 +12,29 @@ import org.ndk.database.core.queue.Query
 import org.ndk.global.math.RealRange
 import org.ndk.global.tools.Tools
 import org.ndk.godsimulator.GodSimulator
-import org.ndk.godsimulator.GodSimulator.Companion.configs
-import org.ndk.godsimulator.GodSimulator.Companion.database
-import org.ndk.godsimulator.GodSimulator.Companion.equipableManager
 import org.ndk.godsimulator.GodSimulator.Companion.languagesManager
 import org.ndk.godsimulator.GodSimulator.Companion.scheduler
 import org.ndk.godsimulator.database.Database
-import org.ndk.godsimulator.database.Database.Companion.accessor
+import org.ndk.godsimulator.database.Database.accessor
+import org.ndk.godsimulator.database.Database.accessorAsync
+import org.ndk.godsimulator.database.GSON
+import org.ndk.godsimulator.equipable.EquipableManager
 import org.ndk.godsimulator.extension.sendSimulatorMessage
 import org.ndk.godsimulator.extension.simulatorLocation
 import org.ndk.godsimulator.language.MSG
 import org.ndk.godsimulator.profile.PlayerProfile.Companion.profile
+import org.ndk.godsimulator.quest.goal.abc.DealDamageGoalPattern
 import org.ndk.godsimulator.rpg.stat.RPGHealthStat
 import org.ndk.godsimulator.shop.Shop
-import org.ndk.godsimulator.world.WorldsManager.Companion.data
+import org.ndk.godsimulator.wobject.building.BuildingsManager
+import org.ndk.godsimulator.world.WorldsManager.data
 import org.ndk.klib.*
 import org.ndk.minecraft.Utils.debug
 import org.ndk.minecraft.Utils.debugAverageExecTime
 import org.ndk.minecraft.Utils.debugExecTime
 import org.ndk.minecraft.command.CommandExecution
 import org.ndk.minecraft.command.CommandTabExecution
+import org.ndk.minecraft.config.ConfigsManager
 import org.ndk.minecraft.extension.*
 import org.ndk.minecraft.gui.GUIManager
 import org.ndk.minecraft.language.Language
@@ -65,6 +68,15 @@ class TestCommand : SimulatorCommand() {
 
     override fun onTabComplete(execution: CommandTabExecution): MutableList<String>? {
         return if (execution.argsSize == 1) optionsStr.toMutableList() else null
+    }
+
+    fun giveDamageQuest(execution: CommandExecution) {
+        val player = if (execution.isConsole) execution.getOfflinePlayer(1) else execution.player
+        player.accessorAsync.thenAccept {
+            val quest = it.profile.quests.newQuest(MSG.QUEST_TEST_NAME, MSG.QUEST_TEST_DESCRIPTION)
+            quest.addGoal(DealDamageGoalPattern(Constants.BIGINT_100))
+            debug("Quest created")
+        }
     }
 
 
@@ -121,7 +133,7 @@ class TestCommand : SimulatorCommand() {
         val player = execution.player
         val auraStr = execution.getArg(1)
         val profile = player.profile
-        val auraType = equipableManager.auras.getType(auraStr) ?: return
+        val auraType = EquipableManager.auras.getType(auraStr) ?: return
         val aura = auraType.newEquipable()
         profile.auras.add(aura)
     }
@@ -130,7 +142,7 @@ class TestCommand : SimulatorCommand() {
         val player = execution.player
         val petStr = execution.getArg(1)
         val profile = player.profile
-        val petType = equipableManager.pets.getType(petStr) ?: return
+        val petType = EquipableManager.pets.getType(petStr) ?: return
         val pet = petType.newEquipable()
         profile.pets.add(pet)
     }
@@ -165,7 +177,7 @@ class TestCommand : SimulatorCommand() {
 
     fun playerSpeedTest(execution: CommandExecution) {
         val player = execution.player
-        val handle = player.handle
+        val handle = player.nms
         val abilities = handle.abilities
         debug(abilities.walkSpeed)
         val speed = execution.getFloat(0)
@@ -196,7 +208,7 @@ class TestCommand : SimulatorCommand() {
     fun giveTestPet(execution: CommandExecution) {
         val player = execution.player
         val profile = player.profile
-        val petType = equipableManager.pets.getType("speedy") ?: return
+        val petType = EquipableManager.pets.getType("speedy") ?: return
         repeat(100) {
             val pet = petType.newEquipable()
             profile.pets.add(pet)
@@ -204,7 +216,7 @@ class TestCommand : SimulatorCommand() {
     }
 
     fun configInheritance(execution: CommandExecution) {
-        val config = configs.load("test")
+        val config = ConfigsManager.load("test")
 
         val section = config.getSection("test")
         debug(section)
@@ -244,9 +256,9 @@ class TestCommand : SimulatorCommand() {
     }
 
     fun nearbyBuildings(execution: CommandExecution) {
-        debug(GodSimulator.buildingsManager.getBuildings(execution.player, execution.player.location, 5.0))
+        debug(BuildingsManager.getBuildings(execution.player, execution.player.location, 5.0))
         debugAverageExecTime("Get nearby buildings", 1000) {
-            GodSimulator.buildingsManager.getBuildings(execution.player, execution.player.location, 5.0)
+            BuildingsManager.getBuildings(execution.player, execution.player.location, 5.0)
         }
     }
 
@@ -283,7 +295,7 @@ class TestCommand : SimulatorCommand() {
         val state = block.state as Chest
         val craftInventory = state.inventory as CraftInventory
         val firstItem = craftInventory.inventory.getItem(0)
-        val inventory = player.handle.inventory
+        val inventory = player.nms.inventory
         inventory.setItem(0, firstItem)
         player.sendSimulatorMessage("Link saved: ${firstItem === inventory.getItem(0)}")
     }
@@ -317,10 +329,12 @@ class TestCommand : SimulatorCommand() {
 
     @Suppress("UNUSED_PARAMETER")
     fun dbtest(execution: CommandExecution) {
-        val table = database.core.newTable("test_players_speed", "Id VARCHAR(36) PRIMARY KEY, Data TEXT")
+        val core = Database.core
 
-        database.core.execute(Query.update("DROP INDEX IF EXISTS test_players_speed_index ON test_players_speed")).join()
-        database.core.execute(Query.update("CREATE INDEX IF NOT EXISTS test_players_speed_index ON test_players_speed (Id)")).join()
+        val table = core.newTable("test_players_speed", "Id VARCHAR(36) PRIMARY KEY, Data TEXT")
+
+        core.execute(Query.update("DROP INDEX IF EXISTS test_players_speed_index ON test_players_speed")).join()
+        core.execute(Query.update("CREATE INDEX IF NOT EXISTS test_players_speed_index ON test_players_speed (Id)")).join()
 
         debugExecTime("Clearing table") {
             table.clearRows().join()
@@ -351,9 +365,9 @@ class TestCommand : SimulatorCommand() {
 
         // ConvertingToJSON
         debugExecTime("ConvertingToJSON") {
-            uuids.associateWith { Database.GSON.toJson(map) }
+            uuids.associateWith { GSON.gson.toJson(map) }
         }
-        val json = Database.GSON.toJson(map)
+        val json = GSON.gson.toJson(map)
 
 
         // Add

@@ -11,6 +11,12 @@ abstract class CountGoal<T : GoalCountPattern<T, N>, N : Number>(quest: ProfileQ
 
     abstract fun increment(amount: N)
 
+    override fun serializeProgress(): String {
+        return progress.toString()
+    }
+
+    abstract override fun deserializeProgress(data: String)
+
     override fun getReadableProgress(): String {
         return if (isCompleted)
             profile.getLangMsg(MSG.QUEST_GOAL_COMPLETED).text

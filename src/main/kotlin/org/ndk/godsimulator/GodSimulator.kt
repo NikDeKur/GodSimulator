@@ -10,6 +10,7 @@ import org.ndk.godsimulator.command.TestCommand
 import org.ndk.godsimulator.command.admin.AdminBaseCommand
 import org.ndk.godsimulator.command.admin.AdminStickCommand
 import org.ndk.godsimulator.database.Database
+import org.ndk.godsimulator.economy.currency.CurrencyManager
 import org.ndk.godsimulator.equipable.EquipableManager
 import org.ndk.godsimulator.god.GodsManager
 import org.ndk.godsimulator.language.LangManager
@@ -22,6 +23,7 @@ import org.ndk.godsimulator.location.LocationsManager
 import org.ndk.godsimulator.menu.GlobalMenuListener
 import org.ndk.godsimulator.quest.listening.GoalsListener
 import org.ndk.godsimulator.quest.manager.QuestsManager
+import org.ndk.godsimulator.reward.RewardsManager
 import org.ndk.godsimulator.rpg.RPGListener
 import org.ndk.godsimulator.rpg.RPGManager
 import org.ndk.godsimulator.rpg.regen.RegenerationManager
@@ -36,7 +38,6 @@ import org.ndk.godsimulator.world.SimulatorWorld
 import org.ndk.godsimulator.world.WorldsManager
 import org.ndk.minecraft.Scheduler
 import org.ndk.minecraft.Utils.debug
-import org.ndk.minecraft.config.ConfigsManager
 import org.ndk.minecraft.language.LanguageProvider
 import org.ndk.minecraft.language.LanguagesManager
 import org.ndk.minecraft.modules.ModulesManager
@@ -73,11 +74,11 @@ class GodSimulator : ServerPlugin() {
     override val components
         get() = listOf(
             // Listeners
-            OtherCommandsTabCompletion(), SkillListener, GoalsListener,
-            SellZoneListener(), ShopListener(),
-            LocationComeListener(), GlobalEventListener(),
-            AdminStickCommand.Companion.StickListener(),
-            RPGListener(), GlobalMenuListener(),
+            OtherCommandsTabCompletion, SkillListener, GoalsListener,
+            SellZoneListener, ShopListener,
+            LocationComeListener, GlobalEventListener,
+            AdminStickCommand.Companion.StickListener,
+            RPGListener, GlobalMenuListener,
 
             // Commands
             TestCommand(), SpawnBuildingCommand(), LanguageCommand(),
@@ -85,10 +86,11 @@ class GodSimulator : ServerPlugin() {
 
             // Modules
             BeforeModulesTask(),
-            LangManager, RPGManager(), GodsManager(),
-            EquipableManager(), Database, WorldsManager(),
-            ShopManager(), BuildingsManager(), EntitiesManager,
-            LocationsManager(), RegenerationManager, DoubleJumpManager,
+            CurrencyManager, RewardsManager, LangManager,
+            RPGManager, GodsManager,
+            EquipableManager, Database, WorldsManager,
+            ShopManager, BuildingsManager, EntitiesManager,
+            LocationsManager, RegenerationManager, DoubleJumpManager,
             QuestsManager,
             org.ndk.minecraft.scoreboard.ScoreboardManager(ScoreboardAdapter())
         )
@@ -105,28 +107,14 @@ class GodSimulator : ServerPlugin() {
         lateinit var scheduler: Scheduler
         lateinit var modulesManager: ModulesManager
 
-        lateinit var godsManager: GodsManager
-
-        val configs: ConfigsManager
-            get() = instance.modulesManager.getModule("ConfigsManager") as ConfigsManager
-
         inline val languagesManager: LanguagesManager
             get() = instance.languagesManager
 
-        lateinit var rpgManager: RPGManager
-        lateinit var equipableManager: EquipableManager
-        lateinit var shopManager: ShopManager
-        lateinit var worldsManager: WorldsManager
-        lateinit var buildingsManager: BuildingsManager
-        lateinit var database: Database
-        lateinit var locationsManager: LocationsManager
 
+        val worldedit: WorldEditPlugin = getPlugin(WorldEditPlugin::class.java)
 
-        val worldedit: WorldEditPlugin
-            get() = getPlugin(WorldEditPlugin::class.java)
-
-        val worlds: Collection<SimulatorWorld>
-            get() = worldsManager.worlds.values
+        inline val worlds: Collection<SimulatorWorld>
+            get() = WorldsManager.worlds.values
     }
 
     class BeforeModulesTask : PluginModule {

@@ -8,14 +8,12 @@ import org.bukkit.World
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.util.Vector
 import org.ndk.godsimulator.GodSimulator
-import org.ndk.godsimulator.GodSimulator.Companion.shopManager
-import org.ndk.godsimulator.extension.readMSGHolder
 import org.ndk.minecraft.extension.*
 import org.ndk.minecraft.modules.PluginModule
 import org.ndk.minecraft.plugin.ServerPlugin
 import java.util.*
 
-class ShopManager : PluginModule {
+object ShopManager : PluginModule {
 
     override val id: String = "ShopManager"
 
@@ -29,7 +27,6 @@ class ShopManager : PluginModule {
             val pattern = shop.readShopPatternOrThrow("")
             patterns[pattern.id] = pattern
         }
-        shopManager = this
     }
 
     override fun onUnload(plugin: ServerPlugin) {
@@ -63,34 +60,33 @@ class ShopManager : PluginModule {
     }
 
 
-    companion object {
-        fun ConfigurationSection.readShopPattern(path: String, def: Shop.Pattern? = null): Shop.Pattern? {
-            val section = getSection(path) ?: return def
-            val id = section.name
-            val msgName = section.readMSGHolder("name") ?: return def
-            val entityType = section.readEntityType("entity") ?: return def
-            val hologramTranslation = section.readVector("hologramTranslation") ?: Vector(0.0, 0.0, 0.0)
-            return Shop.Pattern(id, msgName, entityType, hologramTranslation)
-        }
-        inline fun ConfigurationSection.readShopPatternOrThrow(path: String): Shop.Pattern {
-            return readShopPattern(path, null) ?: throwNotFound(path)
-        }
 
-        /**
-         * Also register (and spawn) shop via shopManager
-         */
-        fun ConfigurationSection.readShop(path: String, world: World, def: Shop? = null): Shop? {
-            val section = getSection(path) ?: return def
-            val patternStr = section.getStringOrThrow("pattern")
-            val pattern = shopManager.patterns[patternStr] ?: return def
-            val location = section.readLocation("location", world) ?: return def
-            return shopManager.addShop(pattern, location)
-        }
-        /**
-         * Also register (and spawn) shop via shopManager
-         */
-        inline fun ConfigurationSection.readShopOrThrow(path: String, world: World): Shop {
-            return readShop(path, world, null) ?: throwNotFound(path)
-        }
+    fun ConfigurationSection.readShopPattern(path: String, def: Shop.Pattern? = null): Shop.Pattern? {
+        val section = getSection(path) ?: return def
+        val id = section.name
+        val msgName = section.readMSGHolder("name") ?: return def
+        val entityType = section.readEntityType("entity") ?: return def
+        val hologramTranslation = section.readVector("hologramTranslation") ?: Vector(0.0, 0.0, 0.0)
+        return Shop.Pattern(id, msgName, entityType, hologramTranslation)
+    }
+    inline fun ConfigurationSection.readShopPatternOrThrow(path: String): Shop.Pattern {
+        return readShopPattern(path, null) ?: throwNotFound(path)
+    }
+
+    /**
+     * Also register (and spawn) shop via shopManager
+     */
+    fun ConfigurationSection.readShop(path: String, world: World, def: Shop? = null): Shop? {
+        val section = getSection(path) ?: return def
+        val patternStr = section.getStringOrThrow("pattern")
+        val pattern = patterns[patternStr] ?: return def
+        val location = section.readLocation("location", world) ?: return def
+        return addShop(pattern, location)
+    }
+    /**
+     * Also register (and spawn) shop via shopManager
+     */
+    inline fun ConfigurationSection.readShopOrThrow(path: String, world: World): Shop {
+        return readShop(path, world, null) ?: throwNotFound(path)
     }
 }

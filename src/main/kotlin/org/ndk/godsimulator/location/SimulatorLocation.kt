@@ -8,14 +8,15 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
 import org.ndk.global.interfaces.Snowflake
 import org.ndk.global.spatial.Point
-import org.ndk.godsimulator.buying.Buyable
-import org.ndk.godsimulator.buying.Currency
-import org.ndk.godsimulator.buying.Wallet
-import org.ndk.godsimulator.buying.WalletImpl
+import org.ndk.godsimulator.economy.Buyable
+import org.ndk.godsimulator.economy.currency.Currency
+import org.ndk.godsimulator.economy.wallet.Wallet
+import org.ndk.godsimulator.economy.wallet.WalletImpl
 import org.ndk.godsimulator.language.MSG
 import org.ndk.godsimulator.language.MSGNameHolder
 import org.ndk.godsimulator.profile.PlayerProfile
 import org.ndk.godsimulator.selling.SellZone
+import org.ndk.godsimulator.wobject.WorldRegion
 import org.ndk.godsimulator.world.SimulatorWorld
 import org.ndk.klib.toBeautifulString
 import org.ndk.minecraft.extension.getLangMsg
@@ -31,7 +32,7 @@ class SimulatorLocation(
     val region: Region,
     val priceCoins: BigInteger,
     val material: Material
-) : Region by region, Snowflake<String>, MSGNameHolder, org.ndk.godsimulator.wobject.WorldRegion, Buyable {
+) : Region by region, Snowflake<String>, MSGNameHolder, WorldRegion, Buyable {
 
     override val buyable: Boolean
         get() = priceCoins > BigInteger.ZERO

@@ -45,7 +45,7 @@ object RPGRegenStat : RPGStat.BigInteger() {
     override val nameBuffMSG: MSG = MSG.RPG_STAT_NAME_BUFF_REGENERATION
 }
 
-object RPGRegenMultiplierStat : RPGStat.Double() {
+object RPGRegenMultiplierStat : RPGStat.Double(), RPGStat.Multiplier {
     override val id: String = "regeneration_multiplier"
     override val nameMSG: MSG = MSG.RPG_STAT_NAME_REGENERATION_MULTIPLIER
     override val nameBuffMSG: MSG = MSG.RPG_STAT_NAME_BUFF_REGENERATION_MULTIPLIER
@@ -55,7 +55,7 @@ object RPGRegenMultiplierStat : RPGStat.Double() {
 // ----------------------------
 // DAMAGE
 // ----------------------------
-object RPGDamageMultiplierStat : RPGStat.Double() {
+object RPGDamageMultiplierStat : RPGStat.Double(), RPGStat.Multiplier {
     override val id: String = "damage_multiplier"
     override val nameMSG: MSG = MSG.RPG_STAT_NAME_DAMAGE_MULTIPLIER
     override val nameBuffMSG: MSG = MSG.RPG_STAT_NAME_BUFF_DAMAGE_MULTIPLIER
@@ -65,7 +65,7 @@ object RPGDamageMultiplierStat : RPGStat.Double() {
 // ----------------------------
 // EXPERIENCE
 // ----------------------------
-object RPGExpMultiplierStat : RPGStat.Double() {
+object RPGExpMultiplierStat : RPGStat.Double(), RPGStat.Multiplier {
     override val id: String = "xp_multiplier"
     override val nameMSG: MSG = MSG.RPG_STAT_NAME_EXP_MULTIPLIER
     override val nameBuffMSG: MSG = MSG.RPG_STAT_NAME_BUFF_EXP_MULTIPLIER
@@ -75,7 +75,7 @@ object RPGExpMultiplierStat : RPGStat.Double() {
 // ----------------------------
 // Coins
 // ----------------------------
-object RPGCoinsMultiplierStat : RPGStat.Double() {
+object RPGCoinsMultiplierStat : RPGStat.Double(), RPGStat.Multiplier {
     override val id: String = "coins_multiplier"
     override val nameMSG: MSG = MSG.RPG_STAT_NAME_COINS_MULTIPLIER
     override val nameBuffMSG: MSG = MSG.RPG_STAT_NAME_BUFF_COINS_MULTIPLIER
@@ -85,7 +85,7 @@ object RPGCoinsMultiplierStat : RPGStat.Double() {
 // ----------------------------
 // Souls
 // ----------------------------
-object RPGSoulsMultiplierStat : RPGStat.Double() {
+object RPGSoulsMultiplierStat : RPGStat.Double(), RPGStat.Multiplier {
     override val id: String = "souls_multiplier"
     override val nameMSG: MSG = MSG.RPG_STAT_NAME_SOULS_MULTIPLIER
     override val nameBuffMSG: MSG = MSG.RPG_STAT_NAME_BUFF_SOULS_MULTIPLIER

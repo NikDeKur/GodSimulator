@@ -5,7 +5,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent
 import org.ndk.godsimulator.GodSimulator
 import org.ndk.godsimulator.GodSimulator.Companion.scheduler
 import org.ndk.godsimulator.profile.PlayerProfile
-import org.ndk.godsimulator.world.WorldsManager.Companion.data
+import org.ndk.godsimulator.world.WorldsManager.data
 import org.ndk.minecraft.movement.MovementManager
 
 class ForceGodSelectGUI(player: Player, val profile: PlayerProfile) : GodSelectGUI(player) {

@@ -38,7 +38,7 @@ class AdminStickCommand : SimulatorCommand() {
             .setUnstackable()
 
 
-        class StickListener : Listener {
+        object StickListener : Listener {
             @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
             fun onStickClick(event: EntityDamageByEntityEvent) {
                 val attacker = event.damager as? Player ?: return

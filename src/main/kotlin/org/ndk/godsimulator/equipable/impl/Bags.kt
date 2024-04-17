@@ -3,16 +3,15 @@ package org.ndk.godsimulator.equipable.impl
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import org.ndk.godsimulator.GodSimulator.Companion.equipableManager
-import org.ndk.godsimulator.buying.Currency
-import org.ndk.godsimulator.buying.Wallet
-import org.ndk.godsimulator.buying.WalletImpl
+import org.ndk.godsimulator.economy.currency.Currency
+import org.ndk.godsimulator.economy.wallet.Wallet
+import org.ndk.godsimulator.economy.wallet.WalletImpl
 import org.ndk.godsimulator.equipable.Equipable
+import org.ndk.godsimulator.equipable.EquipableManager
 import org.ndk.godsimulator.equipable.inventory.EquipableInventory
 import org.ndk.godsimulator.equipable.inventory.SingleEquipableInventory
 import org.ndk.godsimulator.equipable.type.BuyableEquipableType
 import org.ndk.godsimulator.equipable.type.EquipableTypesManager
-import org.ndk.godsimulator.extension.readMSGHolderOrThrow
 import org.ndk.godsimulator.language.MSG
 import org.ndk.godsimulator.profile.PlayerProfile
 import org.ndk.godsimulator.shop.ShopGUI
@@ -153,14 +152,14 @@ class BagsInventory(profile: PlayerProfile) : SingleEquipableInventory<BagType>(
     override val allLimit = -1
 
     val bag: Bag
-        get() = item ?: equipableManager.bags.defaultBag
+        get() = item ?: EquipableManager.bags.defaultBag
 }
 
 class BagsShopGUI(
     player: Player
 ) : ShopGUI<BagType>(
     player,
-    equipableManager.bags
+    EquipableManager.bags
 ) {
 
     override fun getTitle(): String {

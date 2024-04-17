@@ -1,8 +1,10 @@
 package org.ndk.godsimulator.quest
 
-import com.google.gson.stream.JsonWriter
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
+import com.google.gson.JsonSerializer
 import org.ndk.global.interfaces.Snowflake
-import org.ndk.global.map.list.ListsMap
+import org.ndk.global.map.list.ListsHashMap
 import org.ndk.godsimulator.language.MSGDescriptionHolder
 import org.ndk.godsimulator.language.MSGNameHolder
 import org.ndk.godsimulator.profile.PlayerProfile
@@ -10,21 +12,23 @@ import org.ndk.godsimulator.profile.ProfileQuests
 import org.ndk.godsimulator.quest.goal.abc.GoalPattern
 import org.ndk.godsimulator.quest.goal.impl.Goal
 import org.ndk.godsimulator.quest.goal.type.GoalType
-import org.ndk.klib.listsMapBoundVar
+import org.ndk.godsimulator.reward.Reward
 import org.ndk.minecraft.language.MSGHolder
 import java.util.*
 
-class ProfileQuest(
+open class ProfileQuest(
     val quests: ProfileQuests,
     override val id: UUID, // questId
     val profile: PlayerProfile,
     override val nameMSG: MSGHolder,
-    override val descriptionMSG: MSGHolder
+    override val descriptionMSG: MSGHolder,
+    val reward: Reward,
 ) : Snowflake<UUID>, MSGNameHolder, MSGDescriptionHolder {
 
     override val defaultPhName: String = "quest"
 
-    val goals: ListsMap<GoalType<*>, Goal<*>> by quests.data.listsMapBoundVar("goals")
+    val goals = ListsHashMap<GoalType<*>, Goal<*>>()
+    val uncompletedGoals = HashSet<Goal<*>>()
 
     /**
      * Create a goal from a pattern and add it to the quest.
@@ -49,57 +53,51 @@ class ProfileQuest(
      */
     fun addGoal(goal: Goal<*>) {
         goals.add(goal.pattern.type, goal)
-        quests.addGoalListener(goal)
+        if (!goal.isCompleted) {
+            quests.addGoalListener(goal)
+            uncompletedGoals.add(goal)
+        }
+    }
+
+
+    open fun onGoalComplete(goal: Goal<*>) {
+        uncompletedGoals.remove(goal)
+        if (uncompletedGoals.isEmpty()) {
+            complete()
+        }
+    }
+
+
+    open fun complete() {
+        quests.removeQuest(id)
+        profile.reward(reward)
+        quests.data.remove(id.toString())
     }
 
 
 
-
-    fun serialize(writer: JsonWriter) {
-        writer.beginObject()
-        writer.name("name").value(nameMSG.id)
-        writer.name("description").value(descriptionMSG.id)
-        val secGoals = writer.name("goals")
-        secGoals.beginObject()
-        goals.forEach { (type, goals) ->
-            val secPattern = secGoals.name(type.id)
-            secPattern.beginArray()
-            goals.forEach {
-                secPattern.beginObject()
-                /**
-                 * id: {
-                 *   "name": name,
-                 *   "description": description,
-                 *   "goals": {
-                 *     "patternId": [
-                 *       {
-                 *         "data": "pattern data",
-                 *         "progress": "serialize() call"
-                 *       }
-                 *     ]
-                 *   }
-                 *
-                 */
-                secPattern.name("data").value(it.pattern.serialize())
-                secPattern.name("progress").value(it.serialize())
-                secPattern.endObject()
-            }
-            secPattern.endArray()
-        }
-
-        secGoals.endObject()
-        writer.endObject()
-
+    override fun toString(): String {
+        val goals = goals.values.flatten()
+        return "ProfileQuest(id=$id, nameMSG=${nameMSG.id}, descriptionMSG=${descriptionMSG.id}, goals=$goals)"
     }
 
 
     companion object {
-
-//        fun deserialize(profile: PlayerProfile, id: UUID, data: Map<String, Any>): ProfileQuest {
-//            val quest = QuestsManager.getQuest(data["quest"] as String)
-//            val profileQuest = ProfileQuest(id, profile, quest)
-//            quest.goals.forEach { profileQuest.addGoal(it) }
-//            return profileQuest
-//        }
+        val TypeAdapter = JsonSerializer<ProfileQuest> { quest, _, context ->
+            val obj = JsonObject()
+            obj.addProperty("name", quest.nameMSG.id)
+            obj.addProperty("description", quest.descriptionMSG.id)
+            val secGoals = JsonObject()
+            quest.goals.forEach { (type, goals) ->
+                val goalsTypeGroup = JsonArray()
+                goals.forEach {
+                    val goalJson = context.serialize(it)
+                    goalsTypeGroup.add(goalJson)
+                }
+                secGoals.add(type.id, goalsTypeGroup)
+            }
+            obj.add("goals", secGoals)
+            obj
+        }
     }
 }

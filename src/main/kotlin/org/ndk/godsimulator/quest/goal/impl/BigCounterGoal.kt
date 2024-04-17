@@ -15,4 +15,8 @@ open class BigCounterGoal<T : GoalCountPattern<T, BigInteger>>(quest: ProfileQue
         }
         progress += amount
     }
+
+    override fun deserializeProgress(data: String) {
+        progress = data.toBigInteger()
+    }
 }

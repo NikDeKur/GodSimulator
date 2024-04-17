@@ -14,4 +14,8 @@ open class CounterGoal<T : GoalCountPattern<T, Int>>(quest: ProfileQuest, patter
         }
         progress += amount
     }
+
+    override fun deserializeProgress(data: String) {
+        progress = data.toInt()
+    }
 }

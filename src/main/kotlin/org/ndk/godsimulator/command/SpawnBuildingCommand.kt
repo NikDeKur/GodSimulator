@@ -1,7 +1,7 @@
 package org.ndk.godsimulator.command
 
-import org.ndk.godsimulator.GodSimulator.Companion.buildingsManager
 import org.ndk.godsimulator.language.MSG
+import org.ndk.godsimulator.wobject.building.BuildingsManager
 import org.ndk.godsimulator.wobject.building.WorldEditAPI
 import org.ndk.minecraft.command.CommandExecution
 import org.ndk.minecraft.command.CommandTabExecution
@@ -13,9 +13,9 @@ class SpawnBuildingCommand : SimulatorCommand() {
         val player = execution.player
         val cardinal = execution.getIntOrNull(1) ?: 0
         val side = WorldEditAPI.WorldSide.entries[cardinal]
-        val region = buildingsManager.pasteBuilding(player.location, execution.getArg(0), side)
+        val region = BuildingsManager.pasteBuilding(player.location, execution.getArg(0), side)
         player.sendSimpleMessage("&aСхематика успешно установлена &7(${region.minimumPoint} - ${region.maximumPoint})")
-        player.sendSimpleMessage("${buildingsManager.getBuildings(player, player.location)}")
+        player.sendSimpleMessage("${BuildingsManager.getBuildings(player, player.location)}")
 
     }
 

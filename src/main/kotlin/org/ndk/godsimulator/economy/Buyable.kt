@@ -1,5 +1,6 @@
-package org.ndk.godsimulator.buying
+package org.ndk.godsimulator.economy
 
+import org.ndk.godsimulator.economy.wallet.Wallet
 import org.ndk.godsimulator.equipable.impl.Aura
 import org.ndk.godsimulator.equipable.impl.AuraType
 import org.ndk.godsimulator.equipable.impl.Pet
@@ -21,7 +22,7 @@ interface Buyable {
 
 
     /**
-     * Called before buying the item
+     * Called before economy the item
      *
      * Called after checking if the player has enough money [not taken yet] and if the item is buyable
      *
@@ -48,7 +49,7 @@ interface Buyable {
     fun afterEvent(profile: PlayerProfile, silent: Boolean): Boolean { return true }
 
     /**
-     * Called after buying the item
+     * Called after economy the item
      *
      * Called after the money is taken. Final step of the purchase
      *

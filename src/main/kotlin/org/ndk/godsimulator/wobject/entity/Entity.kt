@@ -12,10 +12,9 @@ import org.ndk.godsimulator.reward.BagFillReward
 import org.ndk.godsimulator.reward.ExperienceReward
 import org.ndk.godsimulator.reward.SoulsReward
 import org.ndk.godsimulator.wobject.LootableLivingObject
-import org.ndk.klib.r_CallMethod
-import org.ndk.minecraft.Utils.debug
+import org.ndk.klib.r_CallMethodTyped
 import org.ndk.minecraft.extension.getLangMsg
-import org.ndk.minecraft.extension.handle
+import org.ndk.minecraft.extension.nms
 import org.ndk.minecraft.extension.removeEntities
 import java.math.BigInteger
 
@@ -54,12 +53,17 @@ class Entity<T : EntityLiving>(
         return player.getLangMsg(MSG.ENTITY_HOLOGRAM_TEXT, getFinalPlaceholder(player)).listText
     }
 
+    fun playDamageSound(source: DamageSource) {
+        entity.nms.r_CallMethodTyped("c", DAMAGE_SOURCE_ARRAY, source)
+    }
+
     override fun damage(player: Player, damage: BigInteger) {
         super.damage(player, damage)
-        val source = DamageSource.playerAttack(player.handle)
-        val nms = entity.handle
-        debug(nms.r_CallMethod("cf", source))
-        debug(nms.r_CallMethod("c", source))
+
+        // Play damage sound
+        val nmsPlayer = player.nms
+        val source = DamageSource.playerAttack(nmsPlayer)
+        playDamageSound(source)
     }
 
 
@@ -90,5 +94,10 @@ class Entity<T : EntityLiving>(
         entity.health = 0.0
 
         EntitiesManager.removeBukkitEntity(entity)
+    }
+
+
+    companion object {
+        val DAMAGE_SOURCE_ARRAY = arrayOf(DamageSource::class.java)
     }
 }

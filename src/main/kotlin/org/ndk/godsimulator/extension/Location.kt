@@ -6,12 +6,11 @@ import org.bukkit.Location
 import org.bukkit.entity.Player
 import org.bukkit.util.Vector
 import org.ndk.global.spatial.Point
-import org.ndk.godsimulator.GodSimulator
 import org.ndk.godsimulator.location.SimulatorLocation
-
 import org.ndk.godsimulator.wobject.building.Building
+import org.ndk.godsimulator.wobject.building.BuildingsManager
 import org.ndk.godsimulator.wobject.entity.EntitiesManager
-import org.ndk.godsimulator.world.WorldsManager.Companion.data
+import org.ndk.godsimulator.world.WorldsManager.data
 import org.ndk.minecraft.extension.asBlockLocation
 
 
@@ -32,7 +31,7 @@ inline fun Location.getNearbyEntities(player: Player, radius: Double = 0.0): Col
     return EntitiesManager.getEntities(player, this, radius)
 }
 inline fun Location.getNearbyBuildings(player: Player, radius: Double = 0.0): Set<Building> {
-    return GodSimulator.buildingsManager.getBuildings(player, this, radius)
+    return BuildingsManager.getBuildings(player, this, radius)
 }
 
 inline fun com.sk89q.worldedit.Vector.toBukkitVector(): Vector {

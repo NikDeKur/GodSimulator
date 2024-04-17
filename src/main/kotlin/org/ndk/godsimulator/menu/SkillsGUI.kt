@@ -4,6 +4,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
 import org.ndk.godsimulator.language.MSG
+import org.ndk.godsimulator.menu.GlobalMenu.Companion.checkGoBack
 import org.ndk.godsimulator.profile.PlayerProfile.Companion.profile
 import org.ndk.godsimulator.skill.Skill
 import org.ndk.godsimulator.skill.cast.SkillListener
@@ -48,12 +49,15 @@ class SkillsGUI(player: Player) : GUI(player, 27) {
         val profile = player.profile
         val god = profile.god
 
+
         inventory.setColumn(1, Patterns.EMPTY_SLOT)
         inventory.setColumn(4, Patterns.EMPTY_SLOT)
         inventory.setColumn(6, Patterns.EMPTY_SLOT)
         inventory.setColumn(9, Patterns.EMPTY_SLOT)
         inventory.setItem(4, Patterns.EMPTY_SLOT)
         inventory.setItem(22, Patterns.EMPTY_SLOT)
+
+        inventory.setItem(0, GlobalMenu.ITEM_GO_BACK.build(player))
 
         val godIcon = god.getIcon(player)
         inventory.setItem(13, godIcon)
@@ -75,7 +79,10 @@ class SkillsGUI(player: Player) : GUI(player, 27) {
 
     override fun onClick(event: InventoryClickEvent) {
         val item = event.currentItem
-        if (item.type.isAir) return
+        if (item.isEmpty()) return
+
+        if (checkGoBack(item)) return
+
         val skillId = item.getStringTag("skillId") ?: return
         val profile = player.profile
         val skills = profile.skills

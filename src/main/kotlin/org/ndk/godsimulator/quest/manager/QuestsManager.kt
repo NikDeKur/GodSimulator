@@ -1,12 +1,12 @@
 package org.ndk.godsimulator.quest.manager
 
-import org.ndk.godsimulator.extension.readMSGHolderOrThrow
 import org.ndk.godsimulator.quest.Quest
 import org.ndk.godsimulator.quest.goal.type.GoalType
 import org.ndk.godsimulator.quest.goal.type.GoalTypes
 import org.ndk.minecraft.extension.forEachSectionSafe
 import org.ndk.minecraft.extension.getSectionOrThrow
 import org.ndk.minecraft.extension.pairs
+import org.ndk.minecraft.extension.readMSGHolderOrThrow
 import org.ndk.minecraft.modules.PluginModule
 import org.ndk.minecraft.plugin.ServerPlugin
 

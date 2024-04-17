@@ -13,7 +13,7 @@ import org.ndk.godsimulator.wobject.WorldRegion
 import org.ndk.klib.ceil
 import org.ndk.klib.floor
 import org.ndk.minecraft.extension.getLangMsg
-import org.ndk.minecraft.extension.handle
+import org.ndk.minecraft.extension.nms
 import org.ndk.minecraft.extension.removeEntities
 import org.ndk.minecraft.extension.spawnEntity
 import org.ndk.minecraft.language.MSGHolder
@@ -32,7 +32,7 @@ class Shop(
     val entityLocation: Location
         get() = entity.location
     val entityBB
-        get() = entity.handle.boundingBox!!
+        get() = entity.nms.boundingBox!!
 
     override val minPoint
         get() = Point(

@@ -13,11 +13,10 @@ import org.bukkit.Location
 import org.bukkit.entity.Player
 import org.ndk.godsimulator.GodSimulator
 import org.ndk.godsimulator.GodSimulator.Companion.scheduler
-import org.ndk.godsimulator.extension.readMSGHolderOrThrow
-import org.ndk.godsimulator.world.WorldsManager.Companion.data
-import org.ndk.minecraft.plugin.ServerPlugin
+import org.ndk.godsimulator.world.WorldsManager.data
 import org.ndk.minecraft.extension.*
 import org.ndk.minecraft.modules.PluginModule
+import org.ndk.minecraft.plugin.ServerPlugin
 import java.io.File
 import java.math.BigInteger
 import java.util.*
@@ -25,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.logging.Logger
 
 
-class BuildingsManager : PluginModule {
+object BuildingsManager : PluginModule {
 
 
     val patterns = ConcurrentHashMap<String, BuildingPattern>()
@@ -45,7 +44,6 @@ class BuildingsManager : PluginModule {
         logger = plugin.logger
 
         registerBuildings(plugin)
-        GodSimulator.buildingsManager = this
     }
 
     override fun onUnload(plugin: ServerPlugin) {

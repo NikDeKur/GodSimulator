@@ -1,5 +1,3 @@
-@file:Suppress("NOTHING_TO_INLINE")
-
 package org.ndk.godsimulator.database
 
 
@@ -15,18 +13,17 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.scheduler.BukkitTask
 import org.ndk.database.core.DatabaseV3
 import org.ndk.database.service.AbstractDataService
-import org.ndk.godsimulator.GodSimulator.Companion.database
 import org.ndk.godsimulator.GodSimulator.Companion.logger
 import org.ndk.godsimulator.GodSimulator.Companion.modulesManager
 import org.ndk.godsimulator.GodSimulator.Companion.scheduler
 import org.ndk.godsimulator.god.ForceGodSelectGUI
 import org.ndk.godsimulator.world.WorldsManager
-import org.ndk.godsimulator.world.WorldsManager.Companion.data
+import org.ndk.godsimulator.world.WorldsManager.data
 import org.ndk.klib.forEachSafe
 import org.ndk.klib.toTArray
 import org.ndk.minecraft.Utils.debug
 import org.ndk.minecraft.extension.applyColors
-import org.ndk.minecraft.extension.readDBConnector
+import org.ndk.minecraft.extension.readDBConnectorOrThrow
 import org.ndk.minecraft.modules.PluginModule
 import org.ndk.minecraft.modules.TaskMoment
 import org.ndk.minecraft.plugin.ServerPlugin
@@ -57,10 +54,8 @@ object Database : PluginModule, Listener {
 
     override fun onLoad(plugin: ServerPlugin) {
         debug("Loading Database")
-        database = this
 
-
-        val connector = plugin.config.readDBConnector("database")
+        val connector = plugin.config.readDBConnectorOrThrow("database")
         core = DatabaseV3("GodSimulator-Main", connector)
 
         // Connect to the database
@@ -226,39 +221,16 @@ object Database : PluginModule, Listener {
         }
     }
 
-//    val worldsService = object: AbstractDataService<World, UUID, SimulatorWorld>() {
-//        override val database: DatabaseV3 = core
-//        override val tableName: String = "worlds"
-//
-//        override val gson: Gson = GSON
-//
-//        override fun createSession(holder: World): SimulatorWorld {
-//            return SimulatorWorld(this, holder)
-//        }
-//
-//        override val idSQLType: String = "VARCHAR(36)"
-//        override val sessionsLimit: Int = 100
-//
-//        override fun getName(holder: World): String {
-//            return holder.name
-//        }
-//
-//        override fun getId(holder: World): UUID {
-//            return holder.uid
-//        }
-//    }
-
-
 
 
     val OfflinePlayer.accessorRaw: PlayerAccessor
-        get() = database.playersService.getSession(this)
+        get() = playersService.getSession(this)
 
     @get:Synchronized
     val OfflinePlayer.accessorAsync: CompletableFuture<PlayerAccessor>
         get() {
-            return if (database.connectionEstablished) {
-                database.playersService.getSessionAsync(this)
+            return if (connectionEstablished) {
+                playersService.getSessionAsync(this)
             } else {
                 // If connection is not established, it means the database hasn't loaded, yet
                 // We add the task, which will be executed after the database is loaded
@@ -270,13 +242,17 @@ object Database : PluginModule, Listener {
                         .thenAccept { future.complete(it) }
                 }
                 future
+            }.exceptionally {
+                logger.warning("Uncaught exception while operating with accessor for $name occurred!")
+                it.printStackTrace()
+                null
             }
         }
 
     @get:Synchronized
     val Player.accessor: PlayerAccessor
         get() {
-            require(database.connectionEstablished) { "Database is not yet ready to loadData" }
+            require(connectionEstablished) { "Database is not yet ready to loadData" }
 
             val accessor = accessorRaw
 
@@ -286,7 +262,7 @@ object Database : PluginModule, Listener {
                 val async = accessorAsync
 
                 try {
-                    async.get(LOADING_TIMEOUT, TimeUnit.MILLISECONDS)
+                    async[LOADING_TIMEOUT, TimeUnit.MILLISECONDS]
                 } catch (e: TimeoutException) {
                     logger.warning("Can't load player data for $uniqueId ($name) in $LOADING_TIMEOUT milliseconds.")
                     e.printStackTrace()
@@ -308,7 +284,7 @@ object Database : PluginModule, Listener {
     @get:Synchronized
     val OfflinePlayer.loadedAccessor: PlayerAccessor?
         get() {
-            if (!database.connectionEstablished) return null
+            if (!connectionEstablished) return null
             val accessor = accessorRaw
             return if (accessor.isLoaded) accessor else null
         }

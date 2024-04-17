@@ -7,7 +7,7 @@ import org.bukkit.Location
 import org.bukkit.World
 import org.bukkit.entity.Player
 import org.ndk.godsimulator.wobject.ObjectsManager
-import org.ndk.minecraft.extension.handle
+import org.ndk.minecraft.extension.nms
 import org.ndk.minecraft.extension.sendPackets
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
@@ -17,7 +17,7 @@ class SimulatorWorld(
     val bukkit: World
 ) : HashMap<String, Any>() {
 
-    val nms = bukkit.handle
+    val nms = bukkit.nms
 
     val players: List<Player>
         get() = bukkit.players

@@ -6,12 +6,12 @@ import org.bukkit.World
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerRespawnEvent
-import org.ndk.godsimulator.GodSimulator
-import org.ndk.godsimulator.extension.readMSGHolderOrThrow
 import org.ndk.godsimulator.extension.readRegionOrThrow
 import org.ndk.godsimulator.shop.ShopManager
-import org.ndk.godsimulator.shop.ShopManager.Companion.readShopOrThrow
+import org.ndk.godsimulator.shop.ShopManager.readShopOrThrow
+import org.ndk.klib.forEachSafe
 import org.ndk.minecraft.Utils.debug
+import org.ndk.minecraft.config.ConfigsManager
 import org.ndk.minecraft.extension.*
 import org.ndk.minecraft.modules.PluginModule
 import org.ndk.minecraft.modules.TaskMoment
@@ -26,17 +26,14 @@ import org.spigotmc.event.player.PlayerSpawnLocationEvent
  * - [via task] ShopManager
  * - [via task] Database
  */
-class WorldsManager : PluginModule, Listener {
+object WorldsManager : PluginModule, Listener {
     val worlds = HashMap<String, SimulatorWorld>()
     val portals = ArrayList<Portal>()
 
-    override val id: String = "WorldsManager"
-
     override fun onLoad(plugin: ServerPlugin) {
-        GodSimulator.worldsManager = this
 
         val logger = plugin.logger
-        val config = GodSimulator.configs.loadDefault()
+        val config = ConfigsManager.loadDefault()
         val gamerulesSection = config.getSection("gamerules")
 
         val worlds = Bukkit.getWorlds()
@@ -53,34 +50,28 @@ class WorldsManager : PluginModule, Listener {
         }
 
 
+        Bukkit.getWorlds().forEachSafe({ w, e -> logger.warning("Error while loading world ${w.name}!"); e.printStackTrace() }
+        ) { worldBukkit ->
+            val world = SimulatorWorld(worldBukkit)
+            addWorldData(world)
 
-        for (worldBukkit in Bukkit.getWorlds()) {
-            try {
-                val world = SimulatorWorld(worldBukkit)
-                addWorldData(world)
+            val spawn = config.readLocationOrThrow("spawn", defWorld = worldBukkit)
+            world.spawnLocation = spawn
 
-                val spawn = config.readLocationOrThrow("spawn", world = worldBukkit)
-                world.spawnLocation = spawn
-
-                // Load shops as scheduled task, because ShopManager loads after WorldsManager
-                plugin.modulesManager.addTask(TaskMoment.AFTER_LOAD, "LoadShops_${worldBukkit.name}", ShopManager::class.java) {
-                    config.forEachSectionSafe("shops") {
-                        it.readShopOrThrow("", world = worldBukkit)
-                    }
+            // Load shops as scheduled task, because ShopManager loads after WorldsManager
+            plugin.modulesManager.addTask(TaskMoment.AFTER_LOAD, "LoadShops_${worldBukkit.name}", ShopManager::class.java) {
+                config.forEachSectionSafe("shops") {
+                    it.readShopOrThrow("", world = worldBukkit)
                 }
+            }
 
-                config.getListSection("portals").forEach {
-                    val name = it.readMSGHolderOrThrow("name")
-                    val hologramTranslation = it.readVector("hologramTranslation", VECTOR_ZERO)!!
-                    val region = it.readRegionOrThrow("region")
-                    val destination = it.readLocationOrThrow("destination", world = worldBukkit)
-                    val portal = Portal(it.name, name, hologramTranslation, region, destination)
-                    addPortal(world, portal)
-                }
-
-            } catch (e: Exception) {
-                logger.warning("Error while loading world ${worldBukkit.name}!")
-                e.printStackTrace()
+            config.getListSection("portals").forEach {
+                val name = it.readMSGHolderOrThrow("name")
+                val hologramTranslation = it.readVector("hologramTranslation", VECTOR_ZERO)!!
+                val region = it.readRegionOrThrow("region")
+                val destination = it.readLocationOrThrow("destination", defWorld = worldBukkit)
+                val portal = Portal(it.name, name, hologramTranslation, region, destination)
+                addPortal(world, portal)
             }
         }
     }
@@ -137,9 +128,7 @@ class WorldsManager : PluginModule, Listener {
     }
 
 
-    companion object {
-        val World.data: SimulatorWorld
-            get() = GodSimulator.worldsManager.getWorldData(name) ?: throw IllegalArgumentException("World $name is not loaded!")
-    }
+    val World.data: SimulatorWorld
+        get() = getWorldData(name) ?: throw IllegalArgumentException("World $name is not loaded!")
 
 }

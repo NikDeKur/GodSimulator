@@ -15,10 +15,10 @@ import org.ndk.minecraft.extension.getLangMsg
 import org.ndk.minecraft.modules.PluginModule
 import org.ndk.minecraft.plugin.ServerPlugin
 
-class RPGManager : PluginModule {
-    override val id: String = "RPGManager"
-
+object RPGManager : PluginModule {
     val types = HashMap<String, RPGStat<*>>()
+
+    const val STATS_PACKAGE = "org.ndk.godsimulator.rpg.stat"
 
     override fun onLoad(plugin: ServerPlugin) {
         val classes = Tools.findClasses(GodSimulator.classLoader, STATS_PACKAGE)
@@ -28,8 +28,6 @@ class RPGManager : PluginModule {
                 registerType(instance)
             }
         }
-
-        GodSimulator.rpgManager = this
     }
 
     override fun onUnload(plugin: ServerPlugin) {
@@ -68,7 +66,4 @@ class RPGManager : PluginModule {
     }
 
 
-    companion object {
-        const val STATS_PACKAGE = "org.ndk.godsimulator.rpg.stat"
-    }
 }

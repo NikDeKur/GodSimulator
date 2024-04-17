@@ -1,7 +1,7 @@
 package org.ndk.godsimulator.command.admin.data
 
-import org.ndk.godsimulator.GodSimulator.Companion.database
 import org.ndk.godsimulator.command.SimulatorCommand
+import org.ndk.godsimulator.database.Database
 import org.ndk.godsimulator.database.Database.accessorRaw
 import org.ndk.godsimulator.language.MSG
 import org.ndk.klib.format
@@ -16,7 +16,7 @@ class DataLoadCommand : SimulatorCommand() {
     override fun onCommand(execution: CommandExecution) {
         if (execution.args.isEmpty()) {
             val start = System.nanoTime()
-            database.loadCachedPlayersDataAsync()
+            Database.loadCachedPlayersDataAsync()
                 .thenAccept {
                     val finish = (System.nanoTime() - start).nanosToMs().format(2)
                     execution.sendLangMsg(MSG.CMD_ADMIN_DATA_LOAD_SUCCESS, "time" to finish)

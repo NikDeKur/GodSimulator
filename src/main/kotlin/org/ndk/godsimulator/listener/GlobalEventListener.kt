@@ -9,13 +9,13 @@ import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.FoodLevelChangeEvent
 import org.bukkit.event.player.PlayerChangedWorldEvent
 import org.ndk.godsimulator.database.Database.accessor
-import org.ndk.godsimulator.world.WorldsManager.Companion.data
+import org.ndk.godsimulator.world.WorldsManager.data
 import org.ndk.minecraft.Utils.debug
 import org.ndk.minecraft.extension.cancel
 import org.ndk.minecraft.movement.OptiPlayerMoveEvent
 
 
-class GlobalEventListener : Listener {
+object GlobalEventListener : Listener {
 
     @EventHandler
     fun onFoodLevelChange(event: FoodLevelChangeEvent) {
@@ -24,7 +24,6 @@ class GlobalEventListener : Listener {
 
     @EventHandler
     fun onDamage(event: EntityDamageEvent) {
-        // val player = event.entity as? Player ?: return
         if (event.cause == EntityDamageEvent.DamageCause.FALL) {
             event.cancel()
         }

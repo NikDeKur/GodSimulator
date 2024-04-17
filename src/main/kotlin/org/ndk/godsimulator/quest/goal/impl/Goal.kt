@@ -1,5 +1,7 @@
 package org.ndk.godsimulator.quest.goal.impl
 
+import com.google.gson.JsonObject
+import com.google.gson.JsonSerializer
 import org.ndk.global.tools.Tools
 import org.ndk.godsimulator.extension.getLangMsg
 import org.ndk.godsimulator.language.MSG
@@ -19,7 +21,10 @@ open class Goal<T : GoalPattern<T>> (val quest: ProfileQuest, val pattern: T) {
     val profile by quest::profile
 
     open var isCompleted = false
-    open fun complete() { isCompleted = true }
+    open fun complete() {
+        isCompleted = true
+
+    }
 
     /**
      * Get string with human-readable progress.
@@ -41,11 +46,24 @@ open class Goal<T : GoalPattern<T>> (val quest: ProfileQuest, val pattern: T) {
      *
      * @return Serialized progress.
      */
-    open fun serialize(): String {
+    open fun serializeProgress(): String {
         return isCompleted.toString()
     }
 
-    open fun deserialize(data: String) {
+    open fun deserializeProgress(data: String) {
         isCompleted = Tools.parseBooleanOrNull(data) ?: false
+    }
+
+    override fun toString(): String {
+        return "Goal(pattern=$pattern, progress=${serializeProgress()})"
+    }
+
+    companion object {
+        val TypeAdapter = JsonSerializer<Goal<*>> { goal, _, _ ->
+                val obj = JsonObject()
+                obj.addProperty("data", goal.pattern.serializeData())
+                obj.addProperty("progress", goal.serializeProgress())
+                obj
+            }
     }
 }

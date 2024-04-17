@@ -9,7 +9,7 @@ import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Player
 import org.jetbrains.annotations.Contract
 import org.ndk.global.tools.Tools
-import org.ndk.godsimulator.buying.Wallet
+import org.ndk.godsimulator.economy.wallet.Wallet
 import org.ndk.klib.isBlankOrEmpty
 import org.ndk.klib.toBeautifulString
 import org.ndk.klib.toSingletonSet

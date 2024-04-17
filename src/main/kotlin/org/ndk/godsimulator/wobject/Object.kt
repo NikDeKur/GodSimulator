@@ -5,7 +5,7 @@ import org.bukkit.entity.Player
 import org.bukkit.util.Vector
 import org.ndk.godsimulator.language.MSGNameHolder
 import org.ndk.godsimulator.world.SimulatorWorld
-import org.ndk.godsimulator.world.WorldsManager.Companion.data
+import org.ndk.godsimulator.world.WorldsManager.data
 import java.util.*
 
 abstract class Object : HologramHolder, MSGNameHolder {

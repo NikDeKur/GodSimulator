@@ -3,7 +3,6 @@ package org.ndk.godsimulator.god
 
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.ndk.godsimulator.GodSimulator.Companion.godsManager
 import org.ndk.godsimulator.language.MSG
 import org.ndk.godsimulator.language.Quick
 import org.ndk.godsimulator.profile.PlayerProfile.Companion.profile
@@ -22,7 +21,7 @@ open class GodSelectGUI(player: Player) : GUI(player, 27) {
     override val flags: Set<GUIFlag> = setOf(GUIFlag.CANNOT_TAKE, GUIFlag.CANNOT_PUT)
 
     override fun beforeOpen() {
-        godsManager.gods.forEach { (_, god) ->
+        GodsManager.gods.forEach { (_, god) ->
             if (god.isSelectable)
                 inventory.addItem(god.getIcon(player))
         }
@@ -36,7 +35,7 @@ open class GodSelectGUI(player: Player) : GUI(player, 27) {
 
         val player = event.whoClicked as? Player ?: return
         val godId = item.getStringTag("god") ?: return
-        val god = godsManager.getGod(godId)
+        val god = GodsManager.getGod(godId)
         if (god == null) {
             Quick.internalError(player, "(godId: $godId)")
             return

@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package org.ndk.godsimulator.rpg.profile
 
 import org.bukkit.attribute.Attribute
@@ -14,13 +16,13 @@ import org.ndk.klib.Constants.BIGDEC_100
 import org.ndk.klib.bigDecBoundVar
 import org.ndk.minecraft.Utils.debug
 import org.ndk.minecraft.Utils.runSync
-import org.ndk.minecraft.extension.handle
+import org.ndk.minecraft.extension.nms
 import org.ndk.minecraft.extension.sendEntityAnimation
 import org.ndk.minecraft.extension.setHighWalkSpeed
 import java.math.BigDecimal
 import java.math.BigInteger
 
-class RPGProfile(val profile: PlayerProfile) {
+class RPGPlayerProfile(val profile: PlayerProfile) {
 
     var latestHealth: BigDecimal by profile.scopes.accessor.bigDecBoundVar("latestHealth")
 
@@ -47,17 +49,13 @@ class RPGProfile(val profile: PlayerProfile) {
                     val added = updateMaxHealth()
                     heal(added)
                 }
-                is RPGDamageMultiplierStat -> {
-                    damageMultiplier = stat.merge(damageMultiplier, value as Double)
-                }
-                is RPGExpMultiplierStat -> {
-                    expMultiplier = stat.merge(expMultiplier, value as Double)
-                }
-                is RPGCoinsMultiplierStat -> {
-                    coinsMultiplier = stat.merge(coinsMultiplier, value as Double)
-                }
-                is RPGSoulsMultiplierStat -> {
-                    soulsMultiplier = stat.merge(soulsMultiplier, value as Double)
+                is RPGStat.Multiplier -> {
+                    val mult = multipliers[stat.id]
+                    if (mult != null) {
+                        multipliers[stat.id] = mult + (value as Double)
+                    } else {
+                        multipliers[stat.id] = value as Double
+                    }
                 }
             }
         }
@@ -75,17 +73,8 @@ class RPGProfile(val profile: PlayerProfile) {
                     if (health != maxHealth)
                         unHeal(taken)
                 }
-                is RPGDamageMultiplierStat -> {
-                    damageMultiplier = stat.deMerge(damageMultiplier, value as Double)
-                }
-                is RPGExpMultiplierStat -> {
-                    expMultiplier = stat.deMerge(expMultiplier, value as Double)
-                }
-                is RPGCoinsMultiplierStat -> {
-                    coinsMultiplier = stat.deMerge(coinsMultiplier, value as Double)
-                }
-                is RPGSoulsMultiplierStat -> {
-                    soulsMultiplier = stat.deMerge(soulsMultiplier, value as Double)
+                is RPGStat.Multiplier -> {
+                    multipliers[stat.id] = getMultiplier(stat.id) - (value as Double)
                 }
             }
         }
@@ -262,7 +251,7 @@ class RPGProfile(val profile: PlayerProfile) {
         if (effect) {
             val player = player
             if (player is Player) {
-                player.sendEntityAnimation(player.handle, 1)
+                player.sendEntityAnimation(player.nms, 1)
             }
         }
     }
@@ -282,28 +271,27 @@ class RPGProfile(val profile: PlayerProfile) {
     }
 
 
-    var damageMultiplier: Double = 0.0
+    val multipliers = HashMap<String, Double>()
+
+    inline fun getMultiplier(id: String) = multipliers[id] ?: 1.0
+    inline fun getMultiplier(stat: RPGStat.Multiplier) = getMultiplier(stat.id)
+
     fun scaleDamage(damage: BigInteger): BigInteger {
-        if (damageMultiplier == 0.0) return damage
-        return (damage.toDouble() * damageMultiplier).toBigDecimal().toBigInteger()
+        val mult = getMultiplier(RPGDamageMultiplierStat)
+        if (mult == 0.0) return damage
+        return (damage.toDouble() * mult).toBigDecimal().toBigInteger()
     }
 
-    var expMultiplier: Double = 0.0
     fun scaleExp(exp: BigInteger): BigInteger {
-        if (expMultiplier == 0.0) return exp
-        return (exp.toDouble() * expMultiplier).toBigDecimal().toBigInteger()
+        val mult = getMultiplier(RPGExpMultiplierStat)
+        if (mult == 0.0) return exp
+        return (exp.toDouble() * mult).toBigDecimal().toBigInteger()
     }
 
-    var coinsMultiplier: Double = 0.0
-    fun scaleCoins(coins: BigInteger): BigInteger {
-        if (coinsMultiplier == 0.0) return coins
-        return (coins.toDouble() * coinsMultiplier).toBigDecimal().toBigInteger()
-    }
-
-    var soulsMultiplier: Double = 0.0
-    fun scaleSouls(souls: BigInteger): BigInteger {
-        if (soulsMultiplier == 0.0) return souls
-        return (souls.toDouble() * soulsMultiplier).toBigDecimal().toBigInteger()
+    fun scaleCurrency(currencyId: String, coins: BigInteger): BigInteger {
+        val mult = getMultiplier(currencyId)
+        if (mult == 0.0) return coins
+        return (coins.toDouble() * mult).toBigDecimal().toBigInteger()
     }
 
 
@@ -317,7 +305,8 @@ class RPGProfile(val profile: PlayerProfile) {
             latestHealth = health
         }
 
-        // get inventories to awake them from lazy mode
+        // Get inventories to awake them from lazy mode.
+        // Doing this here, because usually inventories add buffs.
         profile.globalAccessor.whenLoaded {
             scopes.pets.profile
             scopes.auras.profile

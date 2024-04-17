@@ -6,7 +6,7 @@ import org.ndk.godsimulator.equipable.BuffsEquipable
 import org.ndk.godsimulator.event.equipable.EquipableUnEquipEvent
 import org.ndk.godsimulator.rpg.stat.RPGHealthStat
 
-class RPGListener : Listener {
+object RPGListener : Listener {
 
     /**
      * Control un equipping items, that change max health

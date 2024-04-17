@@ -72,11 +72,12 @@ class GlobalMenu(player: Player) : GUI(player, 54) {
 
     companion object {
 
-        fun GUI.checkGoBack(item: ItemStack) {
+        fun GUI.checkGoBack(item: ItemStack): Boolean {
             val res = item.getBooleanTag("isBack") == true
             if (res) {
                 GlobalMenu(player).open()
             }
+            return res
         }
 
         val ITEM_GO_BACK = SimPattern.ARROW_PREVIOUS.clone()

@@ -133,4 +133,11 @@ abstract class RPGStat<T : Comparable<T>> : Snowflake<String>, MSGNameHolder {
             return Tools.parseBooleanOrNull(value)
         }
     }
+
+    /**
+     * Interface for stats that can be multiplied
+     *
+     * Used in [RPGProfile] registry to multiply stats
+     */
+    interface Multiplier : Snowflake<String>
 }

@@ -13,7 +13,9 @@ import org.ndk.minecraft.item.ItemPattern
 
 class EntitySkeletonImpl(world: World) : EntitySkeleton(world) {
 
-    override fun move(enummovetype: EnumMoveType, d0: Double, d1: Double, d2: Double) {}
+    override fun move(enummovetype: EnumMoveType, d0: Double, d1: Double, d2: Double) {
+        // Don't allow the skeleton to move
+    }
 
     public override fun r() {
         goalSelector.a(1, PathfinderGoalFloat(this))
@@ -34,7 +36,7 @@ class PatternOverworldSkeleton : MobPattern<EntitySkeletonImpl> {
     override val clazz: Class<EntitySkeletonImpl> = EntitySkeletonImpl::class.java
 
     override fun createEntity(location: Location): EntitySkeletonImpl {
-        val worldServer = location.worldHandle
+        val worldServer = location.nmsWorld
         val entity = EntitySkeletonImpl(worldServer)
         entity.setLocation(location.x, location.y, location.z, location.yaw, location.pitch)
         entity.setArmor(

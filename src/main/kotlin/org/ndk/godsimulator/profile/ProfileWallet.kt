@@ -1,27 +1,29 @@
 package org.ndk.godsimulator.profile
 
 import org.ndk.global.placeholders.Placeholder
-import org.ndk.godsimulator.buying.Currency
-import org.ndk.godsimulator.buying.Wallet
+import org.ndk.godsimulator.economy.currency.Currency
+import org.ndk.godsimulator.economy.currency.CurrencyManager.getCurrency
+import org.ndk.godsimulator.economy.wallet.Wallet
+import org.ndk.godsimulator.rpg.profile.RPGPlayerProfile
 import org.ndk.klib.toBeautifulString
 import java.math.BigInteger
 import java.math.BigInteger.ZERO
 
-class ProfileWallet(val profile: PlayerProfile) : Wallet , Placeholder {
+class ProfileWallet(val profile: PlayerProfile) : Wallet, Placeholder {
 
 
     override val placeholderMap: MutableMap<String, Any>
         get() = object : HashMap<String, Any>() {
             init {
                 wallet.keys.forEach {
-                    val currency = Currency.currencies[it]
+                    val currency = getCurrency(it)
                     if (currency != null)
                          put(it, getBalance(currency).toBeautifulString())
                 }
             }
 
             override fun get(key: String): Any {
-                val currency = Currency.currencies[key] ?: return ZERO
+                val currency = getCurrency(key) ?: return ZERO
                 return getBalance(currency).toBeautifulString()
             }
         }
@@ -46,8 +48,19 @@ class ProfileWallet(val profile: PlayerProfile) : Wallet , Placeholder {
         }
     }
 
-    override fun giveBalance(currency: Currency, value: BigInteger) {
-        setBalance(currency, getBalance(currency) + value)
+    /**
+     * Give balance in the specified currency to the wallet.
+     *
+     * Method also provides scaling via [RPGPlayerProfile.scaleCurrency] method.
+     *
+     * @param currency the currency to give
+     * @param value the value to give
+     * @return the final value that was given (scaled value)
+     */
+    override fun giveBalance(currency: Currency, value: BigInteger): BigInteger {
+        val final = profile.rpg.scaleCurrency(currency.id, value)
+        setBalance(currency, getBalance(currency) + final)
+        return final
     }
 
     override fun takeBalance(currency: Currency, value: BigInteger): Boolean {
@@ -64,14 +77,14 @@ class ProfileWallet(val profile: PlayerProfile) : Wallet , Placeholder {
     @Suppress("LABEL_NAME_CLASH")
     override fun forEach(action: (Currency, BigInteger) -> Unit) {
         wallet.forEach { (key, value) ->
-            val currency = Currency.currencies[key] ?: return@forEach
+            val currency = getCurrency(key) ?: return@forEach
             action(currency, value as BigInteger)
         }
     }
 
     override fun all(predicate: (Currency, BigInteger) -> Boolean): Boolean {
         return wallet.map { (key, value) ->
-            val currency = Currency.currencies[key] ?: return@map false
+            val currency = getCurrency(key) ?: return@map false
             predicate(currency, value as BigInteger)
         }.all { it }
     }

@@ -1,6 +1,6 @@
 package org.ndk.godsimulator.rpg.buff
 
-import org.ndk.godsimulator.GodSimulator
+import org.ndk.godsimulator.rpg.RPGManager
 import org.ndk.godsimulator.rpg.stat.RPGStat
 import org.ndk.klib.toComparableResult
 import java.util.*
@@ -23,15 +23,27 @@ interface BuffsList : Comparable<BuffsList> {
     fun <T : Comparable<T>> removeBuff(buff: RPGBuff<T>)
 
 
-    fun beforeAddBuff(buff: RPGBuff<*>) {}
-    fun afterAddBuff(buff: RPGBuff<*>) {}
+    fun beforeAddBuff(buff: RPGBuff<*>) {
+        // Do nothing by default
+    }
+    fun afterAddBuff(buff: RPGBuff<*>) {
+        // Do nothing by default
+    }
 
-    fun beforeRemoveBuff(buff: RPGBuff<*>) {}
-    fun afterRemoveBuff(buff: RPGBuff<*>) {}
+    fun beforeRemoveBuff(buff: RPGBuff<*>) {
+        // Do nothing by default
+    }
+    fun afterRemoveBuff(buff: RPGBuff<*>) {
+        // Do nothing by default
+    }
 
-    fun beforeClear() {}
+    fun beforeClear() {
+        // Do nothing by default
+    }
     fun clear()
-    fun afterClear() {}
+    fun afterClear() {
+        // Do nothing by default
+    }
 
     fun forEachStat(action: (String) -> Unit)
     fun forEachBuff(action: (RPGBuff<*>) -> Unit)
@@ -50,7 +62,7 @@ interface BuffsList : Comparable<BuffsList> {
     fun compareByBuffsValue(other: BuffsList): Int {
         var res = 0
         forEachStat {
-            val stat = GodSimulator.rpgManager.getAnyType(it) ?: return@forEachStat
+            val stat = RPGManager.getAnyType(it) ?: return@forEachStat
             val thisBuff = getBuffValueOrNull(stat)
             val otherBuff = other.getBuffValueOrNull(stat)
             if (thisBuff == null || otherBuff == null) {

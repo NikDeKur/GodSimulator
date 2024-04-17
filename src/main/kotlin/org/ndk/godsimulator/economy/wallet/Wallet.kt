@@ -1,11 +1,27 @@
-package org.ndk.godsimulator.buying
+package org.ndk.godsimulator.economy.wallet
 
+import org.ndk.godsimulator.economy.currency.Currency
+import org.ndk.godsimulator.rpg.profile.RPGPlayerProfile
 import java.math.BigInteger
 
 interface Wallet {
+    object EMPTY : WalletImpl() {
+        private fun readResolve(): Any = EMPTY
+    }
+
     fun getBalance(currency: Currency): BigInteger
     fun setBalance(currency: Currency, value: BigInteger)
-    fun giveBalance(currency: Currency, value: BigInteger)
+
+    /**
+     * Give balance in the specified currency to the wallet.
+     *
+     * ProfileWallet implementation also provides scaling via [RPGPlayerProfile.scaleCurrency] method.
+     *
+     * @param currency the currency to give
+     * @param value the value to give
+     * @return the final value that was given (scaled value)
+     */
+    fun giveBalance(currency: Currency, value: BigInteger): BigInteger
     fun takeBalance(currency: Currency, value: BigInteger): Boolean
     fun hasBalance(currency: Currency, value: BigInteger): Boolean {
         return getBalance(currency) >= value

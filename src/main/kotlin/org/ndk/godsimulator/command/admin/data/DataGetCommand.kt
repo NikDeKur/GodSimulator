@@ -8,6 +8,7 @@ import org.ndk.godsimulator.database.GSON
 import org.ndk.godsimulator.language.MSG
 import org.ndk.klib.isBlankOrEmpty
 import org.ndk.klib.removeEmpty
+import org.ndk.minecraft.Utils.debug
 import org.ndk.minecraft.command.CommandExecution
 import org.ndk.minecraft.command.CommandTabExecution
 import org.ndk.minecraft.extension.sendSimpleMessage
@@ -19,21 +20,26 @@ class DataGetCommand : SimulatorCommand() {
         val target = execution.getOfflinePlayer(0)
         val path = execution.getArgOrNull(1) ?: ""
         target.accessorAsync.thenAccept {
-            var data = it[path]
-            if (data is MutableMap<*, *>) {
-                data = HashMap(data)
-                data.removeEmpty()
-                data =
-                    if (data.isEmpty()) "<EmptyMap>"
-                    else GSON.gson.toJson(data)
-            }
+            try {
+                var data = it[path]
+                if (data is MutableMap<*, *>) {
+                    data = HashMap(data)
+                    data.removeEmpty()
+                    data =
+                        if (data.isEmpty()) "<EmptyMap>"
+                        else GSON.gson.toJson(data)
+                }
 
-            execution.send(
-                MSG.CMD_ADMIN_DATA_GET_SUCCESS,
-                "player" to target,
-                "path" to path
-            )
-            execution.sendSimpleMessage(data.toString())
+                execution.send(
+                    MSG.CMD_ADMIN_DATA_GET_SUCCESS,
+                    "player" to target,
+                    "path" to path
+                )
+                execution.sendSimpleMessage(data.toString())
+            } catch (e: Throwable) {
+                debug("Error while getting data: $e")
+                e.printStackTrace()
+            }
         }
     }
 
